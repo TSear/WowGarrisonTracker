@@ -1,7 +1,6 @@
-package com;
+package com.trix.wowgarrisontracker;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 
 import com.trix.wowgarrisontracker.model.Account;
@@ -11,8 +10,12 @@ import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
 import com.trix.wowgarrisontracker.repository.EntryRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 public class BootData implements CommandLineRunner {
@@ -20,6 +23,7 @@ public class BootData implements CommandLineRunner {
     private AccountRepository accountRepository;
     private AccountCharacterRepository accountCharacterRepository;
     private EntryRepository entryRepository;
+    private Logger logger = LoggerFactory.getLogger(Slf4j.class);
 
     public BootData(AccountRepository accountRepository, AccountCharacterRepository accountCharacterRepository,
             EntryRepository entryRepository) {
@@ -30,7 +34,9 @@ public class BootData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        logger.info("Creating data");
         this.innit();
+        
     }
 
     private void innit() {

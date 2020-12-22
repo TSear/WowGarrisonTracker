@@ -13,8 +13,9 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-
+@ToString
 @NoArgsConstructor
 @Getter
 @Setter
@@ -35,5 +36,7 @@ public class Account {
 
     @OneToMany(mappedBy = "accountId")
     private Set<AccountCharacter> accountCharacters;
+
+   
 
 }
