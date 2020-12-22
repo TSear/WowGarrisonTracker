@@ -3,6 +3,7 @@ package com.trix.wowgarrisontracker.services.interfaces;
 import java.util.List;
 
 import com.trix.wowgarrisontracker.model.Account;
+import com.trix.wowgarrisontracker.pojos.AccountPojo;
 
 public interface AccountService {
 
@@ -12,6 +13,6 @@ public interface AccountService {
 
 	void update(Account account, Long id);
 
-	List<Account> findAll();
+	List<AccountPojo> findAll();
     
 }

@@ -2,14 +2,16 @@ package com.trix.wowgarrisontracker.controllers;
 
 import java.util.List;
 
-import com.trix.wowgarrisontracker.model.Account;
-import com.trix.wowgarrisontracker.repository.AccountRepository;
+import com.trix.wowgarrisontracker.converters.AccountPojoToAccount;
+import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
+import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,30 +25,34 @@ public class Testing{
     private AccountService accountService;
     private EntryService entryService;
     private Logger logger = LoggerFactory.getLogger(Slf4j.class);
+    private AccountPojoToAccount accountPojoToAccount;
+    private AccountToAccountPojo accountToAccountPojo;
 
 
     public Testing(AccountCharacterService accountCharacterService, AccountService accountService, EntryService entryService){
         this.accountCharacterService = accountCharacterService;
         this.accountService = accountService;
         this.entryService = entryService;
+        this.accountPojoToAccount = new AccountPojoToAccount();
+        this.accountToAccountPojo = new AccountToAccountPojo();
     }
 
     @RequestMapping("get")
-    public List<Account> getObjects(){
+    public List<AccountPojo> getObjects(){
 
         return accountService.findAll();
     }
 
     @RequestMapping("create")
-    public String saveAccount(Account account){
+    public String saveAccount(@RequestBody AccountPojo account){
 
-        accountService.save(account);
+        accountService.save(accountPojoToAccount.convert(account));
 
-        return "asdfasdfasdfasdf";
+        return "saving";
     }
 
     @RequestMapping("delete")
-    public String deleteAccount(Long id){
+    public String deleteAccount(@RequestBody Long id){
 
         accountService.delete(id);
 
@@ -54,9 +60,9 @@ public class Testing{
     }
 
     @RequestMapping("update")
-    public String updateAccount(Account account, Long id){
+    public String updateAccount(@RequestBody AccountPojo account, Long id){
 
-        accountService.update(account, id);
+        accountService.update(accountPojoToAccount.convert(account), id);
 
         return "asdfasdfasdfasdf";
     }

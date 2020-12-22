@@ -44,7 +44,9 @@ public class BootData implements CommandLineRunner {
         Account account1 = new Account();
         account1.setLogin("login1");
         account1.setPassword("password1");
-        
+        accountRepository.save(account1);
+        logger.info("Account id : " + account1.getId());
+
         AccountCharacter accountCharacter = new AccountCharacter();
         accountCharacter.setCharacterName("characterName");
         accountCharacter.setAccountId(account1.getId());
@@ -59,7 +61,7 @@ public class BootData implements CommandLineRunner {
 
         account1.setAccountCharacters(new HashSet<>(Arrays.asList(accountCharacter)));
 
-        accountRepository.save(account1);
+
         accountCharacterRepository.save(accountCharacter);
         entryRepository.save(entry1);
     }

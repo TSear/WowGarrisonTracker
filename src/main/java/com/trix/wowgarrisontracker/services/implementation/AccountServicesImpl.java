@@ -1,8 +1,11 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
 import com.trix.wowgarrisontracker.model.Account;
+import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 
@@ -17,13 +20,16 @@ public class AccountServicesImpl implements AccountService {
 
     private AccountRepository accountRepository;
     private Logger logger = LoggerFactory.getLogger(Slf4j.class);
+    private AccountToAccountPojo accountToAccountPojo;
 
-    public AccountServicesImpl(AccountRepository accountRepository) {
+    public AccountServicesImpl(AccountRepository accountRepository, AccountToAccountPojo accountToAccountPojo) {
         this.accountRepository = accountRepository;
+        this.accountToAccountPojo = accountToAccountPojo;
     }
 
     @Override
     public void save(Account account) {
+        logger.info(account.toString());
         
         //Tymczasowe zabezpieczenie
         if(account.getLogin().length()>1)
@@ -54,8 +60,13 @@ public class AccountServicesImpl implements AccountService {
     }
 
     @Override
-    public List<Account> findAll() {
-        return accountRepository.findAll();
+    public List<AccountPojo> findAll() {
+        List<AccountPojo> accountPojos = new ArrayList<>();
+
+        for(Account tmp : accountRepository.findAll()){
+            accountPojos.add(accountToAccountPojo.convert(tmp));
+        }
+        return accountPojos;
     }
     
 }
