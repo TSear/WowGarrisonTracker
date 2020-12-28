@@ -32,7 +32,7 @@ public class AccountServicesImpl implements AccountService {
         logger.info(account.toString());
         
         //Tymczasowe zabezpieczenie
-        if(account.getLogin().length()>1)
+        if(!account.getLogin().isEmpty())
             accountRepository.save(account);
 
     }
