@@ -16,7 +16,6 @@ public class CustomUserDetails implements UserDetails {
         this.account = account;
     }
 
-    //TODO Tymczasowa logika. Trzeba to będzie zmienić jak najszybciej
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

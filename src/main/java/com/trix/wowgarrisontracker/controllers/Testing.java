@@ -76,6 +76,18 @@ public class Testing {
     }
 
     @ResponseBody
+    @PostMapping(value = "restLogin")
+    public String restLogin(@RequestBody LoginRequest loginRequest){
+        Account account = accountService.correctCredentials(loginRequest);
+
+        if (account != null) {
+            logger.info("Procesing credentials");
+            return jwTutils.generateToken(new CustomUserDetails(account));
+        }
+        return "bad credentials";
+    }
+
+    @ResponseBody
     @RequestMapping("get")
     public List<AccountPojo> getObjects() {
         return accountService.findAll();

@@ -1,5 +1,6 @@
 package com.trix.wowgarrisontracker.utils;
 
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,10 @@ public class JWTutils {
         return Jwts.parser().setSigningKey(KEY).parseClaimsJws(token).getBody();
     }
 
+    public String getUsername(String token){
+        return this.extractClaims(token).getSubject();
+    }
+
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userDetails.getUsername());
@@ -40,6 +45,15 @@ public class JWTutils {
         logger.info("Token JWTS : " + token);
 
         return token;
+    }
+
+    public Boolean isExpired(String token){
+        return (this.extractClaims(token).getExpiration().after(new Date(System.currentTimeMillis())));
+    }
+
+    public Boolean isTokenValid(String token, UserDetails userDetails){
+        String login = this.getUsername(token);
+        return (login.equals(userDetails.getUsername()) && this.isExpired(token));
     }
 
 }
