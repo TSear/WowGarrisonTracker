@@ -54,13 +54,13 @@ public class Testing {
         this.jwTutils = jwTutils;
     }
 
-    @RequestMapping("loginPage")
+    @RequestMapping("login/page")
     public String loginPage(Model model) {
         model.addAttribute("loginRequest", new LoginRequest());
         return "login";
     }
 
-    @PostMapping(value = "login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "login/validate", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String login(@ModelAttribute LoginRequest loginRequest, Model model) {
 
         Account account = accountService.correctCredentials(loginRequest);
@@ -76,10 +76,9 @@ public class Testing {
     }
 
     @ResponseBody
-    @PostMapping(value = "restLogin")
+    @PostMapping(value = "login/rest")
     public String restLogin(@RequestBody LoginRequest loginRequest){
         Account account = accountService.correctCredentials(loginRequest);
-
         if (account != null) {
             logger.info("Procesing credentials");
             return jwTutils.generateToken(new CustomUserDetails(account));

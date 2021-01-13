@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 
+@PropertySource("classpath:application.properties")
 @Service
 public class JWTutils {
 
-    private final String KEY = "key123456";
+    @Value("${config.jwt.key}")
+    private String KEY;
     private Logger logger = LoggerFactory.getLogger(Slf4j.class);
 
     private Claims extractClaims(String token) {
@@ -35,7 +39,6 @@ public class JWTutils {
     }
 
     private String createToken(Map<String, Object> claims, String username) {
-        
         String token = Jwts.builder().setClaims(claims)
         .setSubject(username)
         .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))

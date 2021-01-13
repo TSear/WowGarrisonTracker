@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <form th:action="@{login}" method="POST" th:object="${loginRequest}">
+    <form th:action="@{login/validate}" method="POST" th:object="${loginRequest}">
 
         <label>Login</label><input type="text" name="login" th:field="*{login}">
         <label>Password</label><input type="text" name="password" th:field="*{password}">
