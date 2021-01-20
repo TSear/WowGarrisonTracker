@@ -34,3 +34,7 @@ build/
 
 ### Projekt ###
 Todo.txt
+
+/src/main/resources/static/boostrapCss
+/src/main/resources/static/boostrapjs
+
