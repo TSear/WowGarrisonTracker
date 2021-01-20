@@ -21,5 +21,7 @@ public interface AccountService {
 	boolean correctCredentials(Account inDatabase, LoginRequest fromForm);
 
 	Account correctCredentials(LoginRequest fromForm);
+
+	boolean isExisting(LoginRequest loginRequest);
     
 }

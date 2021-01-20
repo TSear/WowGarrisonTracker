@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,9 +33,19 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
         String token = request.getHeader("Authorization");
         String login = null;
-        if (token != null && token.startsWith("Bearer ")) {
+        Cookie [] cookies = request.getCookies();
+
+        if(cookies != null && cookies.length >= 1){
+            for(Cookie tmpCookie : cookies){
+                if(("Authorization").equals(tmpCookie.getName()))
+                    token = tmpCookie.getValue();
+            }
+        }
+
+        if (token != null && token.startsWith("Bearer_")) {
             token = token.substring(7);
             login = jwTutils.getUsername(token);
         }

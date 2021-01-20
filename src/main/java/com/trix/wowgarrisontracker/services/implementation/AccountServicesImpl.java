@@ -96,4 +96,13 @@ public class AccountServicesImpl implements AccountService {
         return null;
     }
 
+    @Override
+    public boolean isExisting(LoginRequest loginRequest) {
+        Account account = this.findUserByUsername(loginRequest.getLogin());
+        if(account==null)return false;
+        return account.getPassword().equals(loginRequest.getPassword());
+    }
+
+    
+
 }

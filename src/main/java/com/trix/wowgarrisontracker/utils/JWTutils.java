@@ -47,7 +47,7 @@ public class JWTutils {
         
         logger.info("Token JWTS : " + token);
 
-        return token;
+        return "Bearer_"+token;
     }
 
     public Boolean isExpired(String token){
