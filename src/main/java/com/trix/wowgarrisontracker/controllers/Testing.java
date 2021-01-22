@@ -3,6 +3,7 @@ package com.trix.wowgarrisontracker.controllers;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.trix.wowgarrisontracker.converters.AccountPojoToAccount;
@@ -17,6 +18,7 @@ import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.utils.JWTutils;
 import com.trix.wowgarrisontracker.validators.AccountDTOValidator;
 import com.trix.wowgarrisontracker.validators.LoginRequestValidator;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import io.jsonwebtoken.impl.DefaultClaims;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("testing/")
@@ -75,7 +78,8 @@ public class Testing {
 
     @PostMapping(value = "login/validate")
     public String login(@ModelAttribute("loginRequest") LoginRequest loginRequest, Model model,
-            BindingResult bindingResult, RedirectAttributes redirectAttributes, HttpServletResponse httpServletResponse) {
+            BindingResult bindingResult, RedirectAttributes redirectAttributes,
+            HttpServletResponse httpServletResponse) {
 
         boolean isPasswordCorrect = false;
         boolean isLoginInDatabase = accountService.isExisting(loginRequest);
@@ -87,9 +91,11 @@ public class Testing {
         if (isLoginInDatabase && isPasswordCorrect) {
             logger.info("Procesing credentials");
             model.addAttribute("token", jwTutils.generateToken(new CustomUserDetails(account)));
-            //TODO JWT token jest przechowywany w ciasteczku. Będzie trzeba to zmienić na coś bardziej bezpiecznego
+            // TODO JWT token jest przechowywany w ciasteczku. Będzie trzeba to zmienić na
+            // coś bardziej bezpiecznego
             Cookie cookie = new Cookie("Authorization", jwTutils.generateToken(new CustomUserDetails(account)));
             cookie.setPath("/");
+            cookie.setMaxAge(600);
             httpServletResponse.addCookie(cookie);
             return "redirect:/testing/get";
         }
@@ -100,6 +106,23 @@ public class Testing {
         redirectAttributes.addFlashAttribute("loginRequest", loginRequest);
         return "redirect:/testing/login/page";
 
+    }
+
+    @RequestMapping(name = "/testing/login/token/refresh")
+    public String refreshToken(HttpServletRequest httpServletRequest) {
+
+        Cookie[] cookies = httpServletRequest.getCookies();
+
+        for (Cookie tmpCookie : cookies) {
+            if(tmpCookie.getName().equals("Authorization")){
+
+                DefaultClaims claims = (DefaultClaims) httpServletRequest.getAttribute("claims");
+                String newToken = jwTutils.generateToken(new CustomUserDetails(accountService.findUserByUsername(claims.getSubject())));
+                tmpCookie.setValue(newToken);
+            }
+        }
+        logger.info(httpServletRequest.getAttribute("requestUrl").toString());
+        return "/testing/get";
     }
 
     @ResponseBody
@@ -155,6 +178,11 @@ public class Testing {
         accountService.update(accountPojoToAccount.convert(account), id);
 
         return "asdfasdfasdfasdf";
+    }
+
+    @RequestMapping("track")
+    public String getTrackingPage(){
+        return "track";
     }
 
 }

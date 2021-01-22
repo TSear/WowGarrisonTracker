@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" shrink-to-fit=no>
+    <title>Document</title>
+    <link rel="stylesheet" href="../../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/css/global.css">
+
+</head>
+
+<body>
+
+    <header th:fragment="menuBar" id="header">
+        <nav class="nav navbar-dark bg-dark navbar-light navbar-expand-md align-items-center ">
+            <a href="#" class="navbar-brand mx-4" th:href="@{'/testing/get'}"><b>Garrison Tracker</b></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsedMenu" aria-controls="collapsedMenu" aria-expanded="false" aria-label="Przełącznik nawigacji">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+            <div class="collapse navbar-collapse" id="collapsedMenu">
+                <ul class="nav navbar-nav flex-fill mx-4 py-2" id="menuBarButtonsGroup">
+                    <li class="nav-item text-center ">
+                        <a class="nav-link lightColor p-0 menuLink" href="#" th:href="@{'#'}">Track</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link lightColor p-0 menuLink" href="#" th:href="@{'#'}">Statistics</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link lightColor p-0 menuLink" href="#" th:href="@{'#'}">Auction House</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link lightColor p-0 menuLink" href="#" th:href="@{'#'}">About</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link lightColor p-0 menuLink" href="#" th:href="@{'#'}">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+
+
+    <script src="../../static/js/bootstrap.min.js"></script>
+</body>
+
+</html>

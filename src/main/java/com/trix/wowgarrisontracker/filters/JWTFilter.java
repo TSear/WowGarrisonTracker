@@ -8,8 +8,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
 import com.trix.wowgarrisontracker.services.implementation.AccountDetailsService;
+import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.utils.JWTutils;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +20,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.jsonwebtoken.ExpiredJwtException;
+
 @Component
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -25,9 +29,12 @@ public class JWTFilter extends OncePerRequestFilter {
 
     private JWTutils jwTutils;
 
-    public JWTFilter(JWTutils jwTutils, AccountDetailsService accountDetailsService) {
+    private AccountService accountService;
+
+    public JWTFilter(JWTutils jwTutils, AccountDetailsService accountDetailsService, AccountService accountService) {
         this.jwTutils = jwTutils;
         this.accountDetailsService = accountDetailsService;
+        this.accountService = accountService;
     }
 
     @Override
@@ -45,10 +52,13 @@ public class JWTFilter extends OncePerRequestFilter {
             }
         }
 
+        try{
+
         if (token != null && token.startsWith("Bearer_")) {
             token = token.substring(7);
             login = jwTutils.getUsername(token);
         }
+        
 
         if (login != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             CustomUserDetails userDetails = CustomUserDetails.class
@@ -59,8 +69,16 @@ public class JWTFilter extends OncePerRequestFilter {
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
+            //TODO Trzeba zrobić odnawianie jwt
         }
+                
+        }catch(ExpiredJwtException expiredJwtException){
+
+            
+        }
+
         filterChain.doFilter(request, response);
     }
-
 }
+
+

@@ -41,7 +41,7 @@ public class JWTutils {
     private String createToken(Map<String, Object> claims, String username) {
         String token = Jwts.builder().setClaims(claims)
         .setSubject(username)
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))
+        .setExpiration(new Date(System.currentTimeMillis() + 100000 * 60 * 60))
         .setIssuedAt(new Date(System.currentTimeMillis()))
         .signWith(SignatureAlgorithm.HS256, KEY).compact();
         
