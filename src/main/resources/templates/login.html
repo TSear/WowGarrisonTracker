@@ -2,29 +2,21 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 
 <head th:insert="fragments/header.html :: header(titleName='Login Page')">
-    <!-- <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Document</title>
-    <link rel="stylesheet" th:href="@{'/css/bootstrap.min.css'}">
-    <link rel="stylesheet" th:href="@{'/css/global.css'}"> -->
 </head>
 
-<body>
-    <div class="container h-100">
-        <header class="col-md-4 offset-md-4 my-5">
-            <h1>Logowanie</h1>
-        </header>
-
-        <div class="row ">
+<body class="h-100 d-flex align-items-center container">
+    <div class=" row container rounded col-md-6 offset-md-3 p-0 loginForm">
+        <h1 class="col-12 my-4">Login</h1>
+        <div class="row-fluid ">
             <form th:action="@{validate} " method="POST" th:object="${loginRequest}">
-                <div class="alert-danger col-md-6 offset-md-3" th:if="${#fields.hasErrors('*')}">
-                    <ul>
-                        <li class="my-1 mx-2" th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                <div class="alert-danger rounded col-md-6 offset-md-3 error-box" th:if="${#fields.hasErrors('*')}">
+                    <ul class="p-2 m-2 error-list">
+                        <li class="my-1 mx-2 text-center" th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
                     </ul>
                 </div>
-                <label class="col-md-2 offset-md-3 my-2 ">Login</label><input class="col-md-4 " type="text " th:name="login">
-                <label class="col-md-2 offset-md-3 my-2 ">Password</label><input class="col-md-4 " type="password" th:name="password">
-                <button class="col-md-4 offset-md-4 my-3 btn btn-primary " type="submit ">submit</button>
+                <input placeholder="Login" class="col-6 offset-3 my-2 border-1 rounded text-center bg-dark fs-4" type="text " th:name="login"><br>
+                <input placeholder="Password" class="col-6 offset-3 my-2 border-1 rounded text-center bg-dark fs-4 " type="password" th:name="password">
+                <button class="col-md-4 offset-md-4 my-3 btn btn-primary " type="Submit ">Submit</button>
             </form>
         </div>
     </div>

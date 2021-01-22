@@ -97,7 +97,7 @@ public class Testing {
             cookie.setPath("/");
             cookie.setMaxAge(600);
             httpServletResponse.addCookie(cookie);
-            return "redirect:/testing/get";
+            return "redirect:/testing/infoPage";
         }
 
         bindingResult.reject("credentials.bad", "Wrong login or password");
@@ -183,6 +183,11 @@ public class Testing {
     @RequestMapping("track")
     public String getTrackingPage(){
         return "track";
+    }
+
+    @GetMapping(value = "infoPage")
+    public String getInfoPage(){
+        return "infoPage.html";
     }
 
 }
