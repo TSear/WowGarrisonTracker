@@ -4,12 +4,35 @@
 <head th:insert="fragments/header.html :: header(titleName='Tracking Page')">
 </head>
 
-<body>
+<body class="d-flex flex-column">
 
     <div th:replace="fragments/menuBar.html :: menuBar">
-
     </div>
 
+    <div class="container-fluid flex-grow-1">
+
+        <a href="#" th:href="@{/testing/track/newEntry}" class="btn btn-outline-secondary col-4 offset-4 my-5">Dodaj nowy wpis</a>
+        <hr>
+
+        <table class="container-fluid col-lg-8 my-5">
+            <tr>
+                <th class="col-3 text-center font-large p-3 border-start border-bottom border-secondary">Data</th>
+                <th class="col-3 text-center font-large p-3 border-start border-bottom border-secondary">Id postaci</th>
+                <th class="col-3 text-center font-large p-3 border-start border-bottom border-secondary">War Paint</th>
+                <th class="col-3 text-center font-large p-3 border-start border-bottom border-secondary border-end">Garrison Resource</th>
+            </tr>
+            <tr th:each="entry : ${entries} " th:object="${entry}">
+                <td class="col-3 text-center p-3 border-start border-secondary" th:text="*{entryDate}"></td>
+                <td class="col-3 text-center p-3 border-start border-secondary" th:text="*{accountCharacterId.getId()}"></td>
+                <td class="col-3 text-center p-3 border-start border-secondary" th:text="*{warPaint}"></td>
+                <td class="col-3 text-center p-3 border-start border-secondary border-end" th:text="*{garrisonResources}"></td>
+            </tr>
+
+        </table>
+    </div>
+
+    <div th:replace="fragments/footer.html :: footer "></div>
+    <div th:replace="fragments/header.html :: scripts "></div>
 </body>
 
 </html>

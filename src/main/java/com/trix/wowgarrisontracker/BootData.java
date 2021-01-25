@@ -48,7 +48,7 @@ public class BootData implements CommandLineRunner {
         logger.info("Account id : " + account1.getId());
 
         AccountCharacter accountCharacter = new AccountCharacter();
-        accountCharacter.setCharacterName("characterName");
+        accountCharacter.setCharacterName("Calienda");
         accountCharacter.setAccountId(account1.getId());
 
         Entry entry1 = new Entry();

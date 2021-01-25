@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
+
 @Setter
 @Getter
 @Data
@@ -18,5 +18,11 @@ public class EntryPojo {
     private int garrisonResources;
     private int warPaint;
     private Long accountCharacterId;
+
+    public EntryPojo(){
+        this.entryDate = LocalDate.now();
+        this.garrisonResources = 0;
+        this.warPaint = 0;
+    }
 
 }

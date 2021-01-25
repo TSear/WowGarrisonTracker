@@ -7,7 +7,6 @@
 <body>
 
     <div th:replace="fragments/menuBar.html :: menuBar"></div>
-
     <div class="container">
         <div class="row">
             <h2 class="col-md-12 my-5 largeText mx-0 text-center">Garrison Tracker</h2>
@@ -31,6 +30,8 @@
     <footer th:replace="fragments/footer.html :: footer">
 
     </footer>
+
+    <div th:insert="fragments/header.html :: scripts"></div>
 </body>
 
 </html>
