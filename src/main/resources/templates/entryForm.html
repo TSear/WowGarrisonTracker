@@ -7,7 +7,7 @@
 
 <body class="d-flex flex-column">
 
-    <div th:replace="fragments/menuBar.html :: menuBar"></div>
+    <div th:replace="fragments/menuBar.html :: menuBar(active=1)"></div>
 
     <form th:action="@{'/testing/track/validate'}" method="post" class="container-fluid align-items-center mx-0 flex-fill p-5" th:object="${entry}">
         <div class="row-fluid col-sm-8 offset-sm-2 col-lg-4 offset-lg-4 d-flex flex-column loginForm p-5">

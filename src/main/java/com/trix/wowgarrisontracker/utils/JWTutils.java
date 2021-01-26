@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 
@@ -66,6 +68,14 @@ public class JWTutils {
     public Boolean isTokenValid(String token, UserDetails userDetails) {
         String login = this.getUsername(token);
         return (login.equals(userDetails.getUsername()) && this.isExpired(token));
+    }
+
+    public Long extractId(String token){
+        return Long.valueOf((int)this.extractClaims(token.substring(7)).get("accountId"));
+    }
+
+    public Long extractId(Cookie cookie){
+        return this.extractId(cookie.getValue());
     }
 
 }

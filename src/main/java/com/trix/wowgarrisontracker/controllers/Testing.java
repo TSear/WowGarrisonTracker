@@ -15,6 +15,7 @@ import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
 import com.trix.wowgarrisontracker.model.LoginRequest;
+import com.trix.wowgarrisontracker.pojos.AccCharacterResourcesPojo;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
@@ -228,13 +229,16 @@ public class Testing {
     public String getEntryForm(Model model, HttpServletRequest httpServletRequest) {
 
         Cookie cookie = utils.extractCookie(AUTHORIZATION, httpServletRequest.getCookies());
+
         if (cookie != null) {
 
             List<AccountCharacterPojo> accountCharacterPojoList = new ArrayList<>();
-            Long id = new Long((int) jwTutils.extractClaims(cookie.getValue().substring(7)).get("accountId"));
+            Long id = jwTutils.extractId(cookie);
+
             for (AccountCharacter tmp : accountCharacterService.listOfAccountCharacters(id)) {
                 accountCharacterPojoList.add(accountCharacterToAccountCharacterPojo.convert(tmp));
             }
+
             model.addAttribute("characters", accountCharacterPojoList);
             model.addAttribute("entry", new EntryPojo());
 
@@ -245,14 +249,14 @@ public class Testing {
     }
 
     @PostMapping(value = "track/validate")
-    public String validateNewEntry(@ModelAttribute("entry") EntryPojo entry, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+    public String validateNewEntry(@ModelAttribute("entry") EntryPojo entry, BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
 
         entryDTOValidator.validate(entry, bindingResult);
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             bindingResult.reject("data.wrong", "Wrong data");
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.entry",
-                    bindingResult);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.entry", bindingResult);
             redirectAttributes.addFlashAttribute("entry", entry);
             return "redirect:/testing/track/newEntry";
         }
@@ -260,6 +264,24 @@ public class Testing {
         entryService.saveEntry(entry);
 
         return "redirect:/testing/track";
+    }
+
+    @GetMapping(value = "/characters")
+    public String getCharacters(Model model, HttpServletRequest httpServletRequest) {
+
+        Cookie jwtCookie = utils.extractCookie(AUTHORIZATION, httpServletRequest.getCookies());
+        
+        if(jwtCookie != null){
+
+            Long accountId = jwTutils.extractId(jwtCookie);
+            List<AccCharacterResourcesPojo> accResourcesPojoList = accountCharacterService.listOfResources(accountId);
+
+            model.addAttribute("accountCharacters", accResourcesPojoList);
+            return "characters";
+
+        }
+
+        return "infoPage";
     }
 
 }
