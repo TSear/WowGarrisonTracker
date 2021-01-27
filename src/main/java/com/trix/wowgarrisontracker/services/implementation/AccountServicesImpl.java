@@ -10,6 +10,7 @@ import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.model.LoginRequest;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
+import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
@@ -37,6 +38,7 @@ public class AccountServicesImpl implements AccountService {
         this.accountCharacterService = accountCharacterService;
         this.entryService = entryService;
     }
+
 
     @Override
     public void save(Account account) {

@@ -13,27 +13,28 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccountCharacterPojoToAccountCharacter implements Converter<AccountCharacterPojo, AccountCharacter>{
+public class AccountCharacterPojoToAccountCharacter implements Converter<AccountCharacterPojo, AccountCharacter> {
 
     @Autowired
     private EntryPojoToEntry entryConverter;
 
     @Override
     public AccountCharacter convert(AccountCharacterPojo source) {
-        
+
         AccountCharacter accountCharacter = new AccountCharacter();
         accountCharacter.setAccountId(source.getAccountId());
         accountCharacter.setCharacterName(source.getCharacterName());
         accountCharacter.setId(source.getId());
         Set<Entry> entries = new HashSet<>();
-
-        for(EntryPojo tmp : source.getEntries()){
-            entries.add(entryConverter.convert(tmp));
+        if (source.getEntries() != null && source.getEntries().isEmpty()) {
+            for (EntryPojo tmp : source.getEntries()) {
+                entries.add(entryConverter.convert(tmp));
+            }
         }
 
         accountCharacter.setEntries(entries);
 
         return accountCharacter;
     }
-    
+
 }

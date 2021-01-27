@@ -1,29 +1,38 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
 
 import com.trix.wowgarrisontracker.converters.EntryPojoToEntry;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.repository.EntryRepository;
+import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
-
-import org.springframework.stereotype.Service;
 
 @Service
 public class EntryServiceImpl implements EntryService {
 
     private EntryRepository entryRepository;
     private EntryPojoToEntry entryPojoToEntry;
+    private AccountCharacterService accountCharacterService;
 
-    public EntryServiceImpl(EntryRepository entryRepository, EntryPojoToEntry entryPojoToEntry) {
+    public EntryServiceImpl(EntryRepository entryRepository, EntryPojoToEntry entryPojoToEntry, AccountCharacterService accountCharacterService) {
         this.entryRepository = entryRepository;
         this.entryPojoToEntry = entryPojoToEntry;
+        this.accountCharacterService = accountCharacterService;
     }
 
     @Override
     public List<Entry> listOfEntries(Long characterId) {
-        return entryRepository.findAll();
+    	
+    	List<Entry> listOfEntries = entryRepository.findByAccountCharacterId(characterId);		
+    	
+        return listOfEntries;
     }
 
     @Override

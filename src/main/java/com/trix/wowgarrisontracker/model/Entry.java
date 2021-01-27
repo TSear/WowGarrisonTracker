@@ -34,10 +34,10 @@ public class Entry {
     @Column(name = "entryDate")
     private LocalDate entryDate;
 
-    @Column(name = "garrisonResources")
+    @Column(name = "garrisonResources", columnDefinition = "int default 0")
     private int garrisonResources;
 
-    @Column(name = "warPaint")
+    @Column(name = "warPaint", columnDefinition = "int default 0")
     private int warPaint;
 
     public Entry(){

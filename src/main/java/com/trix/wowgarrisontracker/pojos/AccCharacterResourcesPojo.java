@@ -11,5 +11,10 @@ public class AccCharacterResourcesPojo {
     private String characterName;
     private Long warPaint;
     private Long garrisonResources;
+    
+    public AccCharacterResourcesPojo() {
+    	this.warPaint = 0l;
+    	this.garrisonResources = 0l;
+    }
 
 }

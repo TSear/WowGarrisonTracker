@@ -7,33 +7,51 @@
 
 <body class="d-flex flex-column">
 
-    <div th:replace="fragments/menuBar.html :: menuBar(active=1)"></div>
+	<div th:replace="fragments/menuBar.html :: menuBar(active=1)"></div>
 
-    <form th:action="@{'/testing/track/validate'}" method="post" class="container-fluid align-items-center mx-0 flex-fill p-5" th:object="${entry}">
-        <div class="row-fluid col-sm-8 offset-sm-2 col-lg-4 offset-lg-4 d-flex flex-column loginForm p-5">
-            <div>
-                <label class="form-label">Account Character</label>
-                <select name="accountCharacterId" th:field="*{accountCharacterId}" class="mb-3 text-center form-control bg-dark lightColor ">
-                <option class="text-center bg-dark lightColor" th:each="character : ${characters}" th:text="${character.getCharacterName()}" th:value="${character.getId()}"></option>
-            </select><br>
-            </div>
-            <div>
-                <label class="form-label">Garrison Resources</label>
-                <input type="number" name="garrisonResources" th:value="*{garrisonResources}" class="mb-3 text-center form-control bg-dark lightColor "><br>
-            </div>
-            <div>
-                <label class="form-label">War Paint</label>
-                <input type="number" name="warPaint" th:value="*{warPaint}" class="mb-3 text-center form-control bg-dark lightColor "><br>
-            </div>
-            <div>
-                <label class="form-label">Date</label>
-                <input type="text" name="entrydate" th:value="*{entryDate}" disabled class="mb-3 text-center form-control disabled bg-dark lightColor border-1"><br>
-            </div>
-            <button type="submit" class="offset-4 col-4 btn btn-secondary">Submit</button>
-        </div>
-    </form>
-    <div th:insert="fragments/footer.html :: footer"></div>
-    <div th:insert="fragments/header.html :: scripts"></div>
+	<form th:action="@{'/testing/track/validate'}" method="post"
+		class="container-fluid align-items-center mx-0 flex-fill p-4"
+		th:object="${entry}">
+		<div
+			class="row-fluid col-sm-8 offset-sm-2 col-lg-4 offset-lg-4 d-flex flex-column loginForm p-5">
+			<h2 class="text-center fs-1 mb-5">New Entry</h2>
+			<div th:if="${#fields.hasErrors('*')}" class="alert-danger rounded error-box mt-5">
+				<ul class="p-2 my-2 error-list">
+					<li class="my-1 mx-2 text-center" th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+				</ul>
+			</div>
+			<div>
+				<label class="form-label">Account Character</label> <select
+					name="accountCharacterId" th:field="*{accountCharacterId}"
+					class="mb-3 text-center form-control bg-dark lightColor ">
+					<option class="text-center bg-dark lightColor"
+						th:each="character : ${characters}"
+						th:text="${character.getCharacterName()}"
+						th:value="${character.getId()}"></option>
+				</select><br>
+			</div>
+			<div>
+				<label class="form-label">Garrison Resources</label> <input
+					type="number" name="garrisonResources"
+					th:value="*{garrisonResources}"
+					class="mb-3 text-center form-control bg-dark lightColor "><br>
+			</div>
+			<div>
+				<label class="form-label">War Paint</label> <input type="number"
+					name="warPaint" th:value="*{warPaint}"
+					class="mb-3 text-center form-control bg-dark lightColor "><br>
+			</div>
+			<div>
+				<label class="form-label">Date</label> <input type="text"
+					name="entrydate" th:value="*{entryDate}" disabled
+					class="mb-3 text-center form-control disabled bg-dark lightColor border-1"
+					style="opacity:0.7;"><br>
+			</div>
+			<button type="submit" class="offset-4 col-4 btn btn-secondary">Submit</button>
+		</div>
+	</form>
+	<div th:insert="fragments/footer.html :: footer"></div>
+	<div th:insert="fragments/header.html :: scripts"></div>
 </body>
 
 </html>
