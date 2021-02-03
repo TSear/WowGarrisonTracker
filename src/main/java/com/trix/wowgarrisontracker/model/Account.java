@@ -35,8 +35,6 @@ public class Account {
     private String password;
 
     @OneToMany(mappedBy = "accountId")
-    private Set<AccountCharacter> accountCharacters;
-
-   
+    private Set<AccountCharacter> accountCharacters;   
 
 }
