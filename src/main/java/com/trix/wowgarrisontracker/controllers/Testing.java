@@ -38,6 +38,7 @@ import com.trix.wowgarrisontracker.converters.AccountPojoToAccount;
 import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
 import com.trix.wowgarrisontracker.deserializers.AuctionHouseResponseDeserializer;
 import com.trix.wowgarrisontracker.deserializers.ItemEntityResponseDeserializer;
+import com.trix.wowgarrisontracker.deserializers.ItemWrapperDeserializer;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.AuctionEntity;
@@ -54,6 +55,7 @@ import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.services.interfaces.ItemEntityService;
+import com.trix.wowgarrisontracker.utils.BlizzardRequestUtils;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.trix.wowgarrisontracker.utils.JWTutils;
 import com.trix.wowgarrisontracker.validators.AccountCharacterDTOValidator;
@@ -85,6 +87,7 @@ public class Testing {
 	private AccountCharacterDTOValidator accountCharacterDTOValidator;
 	private AuctionService auctionService;
 	private ItemEntityService itemEntityService;
+	private BlizzardRequestUtils blizzardRequestUtils;
 
 	private final String AUTHORIZATION = "Authorization";
 
@@ -108,6 +111,7 @@ public class Testing {
 		this.accountCharacterDTOValidator = accountCharacterDTOValidator;
 		this.auctionService = auctionService;
 		this.itemEntityService = itemEntityService;
+		this.blizzardRequestUtils = new BlizzardRequestUtils();
 	}
 
 	@GetMapping("login/page")
@@ -354,57 +358,67 @@ public class Testing {
 	public String updateAuctionHouse() {
 		
 		try {
-			String command = "curl -u b0ea73a8d8f74e9b949e5c9868911b7f:C6LomejtnBU682JAdzOKMpZ7t5htKwvL -d grant_type=client_credentials https://us.battle.net/oauth/token";
-			Process process = Runtime.getRuntime().exec(command);
-			InputStream inputStream = process.getInputStream();
-			String text = new BufferedReader(
-				      new InputStreamReader(inputStream, StandardCharsets.UTF_8))
-				        .lines()
-				        .collect(Collectors.joining("\n"));
-			System.out.println(text);
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			Map<String, Object> mappedString = mapper.readValue(text, new TypeReference<Map<String, Object>>(){});
-			String token = mappedString.get("token_type")+" "+mappedString.get("access_token");
-			System.out.println(token);
 			
 			
-			ObjectMapper auctionMapper = new ObjectMapper();
-			String commandForAh = "curl -X GET https://eu.api.blizzard.com/data/wow/connected-realm/3713/auctions?namespace=dynamic-eu&locale=en_US&access_token="+mappedString.get("access_token");
-			Process process2 = Runtime.getRuntime().exec(commandForAh);
-			InputStream auctionHouseInput = process2.getInputStream();
-			String ahText = new BufferedReader(
-					new InputStreamReader(auctionHouseInput, StandardCharsets.UTF_8))
-					.lines()
-					.collect(Collectors.joining("\n"));
-			SimpleModule module = new SimpleModule("AuctionHouseResponseDeserializer", new Version(1, 0, 0, null, null, null));
-			module.addDeserializer(AuctionEntity.class, new AuctionHouseResponseDeserializer());
-			auctionMapper.registerModule(module);
-			auctionMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-			Auctions ah = auctionMapper.readValue(ahText, Auctions.class);
-			
+//			
+//			ObjectMapper auctionMapper = new ObjectMapper();
+//			String commandForAh = "curl -X GET https://eu.api.blizzard.com/data/wow/connected-realm/3713/auctions?namespace=dynamic-eu&locale=en_US&access_token="+mappedString.get("access_token");
+//			Process process2 = Runtime.getRuntime().exec(commandForAh);
+//			InputStream auctionHouseInput = process2.getInputStream();
+//			String ahText = new BufferedReader(
+//					new InputStreamReader(auctionHouseInput, StandardCharsets.UTF_8))
+//					.lines()
+//					.collect(Collectors.joining("\n"));
+//			SimpleModule module = new SimpleModule("AuctionHouseResponseDeserializer", new Version(1, 0, 0, null, null, null));
+//			module.addDeserializer(AuctionEntity.class, new AuctionHouseResponseDeserializer());
+//			auctionMapper.registerModule(module);
+//			auctionMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+//			Auctions ah = auctionMapper.readValue(ahText, Auctions.class);
+//			
 //			ah.getAuctions().forEach(auctionService::save);
 			
-			String requestForItems = "curl -X GET https://us.api.blizzard.com/data/wow/search/item?namespace=static-us&locale=en_US&orderby=id&_page=1&access_token=" +mappedString.get("access_token");
-			Process process3 = Runtime.getRuntime().exec(requestForItems);
-			InputStream itemsInput = process3.getInputStream();
-			String itemsJsonText = new BufferedReader(
-				      new InputStreamReader(itemsInput, StandardCharsets.UTF_8))
-				        .lines()
-				        .collect(Collectors.joining("\n"));
-			ObjectMapper itemMapper = new ObjectMapper();
-			SimpleModule itemModule = new SimpleModule("ItemEntityResponseDeserializer", new Version(1, 0, 0, null, null, null));
-			itemModule.addDeserializer(ItemEntity.class, new ItemEntityResponseDeserializer());
-			itemMapper.registerModule(itemModule);
-			itemMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-			ItemsWraper itemsResponse = itemMapper.readValue(itemsJsonText, ItemsWraper.class);
-			System.out.println(itemsResponse.toString());
+//			String requestForItems = "curl -X GET https://us.api.blizzard.com/data/wow/search/item?namespace=static-us&locale=en_US&orderby=id&_page=1&access_token=" +mappedString.get("access_token");
+//			Process process3 = Runtime.getRuntime().exec(requestForItems);
+//			InputStream itemsInput = process3.getInputStream();
+//			String itemsJsonText = new BufferedReader(
+//				      new InputStreamReader(itemsInput, StandardCharsets.UTF_8))
+//				        .lines()
+//				        .collect(Collectors.joining("\n"));
+//			ObjectMapper itemMapper = new ObjectMapper();
+//			itemMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//			itemMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+//			ItemsWraper itemsResponse = itemMapper.readValue(itemsJsonText, ItemsWraper.class);
+//			System.out.println(itemsResponse);
+//			itemsResponse.getResults().forEach(itemEntityService::save);
+//			
+//			for(int i = 2 ; i < itemsResponse.getPages(); i++) {
+//				String request = "curl -X GET https://us.api.blizzard.com/data/wow/search/item?namespace=static-us&locale=en_US&orderby=id&_page="+i+"&access_token=" +mappedString.get("access_token");
+//				Process pr = Runtime.getRuntime().exec(request);
+//				InputStream items = pr.getInputStream();
+//				String itemsJson = new BufferedReader(
+//					      new InputStreamReader(items, StandardCharsets.UTF_8))
+//					        .lines()
+//					        .collect(Collectors.joining("\n"));
+//				ObjectMapper itemMapper2 = new ObjectMapper();
+//				itemMapper2.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//				itemMapper2.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+//				ItemsWraper itemsResponse2 = itemMapper.readValue(itemsJson, ItemsWraper.class);
+//				System.out.println(itemsResponse2);
+//				itemsResponse2.getResults().forEach(itemEntityService::save);
+//			}
 			
-			itemsResponse.getResults().forEach(itemEntityService::save);
+			ItemsWraper auctionHouseWrapper = blizzardRequestUtils.getWowItems(1);
+			auctionHouseWrapper.getResults().forEach(itemEntityService::save);
 			
-			//TODO to jest tylko jedna strona itemów. Trzeba zrobic petle z zapytaniami po reszte stron
+			for(int i = 2 ; i <= auctionHouseWrapper.getPages(); i++) {
+				ItemsWraper anotherPage = blizzardRequestUtils.getWowItems(i);
+				anotherPage.getResults().forEach(itemEntityService::save);
+			}
+			
+			Auctions auctions = blizzardRequestUtils.getAuctionHouse();
+			System.out.println(auctions.getAuctions().toString());
+			
 			
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
