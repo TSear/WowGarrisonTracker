@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head
+	th:replace="fragments/header.html :: header(titleName='Add new Character')">
+</head>
+
+<body class="d-flex flex-column">
+
+	<div th:replace="fragments/menuBar.html :: menuBar(active=2)"></div>
+
+	<div class="container-fluid flex-grow-1">
+
+
+
+		<form th:object="${characterPojo}"
+			th:action="@{'/testing/characters/validate'}" method="post"
+			class="align-middle my-5 p-5 container-fluid loginForm col-6 offset-3">
+
+			<h2 class="text-center fs-1">Add new Character</h2>
+			
+			<div th:if="${#fields.hasErrors('*')}" class="alert-danger rounded error-box mt-5">
+				<ul class="p-2 my-2 error-list">
+					<li class="my-1 mx-2 text-center" th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+				</ul>
+			</div>
+			
+			<input type="text" placeholder="Character name" name="characterName"
+				class="text-center font-large my-5 form-control lightColor bg-dark">
+			<button type="submit"
+				class="btn btn-secondary offset-4 col-4 text-center">Submit</button>
+
+		</form>
+	</div>
+
+
+	<div th:replace="fragments/footer.html :: footer"></div>
+	<div th:replace="fragments/header.html :: scripts"></div>
+
+</body>
+
+</html>
