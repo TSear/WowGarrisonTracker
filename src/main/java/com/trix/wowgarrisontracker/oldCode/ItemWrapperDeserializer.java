@@ -1,4 +1,4 @@
-package com.trix.wowgarrisontracker.deserializers;
+package com.trix.wowgarrisontracker.oldCode;
 
 import java.io.IOException;
 
@@ -8,8 +8,6 @@ import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.trix.wowgarrisontracker.model.ItemEntity;
-import com.trix.wowgarrisontracker.wrapers.ItemsWraper;
 
 public class ItemWrapperDeserializer extends StdDeserializer<ItemsWraper>{
 

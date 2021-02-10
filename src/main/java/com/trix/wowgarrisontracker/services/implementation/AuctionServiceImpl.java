@@ -1,5 +1,8 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.trix.wowgarrisontracker.model.AuctionEntity;
@@ -25,6 +28,16 @@ public class AuctionServiceImpl implements AuctionService{
 		return repository.save(auctionEntity)!=null;
 	}
 
+
+	@Override
+	public List<AuctionEntity> getAuctionsByItemId(Long itemId) {
+		
+		return repository.findAuctionEntityByItemId(itemId);
+	}
+
+	
+	
+	
 	
 	
 }

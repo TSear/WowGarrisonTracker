@@ -18,7 +18,7 @@ public interface EntryRepository extends JpaRepository<Entry, Long>{
     @Query("SELECT COALESCE(SUM(e.garrisonResources),0) FROM Entry e WHERE e.accountCharacterId.id = :id")
     public Long getGarrisonResourcesByCharacterId(@Param("id")Long id);
 
-    @Query("SELECT e FROM Entry e WHERE e.accountCharacterId.id = :accountCharacterId")
-    public List<Entry>	findByAccountCharacterId(Long accountCharacterId);
+    @Query("SELECT e FROM Entry e WHERE e.accountCharacterId = :accountCharacterId")
+    public List<Entry>	findByAccountCharacterId(@Param("accountCharacterId")Long accountCharacterId);
     
 }

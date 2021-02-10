@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.trix.wowgarrisontracker.deserializers.AuctionHouseResponseDeserializer;
 import com.trix.wowgarrisontracker.model.AuctionEntity;
 import com.trix.wowgarrisontracker.model.Auctions;
-import com.trix.wowgarrisontracker.wrapers.ItemsWraper;
+import com.trix.wowgarrisontracker.oldCode.ItemsWraper;
 
 public class BlizzardRequestUtils {
 

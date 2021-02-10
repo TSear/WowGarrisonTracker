@@ -26,9 +26,9 @@ public class AccountToAccountPojo implements Converter<Account, AccountPojo>{
         
         Set<AccountCharacterPojo> accountCharacterPojos = new HashSet<>();
         
-        for(AccountCharacter tmp : source.getAccountCharacters()){
-            accountCharacterPojos.add(accountCharacterConverter.convert(tmp));
-        }
+//        for(AccountCharacter tmp : source.getAccountCharacters()){
+//            accountCharacterPojos.add(accountCharacterConverter.convert(tmp));
+//        }
 
         accountPojo.setAccountCharacters(accountCharacterPojos);
 

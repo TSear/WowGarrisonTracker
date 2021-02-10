@@ -27,8 +27,7 @@ public class Entry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private AccountCharacter accountCharacterId;
+    private Long accountCharacterId;
 
     //@DateTimeFormat
     @Column(name = "entryDate")

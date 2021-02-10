@@ -23,7 +23,7 @@
             </tr>
             <tr th:each="entry : ${entries} " th:object="${entry}">
                 <td class="col-3 text-center p-3 border-start border-secondary" th:text="*{entryDate}"></td>
-                <td class="col-3 text-center p-3 border-start border-secondary" th:text="*{accountCharacterId.getId()}"></td>
+                <td class="col-3 text-center p-3 border-start border-secondary" th:text="*{accountCharacterId}"></td>
                 <td class="col-3 text-center p-3 border-start border-secondary" th:text="*{warPaint}"></td>
                 <td class="col-3 text-center p-3 border-start border-secondary border-end" th:text="*{garrisonResources}"></td>
             </tr>

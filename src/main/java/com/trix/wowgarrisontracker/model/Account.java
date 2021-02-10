@@ -34,7 +34,7 @@ public class Account {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "accountId")
-    private Set<AccountCharacter> accountCharacters;   
+    //@OneToMany(mappedBy = "accountId")
+    //private Set<AccountCharacter> accountCharacters;   
 
 }

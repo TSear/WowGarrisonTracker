@@ -31,7 +31,7 @@ public class AccountPojoToAccount implements Converter<AccountPojo, Account>{
             accountCharacters.add(accountCharacterConverter.convert(tmp));
         }
 
-        account.setAccountCharacters(accountCharacters);
+        //account.setAccountCharacters(accountCharacters);
 
         return account;
     }

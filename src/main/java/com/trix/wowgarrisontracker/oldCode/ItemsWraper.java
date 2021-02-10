@@ -1,10 +1,9 @@
-package com.trix.wowgarrisontracker.wrapers;
+package com.trix.wowgarrisontracker.oldCode;
 
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.trix.wowgarrisontracker.model.ItemEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +18,7 @@ public class ItemsWraper {
 	@JsonProperty("pageCount")
 	private int pages;
 	@JsonProperty("results")
-	private List<ItemEntity> results;
+	private List<ItemEntityOld> results;
 	
 
 }

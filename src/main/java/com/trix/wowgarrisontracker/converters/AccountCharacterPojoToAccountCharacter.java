@@ -32,7 +32,7 @@ public class AccountCharacterPojoToAccountCharacter implements Converter<Account
             }
         }
 
-        accountCharacter.setEntries(entries);
+        //accountCharacter.setEntries(entries);
 
         return accountCharacter;
     }

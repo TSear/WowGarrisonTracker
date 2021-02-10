@@ -1,4 +1,4 @@
-package com.trix.wowgarrisontracker.model;
+package com.trix.wowgarrisontracker.oldCode;
 
 import java.util.Map;
 
@@ -11,14 +11,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
-@ToString
-@Entity
-public class ItemEntity {
+
+public class ItemEntityOld {
 
 
-	@Id
 	private Long id;
 	private String name;
 	
