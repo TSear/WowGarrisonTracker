@@ -18,11 +18,13 @@ public class EntryPojo {
     private int garrisonResources;
     private int warPaint;
     private Long accountCharacterId;
+    private String characterName;
 
     public EntryPojo(){
         this.entryDate = LocalDate.now();
         this.garrisonResources = 0;
         this.warPaint = 0;
+        this.characterName = "";
     }
 
 }

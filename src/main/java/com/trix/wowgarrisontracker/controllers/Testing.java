@@ -94,7 +94,7 @@ public class Testing {
 		this.accountService = accountService;
 		this.entryService = entryService;
 		this.accountPojoToAccount = new AccountPojoToAccount();
-		this.accountToAccountPojo = new AccountToAccountPojo();
+		this.accountToAccountPojo = accountToAccountPojo;
 		this.accountDTOValidator = accountDTOValidator;
 		this.jwTutils = jwTutils;
 		this.loginRequestValidator = loginRequestValidator;
@@ -222,14 +222,7 @@ public class Testing {
 		return "asdfasdfasdfasdf";
 	}
 
-	@RequestMapping("track")
-	public String getTrackingPage(HttpServletRequest httpServletRequest, Model model) {
-		Claims claims = jwTutils.extractClaims(
-				utils.extractCookie(AUTHORIZATION, httpServletRequest.getCookies()).getValue().substring(7));
-		Long id = Long.valueOf((int) claims.get("accountId"));
-		model.addAttribute("entries", accountService.getAllEntries(id));
-		return "track";
-	}
+
 
 	@GetMapping(value = "infoPage")
 	public String getInfoPage() {
@@ -249,48 +242,6 @@ public class Testing {
 		return "redirect:/testing/login/page";
 	}
 
-	@GetMapping(value = "track/newEntry")
-	public String getEntryForm(Model model, HttpServletRequest httpServletRequest) {
-
-		Cookie cookie = utils.extractCookie(AUTHORIZATION, httpServletRequest.getCookies());
-
-		if (cookie != null) {
-
-			List<AccountCharacterPojo> accountCharacterPojoList = new ArrayList<>();
-			Long id = jwTutils.extractId(cookie);
-
-			for (AccountCharacter tmp : accountCharacterService.listOfAccountCharacters(id)) {
-				accountCharacterPojoList.add(accountCharacterToAccountCharacterPojo.convert(tmp));
-			}
-
-			if (!model.containsAttribute("entry")) {
-				model.addAttribute("entry", new EntryPojo());
-			}
-			model.addAttribute("characters", accountCharacterPojoList);
-
-			return "entryForm";
-		}
-
-		return "track";
-	}
-
-	@PostMapping(value = "track/validate")
-	public String validateNewEntry(@ModelAttribute("entry") EntryPojo entry, BindingResult bindingResult,
-			RedirectAttributes redirectAttributes) {
-		// TODO coś się zjebało. Jak poda się pustą wartość w formie to kontroller
-		// odbiera to jako pustego stringa i wywala error.
-		entryDTOValidator.validate(entry, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.entry", bindingResult);
-			redirectAttributes.addFlashAttribute("entry", entry);
-			return "redirect:/testing/track/newEntry";
-		}
-
-		entryService.saveEntry(entry);
-
-		return "redirect:/testing/track";
-	}
 
 	@GetMapping(value = "/characters")
 	public String getCharacters(Model model, HttpServletRequest httpServletRequest) {

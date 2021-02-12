@@ -14,9 +14,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class AccountToAccountPojo implements Converter<Account, AccountPojo>{
 
-    private AccountCharacterToAccountCharacterPojo accountCharacterConverter = new AccountCharacterToAccountCharacterPojo();
+    private AccountCharacterToAccountCharacterPojo accountCharacterConverter;
+    
+    /**
+	 * @param accountCharacterConverter
+	 */
+	public AccountToAccountPojo(AccountCharacterToAccountCharacterPojo accountCharacterConverter) {
+		super();
+		this.accountCharacterConverter = accountCharacterConverter;
+	}
 
-    @Override
+
+
+	@Override
     public AccountPojo convert(Account source) {
         AccountPojo accountPojo = new AccountPojo();
 

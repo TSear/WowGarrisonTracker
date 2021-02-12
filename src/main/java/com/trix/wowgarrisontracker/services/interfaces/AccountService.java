@@ -6,6 +6,7 @@ import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.model.LoginRequest;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
+import com.trix.wowgarrisontracker.pojos.EntryPojo;
 
 public interface AccountService {
 
@@ -25,6 +26,6 @@ public interface AccountService {
 
 	boolean isExisting(LoginRequest loginRequest);
 
-	List<Entry> getAllEntries(Long accountId);
+	List<EntryPojo> getAllEntries(Long accountId);
     
 }

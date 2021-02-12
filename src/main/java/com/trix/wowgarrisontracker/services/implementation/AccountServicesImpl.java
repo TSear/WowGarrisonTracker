@@ -3,13 +3,16 @@ package com.trix.wowgarrisontracker.services.implementation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
+import com.trix.wowgarrisontracker.converters.EntryToEntryPojo;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.model.LoginRequest;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
+import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
@@ -25,108 +28,115 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class AccountServicesImpl implements AccountService {
 
-    private AccountRepository accountRepository;
-    private Logger logger = LoggerFactory.getLogger(Slf4j.class);
-    private AccountToAccountPojo accountToAccountPojo;
-    private AccountCharacterService accountCharacterService;
-    private EntryService entryService;
+	private AccountRepository accountRepository;
+	private Logger logger = LoggerFactory.getLogger(Slf4j.class);
+	private AccountToAccountPojo accountToAccountPojo;
+	private AccountCharacterService accountCharacterService;
+	private EntryService entryService;
+	private EntryToEntryPojo entryToEntryPojo;
 
-    public AccountServicesImpl(AccountRepository accountRepository, AccountToAccountPojo accountToAccountPojo, EntryService entryService,
-    AccountCharacterService accountCharacterService) {
-        this.accountRepository = accountRepository;
-        this.accountToAccountPojo = accountToAccountPojo;
-        this.accountCharacterService = accountCharacterService;
-        this.entryService = entryService;
-    }
+	public AccountServicesImpl(AccountRepository accountRepository, AccountToAccountPojo accountToAccountPojo,
+			EntryService entryService, AccountCharacterService accountCharacterService,
+			EntryToEntryPojo entryToEntryPojo) {
+		this.accountRepository = accountRepository;
+		this.accountToAccountPojo = accountToAccountPojo;
+		this.accountCharacterService = accountCharacterService;
+		this.entryService = entryService;
+		this.entryToEntryPojo = entryToEntryPojo;
+	}
 
+	@Override
+	public void save(Account account) {
+		logger.info(account.toString());
 
-    @Override
-    public void save(Account account) {
-        logger.info(account.toString());
+		// TODO Tymczasowe zabezpieczenie
+		if (!account.getLogin()
+				.isEmpty() && this.findUserByUsername(account.getLogin()) == null)
+			accountRepository.save(account);
 
-        // TODO Tymczasowe zabezpieczenie
-        if (!account.getLogin().isEmpty() && this.findUserByUsername(account.getLogin()) == null)
-            accountRepository.save(account);
+	}
 
-    }
+	@Override
+	public void delete(Long id) {
 
-    @Override
-    public void delete(Long id) {
+		if (accountRepository.existsById(id))
+			accountRepository.deleteById(id);
+		else
+			logger.info("Nie znaleziono konta");
 
-        if (accountRepository.existsById(id))
-            accountRepository.deleteById(id);
-        else
-            logger.info("Nie znaleziono konta");
+	}
 
-    }
+	@Override
+	public void update(Account account, Long id) {
 
-    @Override
-    public void update(Account account, Long id) {
+		if (accountRepository.existsById(id)) {
+			account.setId(id);
+			accountRepository.save(account);
+		} else {
+			logger.info("Nie znaleziono konta");
+		}
 
-        if (accountRepository.existsById(id)) {
-            account.setId(id);
-            accountRepository.save(account);
-        } else {
-            logger.info("Nie znaleziono konta");
-        }
+	}
 
-    }
+	@Override
+	public List<AccountPojo> findAll() {
+		List<AccountPojo> accountPojos = new ArrayList<>();
 
-    @Override
-    public List<AccountPojo> findAll() {
-        List<AccountPojo> accountPojos = new ArrayList<>();
+		for (Account tmp : accountRepository.findAll()) {
+			accountPojos.add(accountToAccountPojo.convert(tmp));
+		}
+		return accountPojos;
+	}
 
-        for (Account tmp : accountRepository.findAll()) {
-            accountPojos.add(accountToAccountPojo.convert(tmp));
-        }
-        return accountPojos;
-    }
+	@Override
+	public Account findUserByUsername(String username) {
+		Optional<Account> optionalAccount = accountRepository.findByLogin(username);
+		return optionalAccount.isPresent() ? optionalAccount.get() : null;
 
-    @Override
-    public Account findUserByUsername(String username) {
-        Optional<Account> optionalAccount = accountRepository.findByLogin(username);
-        return optionalAccount.isPresent() ? optionalAccount.get() : null;
+	}
 
-    }
+	@Override
+	public boolean correctCredentials(Account inDatabase, LoginRequest fromForm) {
 
-    @Override
-    public boolean correctCredentials(Account inDatabase, LoginRequest fromForm) {
+		return inDatabase.getLogin()
+				.equals(fromForm.getLogin())
+				&& inDatabase.getPassword()
+						.equals(fromForm.getPassword());
 
-        return inDatabase.getLogin().equals(fromForm.getLogin())
-                && inDatabase.getPassword().equals(fromForm.getPassword());
+	}
 
-    }
+	@Override
+	public Account correctCredentials(LoginRequest fromForm) {
 
-    @Override
-    public Account correctCredentials(LoginRequest fromForm) {
+		Account account = this.findUserByUsername(fromForm.getLogin());
+		if (account != null && account.getPassword()
+				.equals(fromForm.getPassword())) {
+			return account;
+		}
+		return null;
+	}
 
-        Account account = this.findUserByUsername(fromForm.getLogin());
-        if (account != null && account.getPassword().equals(fromForm.getPassword())) {
-            return account;
-        }
-        return null;
-    }
+	@Override
+	public boolean isExisting(LoginRequest loginRequest) {
+		Account account = this.findUserByUsername(loginRequest.getLogin());
+		if (account == null)
+			return false;
+		return account.getPassword()
+				.equals(loginRequest.getPassword());
+	}
 
-    @Override
-    public boolean isExisting(LoginRequest loginRequest) {
-        Account account = this.findUserByUsername(loginRequest.getLogin());
-        if (account == null)
-            return false;
-        return account.getPassword().equals(loginRequest.getPassword());
-    }
+	@Override
+	public List<EntryPojo> getAllEntries(Long accountId) {
 
-    @Override
-    public List<Entry> getAllEntries(Long accountId) {
-        
-        List<AccountCharacter> listOfAccountCharacters = accountCharacterService.listOfAccountCharacters(accountId);
-        List<Entry> listOfAllEntries = new ArrayList<>();
-        for(AccountCharacter tmp : listOfAccountCharacters){
-            listOfAllEntries.addAll(entryService.listOfEntries(tmp.getId()));
-        }
-        
-        return listOfAllEntries;
-    }
+		List<AccountCharacter> listOfAccountCharacters = accountCharacterService.listOfAccountCharacters(accountId);
+		List<EntryPojo> listOfAllEntries = new ArrayList<>();
+		for(AccountCharacter tmp : listOfAccountCharacters) {
+			listOfAllEntries.addAll(entryService.listOfEntries(tmp.getId()).stream()
+					.map(entryToEntryPojo::convert)
+					.collect(Collectors.toList()));
+		}
 
-    
+		return listOfAllEntries;
+	}
 
 }
