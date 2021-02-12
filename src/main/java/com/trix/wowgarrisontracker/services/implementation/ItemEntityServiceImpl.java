@@ -1,5 +1,7 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.trix.wowgarrisontracker.model.ItemEntity;
@@ -18,6 +20,11 @@ public class ItemEntityServiceImpl implements ItemEntityService {
 	@Override
 	public boolean save(ItemEntity itemEntity) {
 		return repository.save(itemEntity)!=null;
+	}
+
+	@Override
+	public List<ItemEntity> findAllItemEntities() {
+		return repository.findAll();
 	}
 
 }

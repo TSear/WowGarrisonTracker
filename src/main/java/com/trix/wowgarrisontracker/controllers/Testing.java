@@ -1,8 +1,12 @@
 package com.trix.wowgarrisontracker.controllers;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import javax.persistence.metamodel.PluralAttribute.CollectionType;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,14 +29,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.trix.wowgarrisontracker.converters.AccountCharacterToAccountCharacterPojo;
 import com.trix.wowgarrisontracker.converters.AccountPojoToAccount;
 import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
+import com.trix.wowgarrisontracker.converters.AuctionToAuctionPojo;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
+import com.trix.wowgarrisontracker.model.AuctionEntity;
 import com.trix.wowgarrisontracker.model.Auctions;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
+import com.trix.wowgarrisontracker.model.ItemEntity;
 import com.trix.wowgarrisontracker.model.LoginRequest;
 import com.trix.wowgarrisontracker.pojos.AccCharacterResourcesPojo;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
+import com.trix.wowgarrisontracker.pojos.AuctionHouseInfoPojo;
+import com.trix.wowgarrisontracker.pojos.AuctionPojo;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
@@ -71,6 +80,7 @@ public class Testing {
 	private AuctionService auctionService;
 	private ItemEntityService itemEntityService;
 	private BlizzardRequestUtils blizzardRequestUtils;
+	private AuctionToAuctionPojo auctionToAuctionPojo;
 
 	private final String AUTHORIZATION = "Authorization";
 
@@ -78,8 +88,8 @@ public class Testing {
 			EntryService entryService, JWTutils jwTutils, AccountDTOValidator accountDTOValidator,
 			LoginRequestValidator loginRequestValidator, GeneralUtils utils,
 			AccountCharacterToAccountCharacterPojo accountCharacterToAccountCharacterPojo,
-			AccountCharacterDTOValidator accountCharacterDTOValidator,
-			AuctionService auctionService, ItemEntityService itemEntityService) {
+			AccountCharacterDTOValidator accountCharacterDTOValidator, AuctionService auctionService,
+			ItemEntityService itemEntityService, AuctionToAuctionPojo auctionToAuctionPojo) {
 		this.accountCharacterService = accountCharacterService;
 		this.accountService = accountService;
 		this.entryService = entryService;
@@ -95,6 +105,7 @@ public class Testing {
 		this.auctionService = auctionService;
 		this.itemEntityService = itemEntityService;
 		this.blizzardRequestUtils = new BlizzardRequestUtils();
+		this.auctionToAuctionPojo = auctionToAuctionPojo;
 	}
 
 	@GetMapping("login/page")
@@ -251,8 +262,8 @@ public class Testing {
 			for (AccountCharacter tmp : accountCharacterService.listOfAccountCharacters(id)) {
 				accountCharacterPojoList.add(accountCharacterToAccountCharacterPojo.convert(tmp));
 			}
-			
-			if(!model.containsAttribute("entry")) {				
+
+			if (!model.containsAttribute("entry")) {
 				model.addAttribute("entry", new EntryPojo());
 			}
 			model.addAttribute("characters", accountCharacterPojoList);
@@ -266,7 +277,8 @@ public class Testing {
 	@PostMapping(value = "track/validate")
 	public String validateNewEntry(@ModelAttribute("entry") EntryPojo entry, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
-		//TODO coś się zjebało. Jak poda się pustą wartość w formie to kontroller odbiera to jako pustego stringa i wywala error.
+		// TODO coś się zjebało. Jak poda się pustą wartość w formie to kontroller
+		// odbiera to jako pustego stringa i wywala error.
 		entryDTOValidator.validate(entry, bindingResult);
 
 		if (bindingResult.hasErrors()) {
@@ -336,10 +348,10 @@ public class Testing {
 		return "redirect:/testing/characters";
 
 	}
-	
+
 	@GetMapping(value = "/auctionhouse/update")
 	public String updateAuctionHouse() {
-		
+
 		try {
 // Nie zwraca tego co  chciałem 
 //			ItemsWraper itemsWrapper = blizzardRequestUtils.getWowItems(1);
@@ -349,26 +361,46 @@ public class Testing {
 //				ItemsWraper anotherPage = blizzardRequestUtils.getWowItems(i);
 //				anotherPage.getResults().forEach(itemEntityService::save);
 //			}
-			
+
 			Auctions auctions = blizzardRequestUtils.getAuctionHouse();
+			auctionService.removeAll();
 			auctions.getAuctions().stream().filter(x -> x.getItemId() == 109119).forEach(auctionService::save);
-			//auctions.getAuctions().forEach(auctionService::save);
+			// auctions.getAuctions().forEach(auctionService::save);
 //			System.out.println(auctions.getAuctions().toString());
 //			System.out.println(auctionService.getAuctionsByItemId(109119l));
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
+
 		return "redirect:/testing/auctionhouse/get";
 	}
-	
-	@GetMapping(value = "/auctionhouse/get")
-	public String getAuctionHouse() {
 
-		//TODO informacje przesyłane listami w liscie 
-		
-		return "infoPage";
+	@GetMapping(value = "/auctionhouse/get")
+	public String getAuctionHouse(Model model) {
+
+		List<ItemEntity> itemList = itemEntityService.findAllItemEntities();
+		List<AuctionPojo> returnAuctionList = new ArrayList<>();
+
+		for (ItemEntity itemTmp : itemList) {
+			List<AuctionEntity> listOfAuctionEntities = auctionService.getAuctionsByItemId(itemTmp.getId());
+			AuctionPojo auctionPojoTmp = new AuctionPojo();
+			auctionPojoTmp.setItemName(itemTmp.getName());
+			for (AuctionEntity auctionEntityTmp : listOfAuctionEntities) {
+				AuctionHouseInfoPojo auctionHouseInfoPojo = new AuctionHouseInfoPojo();
+				auctionHouseInfoPojo.setQuantity(auctionEntityTmp.getQuantity());
+				auctionHouseInfoPojo.setUnitPrice(auctionEntityTmp.getUnitPrice());
+				auctionPojoTmp.getInfo().add(auctionHouseInfoPojo);
+			}
+			returnAuctionList.add(auctionPojoTmp);
+			// returnAuctionList.add(listOfAuctionEntities.stream().map(auctionToAuctionPojo::convert).collect(Collectors.toList()));
+		}
+		returnAuctionList.stream().forEach(item -> item.getInfo().sort(
+				(AuctionHouseInfoPojo o1, AuctionHouseInfoPojo o2) -> o1.getUnitPrice().compareTo(o2.getUnitPrice())));
+
+		model.addAttribute("items", returnAuctionList);
+
+		return "auctionHouse.html";
 	}
 
 }

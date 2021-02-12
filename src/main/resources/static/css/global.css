@@ -1,6 +1,6 @@
 body {
     background-color: #22223B;
-    color: #C9ADA7;
+    color: #C9ADA7!important;
     min-height: 100vh;
 }
 
@@ -80,3 +80,26 @@ input:-webkit-autofill::first-line {
     font-size: 2.5vmin;
     ;
 }
+
+.table{
+	color:#C9ADA7;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #202038;
+   color:#C9ADA7;
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

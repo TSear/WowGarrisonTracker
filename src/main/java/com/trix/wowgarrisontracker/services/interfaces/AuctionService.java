@@ -10,4 +10,8 @@ public interface AuctionService {
 	
 	List<AuctionEntity> getAuctionsByItemId(Long itemId);
 	
+	String getItemNameByAuction(Long auctionItemId);
+	
+	void removeAll();
+	
 }
