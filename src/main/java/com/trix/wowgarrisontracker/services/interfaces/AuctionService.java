@@ -14,4 +14,6 @@ public interface AuctionService {
 	
 	void removeAll();
 	
+	void updateAuctionHouse();
+	
 }

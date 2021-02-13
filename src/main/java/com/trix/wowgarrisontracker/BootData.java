@@ -13,6 +13,7 @@ import com.trix.wowgarrisontracker.repository.AccountRepository;
 import com.trix.wowgarrisontracker.repository.AuctionEntityRepository;
 import com.trix.wowgarrisontracker.repository.EntryRepository;
 import com.trix.wowgarrisontracker.repository.ItemEntityRepository;
+import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
 import com.trix.wowgarrisontracker.services.interfaces.ItemEntityService;
 
 import org.slf4j.Logger;
@@ -31,19 +32,22 @@ public class BootData implements CommandLineRunner {
     private Logger logger = LoggerFactory.getLogger(Slf4j.class);
     private ItemEntityRepository itemEntityRepository;
     private AuctionEntityRepository auctionEntityRepository;
+    private AuctionService auctionService;
 
     public BootData(AccountRepository accountRepository, AccountCharacterRepository accountCharacterRepository,
             EntryRepository entryRepository,ItemEntityRepository itemEntityRepository,
-            AuctionEntityRepository auctionEntityRepository) {
+            AuctionEntityRepository auctionEntityRepository, AuctionService auctionService) {
         this.accountRepository = accountRepository;
         this.accountCharacterRepository = accountCharacterRepository;
         this.entryRepository = entryRepository;
         this.itemEntityRepository = itemEntityRepository;
         this.auctionEntityRepository = auctionEntityRepository;
+        this.auctionService = auctionService;
     }
 
     @Override
     public void run(String... args) throws Exception {
+    	auctionService.updateAuctionHouse();
 //        logger.info("Creating data");
 //        this.innit();
         

@@ -12,10 +12,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EntryRepository extends JpaRepository<Entry, Long>{
     
-    @Query("SELECT COALESCE(SUM(e.warPaint),0) FROM Entry e WHERE e.accountCharacterId.id = :id")
+    @Query(value = "SELECT COALESCE(SUM(e.warPaint),0) FROM Entry e WHERE e.accountCharacterId= :id")
     public Long getWarPaintByCharacterId(@Param("id")Long id);
 
-    @Query("SELECT COALESCE(SUM(e.garrisonResources),0) FROM Entry e WHERE e.accountCharacterId.id = :id")
+    @Query("SELECT COALESCE(SUM(e.garrisonResources),0) FROM Entry e WHERE e.accountCharacterId= :id")
     public Long getGarrisonResourcesByCharacterId(@Param("id")Long id);
 
     @Query("SELECT e FROM Entry e WHERE e.accountCharacterId = :accountCharacterId")

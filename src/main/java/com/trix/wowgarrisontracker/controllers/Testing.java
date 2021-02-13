@@ -1,12 +1,8 @@
 package com.trix.wowgarrisontracker.controllers;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import javax.persistence.metamodel.PluralAttribute.CollectionType;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +27,6 @@ import com.trix.wowgarrisontracker.converters.AccountPojoToAccount;
 import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
 import com.trix.wowgarrisontracker.converters.AuctionToAuctionPojo;
 import com.trix.wowgarrisontracker.model.Account;
-import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.AuctionEntity;
 import com.trix.wowgarrisontracker.model.Auctions;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
@@ -42,7 +37,6 @@ import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.pojos.AuctionHouseInfoPojo;
 import com.trix.wowgarrisontracker.pojos.AuctionPojo;
-import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
@@ -56,7 +50,6 @@ import com.trix.wowgarrisontracker.validators.AccountDTOValidator;
 import com.trix.wowgarrisontracker.validators.EntryDTOValidator;
 import com.trix.wowgarrisontracker.validators.LoginRequestValidator;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.impl.DefaultClaims;
 import lombok.extern.slf4j.Slf4j;
 
@@ -298,33 +291,6 @@ public class Testing {
 
 		return "redirect:/testing/characters";
 
-	}
-
-	@GetMapping(value = "/auctionhouse/update")
-	public String updateAuctionHouse() {
-
-		try {
-// Nie zwraca tego co  chciałem 
-//			ItemsWraper itemsWrapper = blizzardRequestUtils.getWowItems(1);
-//			itemsWrapper.getResults().forEach(itemEntityService::save);
-//			
-//			for(int i = 2 ; i <= itemsWrapper.getPages(); i++) {
-//				ItemsWraper anotherPage = blizzardRequestUtils.getWowItems(i);
-//				anotherPage.getResults().forEach(itemEntityService::save);
-//			}
-
-			Auctions auctions = blizzardRequestUtils.getAuctionHouse();
-			auctionService.removeAll();
-			auctions.getAuctions().stream().filter(x -> x.getItemId() == 109119).forEach(auctionService::save);
-			// auctions.getAuctions().forEach(auctionService::save);
-//			System.out.println(auctions.getAuctions().toString());
-//			System.out.println(auctionService.getAuctionsByItemId(109119l));
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-
-		return "redirect:/testing/auctionhouse/get";
 	}
 
 	@GetMapping(value = "/auctionhouse/get")

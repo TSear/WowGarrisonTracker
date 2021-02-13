@@ -18,4 +18,17 @@ public class AuctionEntity {
 	private Long itemId;
 	private Long unitPrice;
 	private Long quantity;
+	
+//	@Override
+//	public boolean equals(Object o) {
+//		
+//		if(o instanceof AuctionEntity) {
+//			return this.id == ((AuctionEntity)o).getId();
+//		}
+//		return this.id == (Long)o;	
+//	}
+//	@Override
+//	public int hashCode() {
+//		return this.id.hashCode();
+//	}
 }

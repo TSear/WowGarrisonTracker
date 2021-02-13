@@ -9,7 +9,6 @@
 	<div th:replace="fragments/menuBar.html :: menuBar(active=4)"></div>
 
 	<div class="container-fluid flex-grow-1">
-		<a th:href="@{/testing/auctionhouse/update}" class="btn btn-outline-secondary col-4 offset-4 mt-5">Update prices</a>
 		<div th:each="item : ${items}" class="row-fluid align-items-center d-flex flex-column">
 			<h2 th:text="${item.itemName}" class="mb-5 mt-5 fs-1"></h2>
 			<table class="row-fluid p-5 w-50 table-striped table table-default table-borderless border-bottom">
@@ -19,7 +18,7 @@
 				</tr>
 				<tr th:each="itemWithAuctions : ${item.info}"
 					th:object="${itemWithAuctions}">
-					<td th:text="*{unitPrice}" class="text-center py-1"></td>
+					<td th:text="*{getPrice()}" class="text-center py-1"></td>
 					<td th:text="*{quantity}" class="text-center py-1"></td>
 				</tr>
 			</table>

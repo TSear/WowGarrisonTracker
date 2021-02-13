@@ -104,8 +104,6 @@ public class TrackController {
 	@PostMapping(value = "validate")
 	public String validateNewEntry(@ModelAttribute("entry") EntryPojo entry, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
-		// TODO coś się zjebało. Jak poda się pustą wartość w formie to kontroller
-		// odbiera to jako pustego stringa i wywala error.
 		entryDTOValidator.validate(entry, bindingResult);
 
 		if (bindingResult.hasErrors()) {
