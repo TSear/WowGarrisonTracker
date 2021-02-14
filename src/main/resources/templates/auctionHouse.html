@@ -9,11 +9,14 @@
 	<div th:replace="fragments/menuBar.html :: menuBar(active=4)"></div>
 
 	<div class="container-fluid flex-grow-1">
-		<div th:each="item : ${items}" class="row-fluid align-items-center d-flex flex-column">
+		<div th:each="item : ${items}"
+			class="row-fluid align-items-center d-flex flex-column">
 			<h2 th:text="${item.itemName}" class="mb-5 mt-5 fs-1"></h2>
-			<table class="row-fluid p-5 w-50 table-striped table table-default table-borderless border-bottom">
+			<table
+				class="row-fluid p-5 w-50 table-striped table table-default table-borderless border-bottom">
 				<tr>
-					<th class="fs-5 py-3 px-3 border-bottom text-center">Unit Price</th>
+					<th class="fs-5 py-3 px-3 border-bottom text-center">Unit
+						Price</th>
 					<th class="fs-5 py-3 px-3 border-bottom text-center">Quantity</th>
 				</tr>
 				<tr th:each="itemWithAuctions : ${item.info}"

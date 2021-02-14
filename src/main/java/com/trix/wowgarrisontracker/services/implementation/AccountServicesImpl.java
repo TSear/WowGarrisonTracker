@@ -13,6 +13,7 @@ import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.model.LoginRequest;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
+import com.trix.wowgarrisontracker.pojos.RegisterModel;
 import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
@@ -138,5 +139,10 @@ public class AccountServicesImpl implements AccountService {
 
 		return listOfAllEntries;
 	}
-
+	@Override
+	public boolean areCredentialsTaken(RegisterModel registerModel) {
+		Account account = this.findUserByUsername(registerModel.getLogin());
+		if(account!=null)return true;
+		return false;
+	}
 }

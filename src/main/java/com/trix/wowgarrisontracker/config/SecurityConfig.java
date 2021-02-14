@@ -42,13 +42,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http.authorizeRequests().antMatchers("/testing/login/*").permitAll().antMatchers("/css/*").permitAll()
+        http.authorizeRequests().antMatchers("/account/login/*").permitAll().antMatchers("/css/*").permitAll()
                 .antMatchers("/js/*").permitAll().anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().formLogin()
-            .loginPage("/testing/login/page")
-            .loginProcessingUrl("/testing/login/verify")
+            .loginPage("/account/login/page")
+            .loginProcessingUrl("/account/login/verify")
             .defaultSuccessUrl("/testing/get", true);
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

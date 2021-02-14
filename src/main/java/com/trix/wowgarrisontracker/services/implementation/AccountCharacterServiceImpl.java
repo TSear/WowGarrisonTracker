@@ -37,7 +37,7 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
 
 	@Override
 	public List<AccountCharacter> listOfAccountCharacters(Long accountId) {
-		return accountCharacterRepository.findAll();
+		return accountCharacterRepository.findAllByAccountId(accountId);
 	}
 
 	@Override

@@ -72,8 +72,7 @@ public class Testing {
 	private AccountCharacterDTOValidator accountCharacterDTOValidator;
 	private AuctionService auctionService;
 	private ItemEntityService itemEntityService;
-	private BlizzardRequestUtils blizzardRequestUtils;
-	private AuctionToAuctionPojo auctionToAuctionPojo;
+	private BlizzardRequestUtils blizzardRequestUtils; private AuctionToAuctionPojo auctionToAuctionPojo;
 
 	private final String AUTHORIZATION = "Authorization";
 
@@ -101,46 +100,46 @@ public class Testing {
 		this.auctionToAuctionPojo = auctionToAuctionPojo;
 	}
 
-	@GetMapping("login/page")
-	public String loginPage(Model model) {
-		if (!model.containsAttribute("loginRequest")) {
-			LoginRequest loginRequest = new LoginRequest();
-			loginRequest.setLogin("Login");
-			model.addAttribute("loginRequest", loginRequest);
-		}
-		return "login";
-	}
-
-	@PostMapping(value = "login/validate")
-	public String login(@ModelAttribute("loginRequest") LoginRequest loginRequest, Model model,
-			BindingResult bindingResult, RedirectAttributes redirectAttributes,
-			HttpServletResponse httpServletResponse) {
-
-		boolean isPasswordCorrect = false;
-		boolean isLoginInDatabase = accountService.isExisting(loginRequest);
-		Account account = accountService.findUserByUsername(loginRequest.getLogin());
-
-		if (account != null)
-			isPasswordCorrect = loginRequest.getPassword().equals(account.getPassword());
-
-		if (isLoginInDatabase && isPasswordCorrect) {
-			logger.info("Procesing credentials");
-			// TODO JWT token jest przechowywany w ciasteczku. Będzie trzeba to zmienić na
-			// coś bardziej bezpiecznego
-			Cookie cookie = new Cookie(AUTHORIZATION, jwTutils.generateToken(new CustomUserDetails(account)));
-			cookie.setPath("/");
-			cookie.setMaxAge(-1);
-			httpServletResponse.addCookie(cookie);
-			return "redirect:/testing/infoPage";
-		}
-
-		bindingResult.reject("credentials.bad", "Wrong login or password");
-		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.loginRequest",
-				bindingResult);
-		redirectAttributes.addFlashAttribute("loginRequest", loginRequest);
-		return "redirect:/testing/login/page";
-
-	}
+//	@GetMapping("login/page")
+//	public String loginPage(Model model) {
+//		if (!model.containsAttribute("loginRequest")) {
+//			LoginRequest loginRequest = new LoginRequest();
+//			loginRequest.setLogin("Login");
+//			model.addAttribute("loginRequest", loginRequest);
+//		}
+//		return "login";
+//	}
+//
+//	@PostMapping(value = "login/validate")
+//	public String login(@ModelAttribute("loginRequest") LoginRequest loginRequest, Model model,
+//			BindingResult bindingResult, RedirectAttributes redirectAttributes,
+//			HttpServletResponse httpServletResponse) {
+//
+//		boolean isPasswordCorrect = false;
+//		boolean isLoginInDatabase = accountService.isExisting(loginRequest);
+//		Account account = accountService.findUserByUsername(loginRequest.getLogin());
+//
+//		if (account != null)
+//			isPasswordCorrect = loginRequest.getPassword().equals(account.getPassword());
+//
+//		if (isLoginInDatabase && isPasswordCorrect) {
+//			logger.info("Procesing credentials");
+//			// TODO JWT token jest przechowywany w ciasteczku. Będzie trzeba to zmienić na
+//			// coś bardziej bezpiecznego
+//			Cookie cookie = new Cookie(AUTHORIZATION, jwTutils.generateToken(new CustomUserDetails(account)));
+//			cookie.setPath("/");
+//			cookie.setMaxAge(-1);
+//			httpServletResponse.addCookie(cookie);
+//			return "redirect:/testing/infoPage";
+//		}
+//
+//		bindingResult.reject("credentials.bad", "Wrong login or password");
+//		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.loginRequest",
+//				bindingResult);
+//		redirectAttributes.addFlashAttribute("loginRequest", loginRequest);
+//		return "redirect:/testing/login/page";
+//
+//	}
 
 	@RequestMapping(name = "/testing/login/token/refresh")
 	public String refreshToken(HttpServletRequest httpServletRequest) {
