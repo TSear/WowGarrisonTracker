@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.trix.wowgarrisontracker.deserializers.AuctionHouseResponseDeserializer;
 import com.trix.wowgarrisontracker.model.AuctionEntity;
 import com.trix.wowgarrisontracker.model.Auctions;
-import com.trix.wowgarrisontracker.oldCode.ItemsWraper;
+
 
 public class BlizzardRequestUtils {
 
@@ -46,25 +46,6 @@ public class BlizzardRequestUtils {
 		
 		return ah;
 
-	}
-
-	public ItemsWraper getWowItems(int page) {
-		String jsonData = "";
-		ItemsWraper itemsWraper = new ItemsWraper();
-		try {
-			String[] token = this.getToken().split(" ");
-			jsonData = this.getJsonData(
-					"curl -X GET https://us.api.blizzard.com/data/wow/search/item?namespace=static-us&locale=en_US&orderby=id&_page="
-							+ page + "&access_token=" + token[1]);
-			ObjectMapper itemMapper = new ObjectMapper();
-			itemMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			itemMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-			itemsWraper = itemMapper.readValue(jsonData, ItemsWraper.class);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-
-		return itemsWraper;
 	}
 
 	public String getJsonData(String curlRequest) {
