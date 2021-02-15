@@ -36,13 +36,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/h2-console/**");
+//        web.ignoring().antMatchers("/account/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http.authorizeRequests().antMatchers("/account/login/*").permitAll().antMatchers("/css/*").permitAll()
+        http.authorizeRequests().antMatchers("/account/**").permitAll()
+        		.antMatchers("/account/login/*").permitAll()
+        		.antMatchers("/css/*").permitAll()
                 .antMatchers("/js/*").permitAll().anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

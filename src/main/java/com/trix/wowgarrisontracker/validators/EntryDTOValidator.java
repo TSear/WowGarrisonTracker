@@ -19,7 +19,8 @@ public class EntryDTOValidator implements Validator {
         ValidationUtils.rejectIfEmpty(errors, "garrisonResources", "garrisonResources.empty", "Garrison Resources cannot be empty");
         ValidationUtils.rejectIfEmpty(errors, "warPaint", "warPaint.empty", "War paint cannot be empty");
         ValidationUtils.rejectIfEmpty(errors, "accountCharacterId", "accountCharacterId.empty", "Account Character cannot be empty");
-
+        if(pojo.getGarrisonResources() < 0)errors.rejectValue("garrisonResources", "garrisonResources.negative", "Garrison Resources cannot be negative");
+        if(pojo.getWarPaint() < 0)errors.rejectValue("warPaint", "warPaint.negative", "War Paint cannot be negative");
     }
 
 }

@@ -16,7 +16,7 @@
 				<hr class="my-5">
 				<div class="form-group my-3 col-10 offset-1">
 					<label for="login">Login</label> <input id="login" name="login"
-						th:value="*{login}" type="text" class="form-control bg-dark"
+						th:value="*{login}" type="text" class="form-control "
 						th:classappend="${#fields.hasErrors('login')}? is-invalid : ''">
 					<div th:if="${#fields.hasErrors('login')}" class="invalid-feedback">
 						<ul class="error-list p-0 m-0 text-center">
@@ -28,7 +28,7 @@
 				<div class="form-group my-3 col-10 offset-1">
 					<label for="password">Password</label> <input id="password"
 						name="password" th:value="*{password}" type="password"
-						class="form-control bg-dark" th:classappend="${#fields.hasErrors('password')} ? is-invalid : ''">
+						class="form-control " th:classappend="${#fields.hasErrors('password')} ? is-invalid : ''">
 					<div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
 						<ul class="error-list p-0 m-0 text-center">
 							<li th:each="err : ${#fields.errors('password')}" th:text="${err}"></li>
@@ -40,7 +40,7 @@
 					<label for="repeatedPassword form-control-label">Repeat Password</label> <input
 						id="repeatedPassword" name="repeatedPassword"
 						th:value="*{repeatedPassword}" type="password"
-						class="form-control bg-dark form-control-danger" th:classappend="${#fields.hasErrors('repeatedPassword')} ? is-invalid : ''">
+						class="form-control  form-control-danger" th:classappend="${#fields.hasErrors('repeatedPassword')} ? is-invalid : ''">
 					<div th:if="${#fields.hasErrors('repeatedPassword')}" class="invalid-feedback">
 						<ul class="error-list p-0 m-0 text-center">
 							<li th:each="err : ${#fields.errors('repeatedPassword')}" th:text="${err}"></li>
