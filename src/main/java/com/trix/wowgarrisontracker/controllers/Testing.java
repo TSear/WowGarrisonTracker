@@ -318,5 +318,8 @@ public class Testing {
 
 		return "auctionHouse.html";
 	}
-
+	@GetMapping(value = "/contact")
+	public String getContact() {
+		return "contact";
+	}
 }

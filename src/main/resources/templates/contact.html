@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/header.html :: html(titleName='Cotact')">
+
+</head>
+<body class="d-flex flex-column">
+	<div th:replace="fragments/menuBar.html :: menuBar(active = 6)"></div>
+
+	<div class="container flex-grow-1 flex-column d-flex">
+
+		<h2 class="fs-1 text-center my-5" style="font-weight: bold;">Contact</h2>
+
+		<div class="row-fluid flex-grow-1">
+			<table class="col-10 offset-1 col-lg-6 offset-lg-3 loginForm">
+				<tr class="font-left py-2">
+					<td class="px-4 py-3">Phone number:</td>
+					<td class="px-4 py-3">123456789</td>
+				</tr>
+				<tr class="font-left">
+					<td class="px-4 py-3">E-mail:</td>
+					<td class="px-4 py-3">Example@mail.pl</td>
+				</tr>
+				<tr class="font-left">
+					<td class="px-4 py-3">Secon E-mail:</td>
+					<td class="px-4 py-3">Example2@gmail.pl</td>
+				</tr>
+			</table>
+		</div>
+
+	</div>
+
+	<div th:replace="fragments/footer.html :: footer"></div>
+	<div th:replace="fragments/header.html :: scripts"></div>
+</body>
+</html>

@@ -17,12 +17,18 @@ public class AccountPojo {
     private String login;
     private String password;
     private Set<AccountCharacterPojo> accountCharacters;
-    
+ 	private Long garrisonResources;
+	private Long warPaint;
+	private Long amountOfEntries;
+	   
     public AccountPojo(){
         id = 1l;
         login = "";
         password = "";
         accountCharacters = new HashSet<>(Collections.emptySet());
+        garrisonResources = 0l;
+        warPaint = 0l;
+        amountOfEntries = 0l;
     }
 
 }

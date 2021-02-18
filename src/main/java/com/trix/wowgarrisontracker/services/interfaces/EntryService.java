@@ -9,6 +9,6 @@ public interface EntryService{
 
     List<Entry> listOfEntries(Long characterId);
 
-    boolean saveEntry(EntryPojo entryPojo);
+    boolean save(EntryPojo entryPojo);
 
 }

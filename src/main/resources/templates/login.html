@@ -13,7 +13,7 @@
 			<form th:action="@{validate} " method="POST"
 				th:object="${loginRequest}" class="container d-flex flex-column align-items-center">
 				<div
-					class="alert-danger  w-75 mx-auto error-box my-4"
+					class="alert-danger  w-75 mx-auto error-box mb-4"
 					th:if="${#fields.hasErrors('*')}">
 					<ul class="p-2 m-2 error-list">
 						<li class="my-1 mx-2 text-center"

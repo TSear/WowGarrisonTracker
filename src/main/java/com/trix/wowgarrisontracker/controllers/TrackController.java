@@ -88,6 +88,8 @@ public class TrackController {
 					.stream()
 					.map(accountCharacterToAccountCharacterPojo::convert)
 					.collect(Collectors.toList());
+			
+			System.out.println(accountService.getAllResourcesByAccountId(id));
 
 			if (!model.containsAttribute("entry")) {
 				model.addAttribute("entry", new EntryPojo());
@@ -112,9 +114,10 @@ public class TrackController {
 			return "redirect:/testing/track/newEntry";
 		}
 
-		entryService.saveEntry(entry);
+		accountService.saveEntry(entry);
 
 		return "redirect:/testing/track";
 	}
+
 
 }

@@ -18,48 +18,61 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private AccountDetailsService accountDetailsService;
+	@Autowired
+	private AccountDetailsService accountDetailsService;
 
-    private JWTFilter jwtFilter;
+	private JWTFilter jwtFilter;
 
-    public SecurityConfig(JWTFilter jwtFilter) {
-        this.jwtFilter = jwtFilter;
+	public SecurityConfig(JWTFilter jwtFilter) {
+		this.jwtFilter = jwtFilter;
 
-    }
+	}
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(accountDetailsService);
-    }
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(accountDetailsService);
+	}
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/h2-console/**");
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring()
+				.antMatchers("/h2-console/**");
 //        web.ignoring().antMatchers("/account/**");
-    }
+	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf()
+				.disable();
 
-        http.authorizeRequests().antMatchers("/account/**").permitAll()
-        		.antMatchers("/account/login/*").permitAll()
-        		.antMatchers("/css/*").permitAll()
-                .antMatchers("/js/*").permitAll().anyRequest().authenticated()
-                .and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and().formLogin()
-            .loginPage("/account/login/page")
-            .loginProcessingUrl("/account/login/verify")
-            .defaultSuccessUrl("/testing/get", true);
+		http.authorizeRequests()
+				.antMatchers("/account/**")
+				.permitAll()
+				.antMatchers("/account/login/*")
+				.permitAll()
+				.antMatchers("/css/*")
+				.permitAll()
+				.antMatchers("/img/**")
+				.permitAll()
+				.antMatchers("/js/*")
+				.permitAll()
+				.anyRequest()
+				.authenticated()
+				.and()
+				.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
+				.formLogin()
+				.loginPage("/account/login/page")
+				.loginProcessingUrl("/account/login/verify")
+				.defaultSuccessUrl("/testing/get", true);
 
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-    }
+		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return NoOpPasswordEncoder.getInstance();
+	}
 
 }

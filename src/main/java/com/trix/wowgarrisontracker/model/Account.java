@@ -1,13 +1,10 @@
 package com.trix.wowgarrisontracker.model;
 
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -16,7 +13,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 @ToString
-@NoArgsConstructor
 @Getter
 @Setter
 @Table(name = "account")
@@ -34,6 +30,15 @@ public class Account {
     @Column(name = "password")
     private String password;
 
+	private Long garrisonResources;
+	private Long warPaint;
+	private Long amountOfEntries;
+	
+	public Account() {
+		this.garrisonResources = 0l;
+		this.warPaint = 0l;
+		this.amountOfEntries = 0l;
+	}
     //@OneToMany(mappedBy = "accountId")
     //private Set<AccountCharacter> accountCharacters;   
 

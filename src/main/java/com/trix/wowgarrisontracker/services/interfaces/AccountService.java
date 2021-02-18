@@ -1,6 +1,7 @@
 package com.trix.wowgarrisontracker.services.interfaces;
 
 import java.util.List;
+import java.util.Map;
 
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.Entry;
@@ -30,5 +31,11 @@ public interface AccountService {
 	List<EntryPojo> getAllEntries(Long accountId);
 
 	boolean areCredentialsTaken(RegisterModel registerModel);
+
+	Map<String, Long> getAllResourcesByAccountId(Long id);
+
+	Account findById(Long id);
+
+	boolean saveEntry(EntryPojo entryPojo);
     
 }

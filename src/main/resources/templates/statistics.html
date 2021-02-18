@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header.html :: head(titleName='Statistics')">
+</head>
+<body class="d-flex flex-column">
+
+<div th:replace="fragments/menuBar.html :: menuBar(active=3)"></div>
+<div class="container-fluid flex-grow-1 d-flex flex-column my-5">
+	
+	<div class="row col-lg-6 offset-lg-3 col-10 offset-1 loginForm align-middle">
+		<table class="w-75 mx-auto">
+		<tr>
+			<td class="pt-3 px-3">All garrison resources: </td>
+			<td class="pt-3 px-3" th:text="${account.garrisonResources}"></td>
+		</tr>	
+		<tr>
+			<td class="pt-3 px-3">All war paint: </td>
+			<td class="pt-3 px-3" th:text="${account.warPaint}"></td>
+		</tr>	
+		<tr>
+			<td class="pt-3 px-3 pb-3">Entries: </td>
+			<td class="pt-3 px-3 pb-3" th:text="${account.amountOfEntries}"></td>
+		</tr>	
+		</table>
+	</div>
+
+</div>
+
+
+<div th:insert="fragments/footer.html :: footer"></div>
+<div th:replace="fragments/header.html :: scripts"></div>
+</body>
+</html>

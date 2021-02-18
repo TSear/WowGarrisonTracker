@@ -1,8 +1,12 @@
+html {
+	background-image: url(../img/bg.png) !important;
+}
+
 body {
-	background-color: #22223B;
 	color: #C9ADA7 !important;
 	min-height: 100vh;
 	font-family: Mukta;
+	background-image: url(../img/bg.png) !important;
 }
 
 header nav {
@@ -17,8 +21,8 @@ header nav {
 	background-color: rgba(248, 215, 218, 0.7);
 }
 
-select{
-	color: rgba(255,255,255,1);
+select {
+	color: rgba(255, 255, 255, 1);
 }
 
 input, select {
@@ -29,8 +33,8 @@ input, select {
 
 .loginForm {
 	border: 1px solid #46494c;
-	background-color: #3d405b;
-	box-shadow: 0 0 0.7em #8d99ae;
+	background-color: rgba(50,50,50,0.6);
+	box-shadow: 0 0 0.4em #8d99ae;
 }
 
 input:focus {
@@ -73,8 +77,9 @@ footer {
 
 input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus,
 	input:-webkit-autofill::first-line {
-   -webkit-transition:color 9999s ease-out, background-color 9999s ease-out;
-    -webkit-transition-delay: 9999s;
+	-webkit-transition: color 9999s ease-out, background-color 9999s
+		ease-out;
+	-webkit-transition-delay: 9999s;
 }
 
 .font-large {
@@ -86,8 +91,21 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
 	color: #C9ADA7;
 }
 
+.table-striped>tbody>tr:nth-child(1) {
+	background-color: rgba(60, 9, 108, 0.4) !important;
+}
+
 .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th
 	{
-	background-color: #202038;
 	color: #C9ADA7;
+}
+
+.table-striped>tbody>tr:nth-child(even)>td, .table-striped>tbody>tr:nth-child(even)>th
+	{
+	background-color: rgba(60, 9, 108, 0.1) !important;
+	color: #C9ADA7;
+}
+
+table {
+	background-color: rgba(25, 25, 25, 0.7);
 }

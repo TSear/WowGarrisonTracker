@@ -1,9 +1,15 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
 import com.trix.wowgarrisontracker.converters.EntryToEntryPojo;
@@ -14,15 +20,10 @@ import com.trix.wowgarrisontracker.model.LoginRequest;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.pojos.RegisterModel;
-import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -131,18 +132,63 @@ public class AccountServicesImpl implements AccountService {
 
 		List<AccountCharacter> listOfAccountCharacters = accountCharacterService.listOfAccountCharacters(accountId);
 		List<EntryPojo> listOfAllEntries = new ArrayList<>();
-		for(AccountCharacter tmp : listOfAccountCharacters) {
-			listOfAllEntries.addAll(entryService.listOfEntries(tmp.getId()).stream()
+		for (AccountCharacter tmp : listOfAccountCharacters) {
+			listOfAllEntries.addAll(entryService.listOfEntries(tmp.getId())
+					.stream()
 					.map(entryToEntryPojo::convert)
 					.collect(Collectors.toList()));
 		}
 
 		return listOfAllEntries;
 	}
+
 	@Override
 	public boolean areCredentialsTaken(RegisterModel registerModel) {
 		Account account = this.findUserByUsername(registerModel.getLogin());
-		if(account!=null)return true;
+		if (account != null)
+			return true;
 		return false;
 	}
+
+	@Override
+	public Map<String, Long> getAllResourcesByAccountId(Long id) {
+
+		Map<String, Long> resources = new HashMap<>();
+		Long warPaint = 0l;
+		Long garrisonResources = 0l;
+		List<Entry> listOfEntries = new ArrayList<>();
+		accountCharacterService.listOfAccountCharacters(id)
+				.stream()
+				.forEach(character -> listOfEntries.addAll(entryService.listOfEntries(character.getId())));
+
+		garrisonResources = listOfEntries.stream()
+				.collect(Collectors.summingLong(Entry::getGarrisonResources));
+		warPaint = listOfEntries.stream()
+				.collect(Collectors.summingLong(Entry::getWarPaint));
+
+		resources.put("garrisonResources", garrisonResources);
+		resources.put("warPaint", warPaint);
+
+		return resources;
+
+	}
+
+	@Override
+	public Account findById(Long id) {
+		Optional<Account> optionalAccount = accountRepository.findById(id);
+		return optionalAccount.isPresent() ? optionalAccount.get() : null;
+	}
+
+	@Override
+	public boolean saveEntry(EntryPojo entryPojo) {
+		AccountCharacter accountCharacter = accountCharacterService.findById(entryPojo.getAccountCharacterId());
+		Account account = this.findById(accountCharacter.getAccountId());
+		account.setGarrisonResources(account.getGarrisonResources() + entryPojo.getGarrisonResources());
+		account.setWarPaint(account.getWarPaint() + entryPojo.getWarPaint());
+		this.save(account);
+		entryService.save(entryPojo);
+		return true;
+
+	}
+
 }
