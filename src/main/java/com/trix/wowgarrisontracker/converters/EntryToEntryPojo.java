@@ -28,7 +28,7 @@ public class EntryToEntryPojo implements Converter<Entry, EntryPojo> {
         entryPojo.setGarrisonResources(source.getGarrisonResources());
         entryPojo.setId(source.getId());
         entryPojo.setWarPaint(source.getWarPaint());
-        entryPojo.setCharacterName(accountCharacterService.findById(source.getAccountCharacterId()).getCharacterName());
+        entryPojo.setCharacterName(accountCharacterService.findById(source.getAccountCharacter().getId()).getCharacterName());
         //entryPojo.setAccountCharacterId(source.getAccountCharacterId().getId());
 
         return entryPojo;

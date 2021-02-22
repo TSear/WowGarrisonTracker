@@ -7,8 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,18 +21,22 @@ import lombok.ToString;
 @Setter
 @Getter
 @Entity
-public class AccountCharacter{
+public class AccountCharacter {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
- 
-    private String characterName;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "accountId")
-    private Long accountId;
+	private String characterName;
+//
+//	@Column(name = "accountId")
+//	private Long accountId;
+	
+	@ManyToOne
+    @JoinColumn(name="accountId", referencedColumnName = "id")
+	private Account account;
 
-   // @OneToMany(mappedBy = "accountCharacterId")
-   //private Set<Entry> entries;  
+	@OneToMany(mappedBy = "accountCharacter")
+	private Set<Entry> entries;
 
 }

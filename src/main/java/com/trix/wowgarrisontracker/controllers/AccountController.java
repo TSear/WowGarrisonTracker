@@ -79,7 +79,7 @@ public class AccountController {
 			cookie.setPath("/");
 			cookie.setMaxAge(-1);
 			httpServletResponse.addCookie(cookie);
-			return "redirect:/testing/infoPage";
+			return "redirect:/infoPage";
 		}
 		bindingResult.reject("credentials.bad", "Wrong login or password");
 		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.loginRequest",

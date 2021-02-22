@@ -7,67 +7,53 @@
 
 <body class="d-flex flex-column">
 
-	<div th:replace="fragments/menuBar.html :: menuBar(active=1)"></div>
+    <div th:replace="fragments/menuBar.html :: menuBar(active=1)"></div>
 
-	<form th:action="@{'/testing/track/validate'}" method="post"
-		class="container-fluid align-items-center mx-0 flex-fill p-4"
-		th:object="${entry}">
-		<div
-			class="row-fluid col-sm-8 offset-sm-2 col-lg-4 offset-lg-4 d-flex flex-column loginForm p-5">
-			<h2 class="text-center fs-1 mb-5">New Entry</h2>
-			<div class="form-group">
-				<label class="form-label m-0">Account Character</label>
-				<div class="input-group">
-					<select name="accountCharacterId" th:field="*{accountCharacterId}"
-						class="mb-1 text-center form-select custom-select">
+    <form th:action="@{'/track/validate'}" method="post" class="container-fluid align-items-center mx-0 flex-fill p-4" th:object="${entry}">
+        <div class="row-fluid col-sm-8 offset-sm-2 col-lg-4 offset-lg-4 d-flex flex-column loginForm p-5">
+            <h2 class="text-center fs-1 mb-5">New Entry</h2>
+            <div class="form-group">
+                <label class="form-label m-0">Account Character</label>
+                <div class="input-group">
+                    <select name="accountCharacterId" th:field="*{accountCharacterId}" class="mb-1 text-center form-select custom-select" th:classappend="${#fields.hasErrors('accountCharacterId')}? is-invalid : ''">
 						<option class="text-center  " th:each="character : ${characters}"
 							th:text="${character.getCharacterName()}"
 							th:value="${character.getId()}"></option>
 					</select>
-				</div>
-			</div>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('accountCharacterId')}">
+                        <ul class="p-0 error-list">
+                            <li class=" mx-2 text-center" th:each="err : ${#fields.errors('accountCharacterId')}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
-			<div class="form-group mt-2">
-				<label class="form-label m-0">Garrison Resources</label> <input
-					type="number" name="garrisonResources"
-					th:value="*{garrisonResources}" class="text-center form-control"
-					required
-					th:classappend="${#fields.hasErrors('garrisonResources')} ? is-invalid : ''">
-				<div class="invalid-feedback"
-					th:if="${#fields.hasErrors('garrisonResources')}">
-					<ul class="p-0 error-list">
-						<li class=" mx-2 text-center"
-							th:each="err : ${#fields.errors('garrisonResources')}"
-							th:text="${err}"></li>
-					</ul>
-				</div>
-			</div>
+            <div class="form-group mt-2">
+                <label class="form-label m-0">Garrison Resources</label> <input type="number" name="garrisonResources" th:value="*{garrisonResources}" class="text-center form-control" required th:classappend="${#fields.hasErrors('garrisonResources')} ? is-invalid : ''">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('garrisonResources')}">
+                    <ul class="p-0 error-list">
+                        <li class=" mx-2 text-center" th:each="err : ${#fields.errors('garrisonResources')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </div>
 
-			<div class="form-group mt-2">
-				<label class="form-label m-0">War Paint</label> <input type="number"
-					name="warPaint" th:value="*{warPaint}"
-					class="text-center form-control   " required
-					th:classappend="${#fields.hasErrors('warPaint')} ? is-invalid : ''">
-				<div class="invalid-feedback text-center mx-auto "
-					th:if="${#fields.hasErrors('warPaint')}">
-					<ul class="  p-0 error-list">
-						<li class=" mx-2 text-center"
-							th:each="err : ${#fields.errors('warPaint')}" th:text="${err}"></li>
-					</ul>
-				</div>
-			</div>
+            <div class="form-group mt-2">
+                <label class="form-label m-0">War Paint</label> <input type="number" name="warPaint" th:value="*{warPaint}" class="text-center form-control   " required th:classappend="${#fields.hasErrors('warPaint')} ? is-invalid : ''">
+                <div class="invalid-feedback text-center mx-auto " th:if="${#fields.hasErrors('warPaint')}">
+                    <ul class="  p-0 error-list">
+                        <li class=" mx-2 text-center" th:each="err : ${#fields.errors('warPaint')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </div>
 
-			<div class="form-group mt-2">
-				<label class="form-label m-0">Date</label> <input type="text"
-					name="entrydate" th:value="*{entryDate}" disabled
-					class="mb-3 text-center form-control disabled   border-1"
-					style="opacity: 0.7;"><br>
-			</div>
-			<button type="submit" class="offset-4 col-4 btn btn-secondary">Submit</button>
-		</div>
-	</form>
-	<div th:insert="fragments/footer.html :: footer"></div>
-	<div th:insert="fragments/header.html :: scripts"></div>
+            <div class="form-group mt-2">
+                <label class="form-label m-0">Date</label> <input type="text" name="entrydate" th:value="*{entryDate}" disabled class="mb-3 text-center form-control disabled   border-1" style="opacity: 0.7;"><br>
+            </div>
+            <button type="submit" class="offset-4 col-4 btn btn-secondary">Submit</button>
+        </div>
+    </form>
+    <div th:insert="fragments/footer.html :: footer"></div>
+    <div th:insert="fragments/header.html :: scripts"></div>
 </body>
 
 </html>

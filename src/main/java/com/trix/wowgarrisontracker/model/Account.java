@@ -1,14 +1,17 @@
 package com.trix.wowgarrisontracker.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -29,7 +32,9 @@ public class Account {
 
     @Column(name = "password")
     private String password;
-
+    
+    @OneToMany(mappedBy = "account" )
+    private Set<AccountCharacter> accountCharacters;
 	private Long garrisonResources;
 	private Long warPaint;
 	private Long amountOfEntries;

@@ -49,7 +49,6 @@ public class AccountServicesImpl implements AccountService {
 
 	@Override
 	public void save(Account account) {
-		logger.info(account.toString());
 
 		// TODO Tymczasowe zabezpieczenie
 		if (!account.getLogin()
@@ -182,13 +181,18 @@ public class AccountServicesImpl implements AccountService {
 	@Override
 	public boolean saveEntry(EntryPojo entryPojo) {
 		AccountCharacter accountCharacter = accountCharacterService.findById(entryPojo.getAccountCharacterId());
-		Account account = this.findById(accountCharacter.getAccountId());
+		Account account = this.findById(accountCharacter.getAccount().getId());
 		account.setGarrisonResources(account.getGarrisonResources() + entryPojo.getGarrisonResources());
 		account.setWarPaint(account.getWarPaint() + entryPojo.getWarPaint());
-		this.save(account);
+		account.setAmountOfEntries(account.getAmountOfEntries() + 1);
+		this.update(account, account.getId());
 		entryService.save(entryPojo);
 		return true;
 
 	}
 
+	
+
+
 }
+

@@ -63,12 +63,12 @@ public class BootData implements CommandLineRunner {
 
         AccountCharacter accountCharacter = new AccountCharacter();
         accountCharacter.setCharacterName("Calienda");
-        accountCharacter.setAccountId(account1.getId());
+        accountCharacter.setAccount(account1);
         accountCharacterRepository.save(accountCharacter);
         Entry entry1 = new Entry();
         entry1.setWarPaint(150);
         entry1.setGarrisonResources(250);
-        entry1.setAccountCharacterId(accountCharacter.getId());
+        entry1.setAccountCharacter(accountCharacter);
 
 
         //accountCharacter.setEntries(new HashSet<>(Arrays.asList(entry1)));

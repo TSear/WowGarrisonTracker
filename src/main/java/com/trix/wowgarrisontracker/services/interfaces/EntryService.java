@@ -11,4 +11,5 @@ public interface EntryService{
 
     boolean save(EntryPojo entryPojo);
 
+    int getAmountOfDays(Long id);
 }

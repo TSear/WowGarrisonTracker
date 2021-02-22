@@ -43,4 +43,12 @@ public class EntryServiceImpl implements EntryService {
         return true;
     }
 
+	@Override
+	public int getAmountOfDays(Long id) {
+		
+		List<Long> listOfEntriesEachDay = entryRepository.getListOfEntriesEachDay(id);
+		
+		return listOfEntriesEachDay.size();
+	}
+
 }

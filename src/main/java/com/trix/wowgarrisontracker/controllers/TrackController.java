@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.trix.wowgarrisontracker.converters.AccountCharacterToAccountCharacterPojo;
+import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
+import com.trix.wowgarrisontracker.repository.EntryRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
@@ -27,7 +29,7 @@ import com.trix.wowgarrisontracker.validators.EntryDTOValidator;
 
 import io.jsonwebtoken.Claims;
 
-@RequestMapping(value = "/testing/track")
+@RequestMapping(value = "/track")
 @Controller
 public class TrackController {
 
@@ -40,7 +42,7 @@ public class TrackController {
 	private AccountCharacterToAccountCharacterPojo accountCharacterToAccountCharacterPojo;
 	private EntryService entryService;
 	private AccountService accountService;
-	
+	private EntryRepository entryRepository;
 
 	/**
 	 * @param jwtUtils
@@ -54,7 +56,7 @@ public class TrackController {
 	public TrackController(JWTutils jwtUtils, GeneralUtils utils, AccountCharacterService accountCharacterService,
 			AccountCharacterToAccountCharacterPojo accountCharacterToPojo,
 			AccountCharacterToAccountCharacterPojo accountCharacterToAccountCharacterPojo, EntryService entryService,
-			AccountService accountService) {
+			AccountService accountService, EntryRepository entryRepository) {
 		this.jwtUtils = jwtUtils;
 		this.utils = utils;
 		this.accountCharacterService = accountCharacterService;
@@ -63,45 +65,43 @@ public class TrackController {
 		this.accountCharacterToAccountCharacterPojo = accountCharacterToAccountCharacterPojo;
 		this.entryService = entryService;
 		this.accountService = accountService;
+		this.entryRepository = entryRepository;
 	}
-	
+
 	@RequestMapping("")
 	public String getTrackingPage(HttpServletRequest httpServletRequest, Model model) {
-		Claims claims = jwtUtils.extractClaims(
-				utils.extractCookie(AUTHORIZATION, httpServletRequest.getCookies()).getValue().substring(7));
-		
+
+		Claims claims = jwtUtils.extractClaims(utils.extractCookie(AUTHORIZATION, httpServletRequest.getCookies())
+				.getValue()
+				.substring(7));
 		Long id = Long.valueOf((int) claims.get("accountId"));
-		model.addAttribute("entries", accountService.getAllEntries(id));
+		List<EntryPojo> entries = accountService.getAllEntries(id);
+		entries.sort((EntryPojo pojo1, EntryPojo pojo2) -> pojo2.getEntryDate()
+				.compareTo(pojo1.getEntryDate()));
+		model.addAttribute("entries", entries);
+
 		return "track";
 	}
-	
+
 	@GetMapping(value = "newEntry")
 	public String getEntryForm(Model model, HttpServletRequest httpServletRequest) {
 
-		Cookie cookie = utils.extractCookie(AUTHORIZATION, httpServletRequest.getCookies());
-
-		if (cookie != null) {
-
-			Long id = jwtUtils.extractId(cookie);
+			Long id = utils.getId(httpServletRequest);
 
 			List<AccountCharacterPojo> accountCharacterPojoList = accountCharacterService.listOfAccountCharacters(id)
 					.stream()
 					.map(accountCharacterToAccountCharacterPojo::convert)
 					.collect(Collectors.toList());
 			
-			System.out.println(accountService.getAllResourcesByAccountId(id));
-
 			if (!model.containsAttribute("entry")) {
+				model.addAttribute("characters", accountCharacterPojoList);
 				model.addAttribute("entry", new EntryPojo());
 			}
-
-			model.addAttribute("characters", accountCharacterPojoList);
-
 			return "entryForm";
 		}
 
-		return "track";
-	}
+
+	
 
 	@PostMapping(value = "validate")
 	public String validateNewEntry(@ModelAttribute("entry") EntryPojo entry, BindingResult bindingResult,
@@ -111,13 +111,12 @@ public class TrackController {
 		if (bindingResult.hasErrors()) {
 			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.entry", bindingResult);
 			redirectAttributes.addFlashAttribute("entry", entry);
-			return "redirect:/testing/track/newEntry";
+			return "redirect:/track/newEntry";
 		}
 
 		accountService.saveEntry(entry);
 
-		return "redirect:/testing/track";
+		return "redirect:/track";
 	}
-
 
 }

@@ -8,8 +8,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
 @Data
 public class AccountPojo {
 
@@ -20,7 +18,10 @@ public class AccountPojo {
  	private Long garrisonResources;
 	private Long warPaint;
 	private Long amountOfEntries;
-	   
+	private Long days;
+	private double averageGRPerDay;
+	private double averageWPPerDay;
+	
     public AccountPojo(){
         id = 1l;
         login = "";

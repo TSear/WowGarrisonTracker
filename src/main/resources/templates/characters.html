@@ -1,45 +1,44 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymelaf.org">
 
-<head
-	th:insert="fragments/header.html :: header(titleName='List of characters')">
+<head th:insert="fragments/header.html :: header(titleName='List of characters')">
 
 </head>
 
 <body class="d-flex flex-column">
 
-	<div th:replace="fragments/menuBar.html :: menuBar(active=2)"></div>
+    <div th:replace="fragments/menuBar.html :: menuBar(active=2)"></div>
 
-	<div class="flex-grow-1 container-fluid">
-		<div class="row-fluid align-items-center my-5">
-			<h2 class="text-center mx-auto">
-				List of your Characters <a
-					class="btn btn-outline-secondary my-5 d-inline float-left mx-2"
-					th:href="@{/testing/characters/new}"><i class="fas fa-plus"></i></a>
+    <div class="flex-grow-1 container-fluid">
+        <div class="row-fluid align-items-center my-5" th:if="${not #lists.isEmpty(accountCharacters)}">
+            <h2 class="text-center mx-auto">
+                List of your Characters <a class="btn btn-outline-secondary my-5 d-inline float-left mx-2" th:href="@{/characters/new}"><i class="fas fa-plus"></i></a>
+            </h2>
+        </div>
 
+        <div class="row-flud flex-grow-1 p-5" th:if="${#lists.isEmpty(accountCharacters)}">
+            <p class="text-center fs-2 align-middle m-5 ">You don't have any characters :C <br><span class="fs-2" style="font-weight: bold;">
+                    <a class=" my-5 d-inline float-left mx-2" style="color: #C9ADA7; " th:href="@{/characters/new}">Add some</a>
+                </span></p>
+        </div>
 
-			</h2>
-		</div>
+        <table class="w-50 col-10 my-4 mx-auto table table-borderless border-bottom table-striped rounded" th:if="${not #lists.isEmpty(accountCharacters)}">
+            <tr class="my-5 p-5 border-bottom">
+                <th class="col-4 text-center  p-3 font-large"><b>Character name</b></th>
+                <th class="col-4 text-center p-3 font-large"><b>Total War Paint</b></th>
+                <th class="col-4 text-center p-3 font-large"><b>Total Garrison Resources</b>
+                </th>
+            </tr>
+            <tr th:each="character : ${accountCharacters}" th:object="${character}">
+                <td th:text="*{characterName}" class="text-center p-3" style="font-weight: bold;"></td>
+                <td th:text="*{warPaint}" class="text-center p-3"></td>
+                <td th:text="*{garrisonResources}" class="text-center p-3"></td>
+            </tr>
+        </table>
+    </div>
 
-		<table
-			class="w-50 col-10 my-4 mx-auto table table-borderless border-bottom table-striped">
-			<tr class="my-5 p-5 border-bottom">
-				<th class="col-4 text-center  p-3 font-large">Character name</th>
-				<th class="col-4 text-center p-3 font-large">Total War Paint</th>
-				<th class="col-4 text-center p-3 font-large">Total Garrison
-					Resources</th>
-			</tr>
-			<tr th:each="character : ${accountCharacters}"
-				th:object="${character}">
-				<td th:text="*{characterName}" class="text-center p-3"></td>
-				<td th:text="*{warPaint}" class="text-center p-3"></td>
-				<td th:text="*{garrisonResources}" class="text-center p-3"></td>
-			</tr>
-		</table>
-	</div>
-
-	<div th:insert="fragments/footer.html :: footer"></div>
-	<div th:insert="fragments/header.html :: scripts"></div>
+    <div th:insert="fragments/footer.html :: footer"></div>
+    <div th:insert="fragments/header.html :: scripts"></div>
 
 </body>
 

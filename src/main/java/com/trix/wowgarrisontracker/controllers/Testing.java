@@ -37,6 +37,8 @@ import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.pojos.AuctionHouseInfoPojo;
 import com.trix.wowgarrisontracker.pojos.AuctionPojo;
+import com.trix.wowgarrisontracker.repository.AccountRepository;
+import com.trix.wowgarrisontracker.repository.EntryRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
@@ -53,7 +55,7 @@ import com.trix.wowgarrisontracker.validators.LoginRequestValidator;
 import io.jsonwebtoken.impl.DefaultClaims;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("testing/")
+@RequestMapping("")
 @Controller
 public class Testing {
 
@@ -73,7 +75,8 @@ public class Testing {
 	private AuctionService auctionService;
 	private ItemEntityService itemEntityService;
 	private BlizzardRequestUtils blizzardRequestUtils; private AuctionToAuctionPojo auctionToAuctionPojo;
-
+	private AccountRepository accountRepository;
+	private EntryRepository entryRepository;
 	private final String AUTHORIZATION = "Authorization";
 
 	public Testing(AccountCharacterService accountCharacterService, AccountService accountService,
@@ -81,7 +84,7 @@ public class Testing {
 			LoginRequestValidator loginRequestValidator, GeneralUtils utils,
 			AccountCharacterToAccountCharacterPojo accountCharacterToAccountCharacterPojo,
 			AccountCharacterDTOValidator accountCharacterDTOValidator, AuctionService auctionService,
-			ItemEntityService itemEntityService, AuctionToAuctionPojo auctionToAuctionPojo) {
+			ItemEntityService itemEntityService, AuctionToAuctionPojo auctionToAuctionPojo, AccountRepository accountRepository, EntryRepository entryRepository) {
 		this.accountCharacterService = accountCharacterService;
 		this.accountService = accountService;
 		this.entryService = entryService;
@@ -98,6 +101,8 @@ public class Testing {
 		this.itemEntityService = itemEntityService;
 		this.blizzardRequestUtils = new BlizzardRequestUtils();
 		this.auctionToAuctionPojo = auctionToAuctionPojo;
+		this.accountRepository = accountRepository;
+		this.entryRepository = entryRepository;
 	}
 
 //	@GetMapping("login/page")
@@ -130,18 +135,18 @@ public class Testing {
 //			cookie.setPath("/");
 //			cookie.setMaxAge(-1);
 //			httpServletResponse.addCookie(cookie);
-//			return "redirect:/testing/infoPage";
+//			return "redirect:/infoPage";
 //		}
 //
 //		bindingResult.reject("credentials.bad", "Wrong login or password");
 //		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.loginRequest",
 //				bindingResult);
 //		redirectAttributes.addFlashAttribute("loginRequest", loginRequest);
-//		return "redirect:/testing/login/page";
+//		return "redirect:/login/page";
 //
 //	}
 
-	@RequestMapping(name = "/testing/login/token/refresh")
+	@RequestMapping(name = "/login/token/refresh")
 	public String refreshToken(HttpServletRequest httpServletRequest) {
 
 		Cookie[] cookies = httpServletRequest.getCookies();
@@ -156,7 +161,7 @@ public class Testing {
 			}
 		}
 		logger.info(httpServletRequest.getAttribute("requestUrl").toString());
-		return "/testing/get";
+		return "/get";
 	}
 
 	@ResponseBody
@@ -231,7 +236,7 @@ public class Testing {
 				httpServletResponse.addCookie(cookieExpired);
 			}
 		}
-		return "redirect:/testing/login/page";
+		return "redirect:/login/page";
 	}
 
 
@@ -279,16 +284,16 @@ public class Testing {
 
 			if (!bindingResult.hasErrors()) {
 				accountCharacterService.save(characterPojo);
-				return "redirect:/testing/characters";
+				return "redirect:/characters";
 			} else {
 				redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.characterPojo",
 						bindingResult);
 				redirectAttributes.addFlashAttribute("characterPojo", characterPojo);
-				return "redirect:/testing/characters/new";
+				return "redirect:/characters/new";
 			}
 		}
 
-		return "redirect:/testing/characters";
+		return "redirect:/characters";
 
 	}
 

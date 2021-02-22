@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.trix.wowgarrisontracker.model.Account;
-import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.model.LoginRequest;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
@@ -37,5 +36,6 @@ public interface AccountService {
 	Account findById(Long id);
 
 	boolean saveEntry(EntryPojo entryPojo);
-    
+
+
 }

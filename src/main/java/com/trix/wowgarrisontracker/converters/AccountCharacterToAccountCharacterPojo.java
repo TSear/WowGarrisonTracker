@@ -27,7 +27,7 @@ public class AccountCharacterToAccountCharacterPojo implements Converter<Account
 	@Override
     public AccountCharacterPojo convert(AccountCharacter source) {
         AccountCharacterPojo accountCharacterPojo = new AccountCharacterPojo();
-        accountCharacterPojo.setAccountId(source.getAccountId());
+        accountCharacterPojo.setAccountId(source.getAccount().getId());
         accountCharacterPojo.setCharacterName(source.getCharacterName());
         accountCharacterPojo.setId(source.getId());
 

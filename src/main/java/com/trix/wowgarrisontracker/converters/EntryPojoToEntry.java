@@ -23,7 +23,7 @@ public class EntryPojoToEntry implements Converter<EntryPojo, Entry> {
 	@Override
 	public Entry convert(EntryPojo source) {
 		Entry entry = new Entry();
-		entry.setAccountCharacterId(source.getAccountCharacterId());
+		entry.setAccountCharacter(accountCharacterRepository.findById(source.getAccountCharacterId()).get());
 		entry.setEntryDate(source.getEntryDate());
 		entry.setGarrisonResources(source.getGarrisonResources());
 		entry.setId(source.getId());
