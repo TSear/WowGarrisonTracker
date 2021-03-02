@@ -9,26 +9,30 @@ import javax.servlet.http.Cookie;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 
+
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.extern.slf4j.Slf4j;
 
-@PropertySource("classpath:application.properties")
+
+
 @Service
 public class JWTutils {
 
-    @Value("${config.jwt.key}")
-    private String KEY;
-    private Logger logger = LoggerFactory.getLogger(Slf4j.class);
+    private String KEY = "M.Ds9ZR}C4q1WDvcxnD57H.Og([Ep";
+
+
+//    private Logger logger = LoggerFactory.getLogger(Slf4j.class);
 
     @Autowired
     private AccountService accountService;
@@ -42,12 +46,17 @@ public class JWTutils {
     }
 
     public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+    
+        return createToken(userDetails.getUsername());
+    }
+//TODO To nie ma sensu. Do przerobienia;
+    public String generateToken(String username) {
+    	return createToken(username);
     }
 
-    private String createToken(Map<String, Object> claims, String username) {
+    private String createToken(String username) {
 
+        Map<String, Object> claims = new HashMap<>();
         Account account = accountService.findUserByUsername(username);
         claims.put("accountId", account.getId());
 
@@ -56,7 +65,7 @@ public class JWTutils {
                 .setExpiration(new Date(System.currentTimeMillis() + 100000 * 60 * 60))
                 .signWith(SignatureAlgorithm.HS256, KEY).compact();
 
-        logger.info("Token JWTS : " + token);
+//        logger.info("Token JWTS : " + token);
 
         return "Bearer_" + token;
     }

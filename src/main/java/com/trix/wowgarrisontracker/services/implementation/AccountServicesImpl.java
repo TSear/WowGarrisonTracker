@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
@@ -36,24 +38,27 @@ public class AccountServicesImpl implements AccountService {
 	private AccountCharacterService accountCharacterService;
 	private EntryService entryService;
 	private EntryToEntryPojo entryToEntryPojo;
+	private PasswordEncoder passwordEncoder;
 
 	public AccountServicesImpl(AccountRepository accountRepository, AccountToAccountPojo accountToAccountPojo,
 			EntryService entryService, AccountCharacterService accountCharacterService,
-			EntryToEntryPojo entryToEntryPojo) {
+			EntryToEntryPojo entryToEntryPojo, PasswordEncoder passwordEncoder) {
 		this.accountRepository = accountRepository;
 		this.accountToAccountPojo = accountToAccountPojo;
 		this.accountCharacterService = accountCharacterService;
 		this.entryService = entryService;
 		this.entryToEntryPojo = entryToEntryPojo;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
 	public void save(Account account) {
 
-		// TODO Tymczasowe zabezpieczenie
 		if (!account.getLogin()
-				.isEmpty() && this.findUserByUsername(account.getLogin()) == null)
+				.isEmpty() && this.findUserByUsername(account.getLogin()) == null) {
+			account.setPassword(passwordEncoder.encode(account.getPassword()));
 			accountRepository.save(account);
+		}
 
 	}
 
@@ -122,9 +127,8 @@ public class AccountServicesImpl implements AccountService {
 		Account account = this.findUserByUsername(loginRequest.getLogin());
 		if (account == null)
 			return false;
-		return account.getPassword()
-				.equals(loginRequest.getPassword());
-	}
+		return passwordEncoder.matches(loginRequest.getPassword(),account.getPassword());
+		}
 
 	@Override
 	public List<EntryPojo> getAllEntries(Long accountId) {

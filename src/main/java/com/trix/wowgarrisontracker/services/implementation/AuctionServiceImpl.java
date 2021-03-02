@@ -20,89 +20,74 @@ import com.trix.wowgarrisontracker.utils.BlizzardRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-public class AuctionServiceImpl implements AuctionService{
+public class AuctionServiceImpl implements AuctionService {
 
-	private ItemEntityRepository itemRepository;
-	private AuctionEntityRepository repository;
-	private BlizzardRequestUtils blizzardRequestUtils;
-	private Logger logger = LoggerFactory.getLogger(Slf4j.class);
-	private ItemEntityService itemEntityService;
-	
-
-	/**
-	 * @param itemRepository
-	 * @param repository
-	 * @param blizzardRequestUtils
-	 * @param logger
-	 * @param itemEntityService
-	 */
-	public AuctionServiceImpl(ItemEntityRepository itemRepository, AuctionEntityRepository repository,
-			ItemEntityService itemEntityService) {
-		this.itemRepository = itemRepository;
-		this.repository = repository;
-		this.blizzardRequestUtils = new BlizzardRequestUtils();
-		this.itemEntityService = itemEntityService;
-	}
+    private ItemEntityRepository itemRepository;
+    private AuctionEntityRepository repository;
+    private BlizzardRequestUtils blizzardRequestUtils;
+    private Logger logger = LoggerFactory.getLogger(Slf4j.class);
+    private ItemEntityService itemEntityService;
 
 
-	
-	
-
-	@Override
-	public boolean save(AuctionEntity auctionEntity) {
-		return repository.save(auctionEntity)!=null;
-	}
-
-
-	@Override
-	public List<AuctionEntity> getAuctionsByItemId(Long itemId) {
-		
-		return repository.findAuctionEntityByItemId(itemId);
-	}
+    public AuctionServiceImpl(ItemEntityRepository itemRepository, AuctionEntityRepository repository,
+                              ItemEntityService itemEntityService) {
+        this.itemRepository = itemRepository;
+        this.repository = repository;
+        this.blizzardRequestUtils = new BlizzardRequestUtils();
+        this.itemEntityService = itemEntityService;
+    }
 
 
-	@Override
-	public String getItemNameByAuction(Long auctionItemId) {
-		
-		Optional<ItemEntity> optionalItem = itemRepository.findById(auctionItemId);
-		if(optionalItem.isPresent()) {
-			return optionalItem.get().getName();
-		}
-		
-		return "";
-	}
-
-	@Override
-	public void removeAll() {
-		repository.deleteAll();
-	}
+    @Override
+    public boolean save(AuctionEntity auctionEntity) {
+        return repository.save(auctionEntity) != null;
+    }
 
 
+    @Override
+    public List<AuctionEntity> getAuctionsByItemId(Long itemId) {
 
-	@Async
-	@Override
-	public void updateAuctionHouse() {
+        return repository.findAuctionEntityByItemId(itemId);
+    }
 
-		while(true) {
-			
-			Auctions auctions = blizzardRequestUtils.getAuctionHouse();
-			List<ItemEntity> items = itemEntityService.findAllItemEntities();
-			this.removeAll();
-			auctions.getAuctions().stream().filter(x -> items.contains(new ItemEntity(x.getItemId()))).forEach(this::save);
-			logger.info("Updating auction house");
-			try {
-				Thread.sleep(30 * 60 * 1000);
-			} catch (InterruptedException e) {
-				logger.error("Interrupted thread sleep");
-				break;
-			}
-			
-		}
-	}
 
-	
-	
-	
-	
-	
+    @Override
+    public String getItemNameByAuction(Long auctionItemId) {
+
+        Optional<ItemEntity> optionalItem = itemRepository.findById(auctionItemId);
+        if (optionalItem.isPresent()) {
+            return optionalItem.get().getName();
+        }
+
+        return "";
+    }
+
+    @Override
+    public void removeAll() {
+        repository.deleteAll();
+    }
+
+
+    @Async
+    @Override
+    public void updateAuctionHouse() {
+
+        while (true) {
+
+            Auctions auctions = blizzardRequestUtils.getAuctionHouse();
+            List<ItemEntity> items = itemEntityService.findAllItemEntities();
+            this.removeAll();
+            auctions.getAuctions().stream().filter(x -> items.contains(new ItemEntity(x.getItemId()))).forEach(this::save);
+            logger.info("Updating auction house");
+            try {
+                Thread.sleep(30 * 60 * 1000);
+            } catch (InterruptedException e) {
+                logger.error("Interrupted thread sleep");
+                break;
+            }
+
+        }
+    }
+
+
 }

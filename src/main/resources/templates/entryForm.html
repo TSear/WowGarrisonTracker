@@ -29,7 +29,7 @@
             </div>
 
             <div class="form-group mt-2">
-                <label class="form-label m-0">Garrison Resources</label> <input type="number" name="garrisonResources" th:value="*{garrisonResources}" class="text-center form-control" required th:classappend="${#fields.hasErrors('garrisonResources')} ? is-invalid : ''">
+                <label class="form-label m-0">Garrison Resources</label> <input max="5000" min="0" type="number" name="garrisonResources" th:value="*{garrisonResources}" class="text-center form-control" required th:classappend="${#fields.hasErrors('garrisonResources')} ? is-invalid : ''">
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('garrisonResources')}">
                     <ul class="p-0 error-list">
                         <li class=" mx-2 text-center" th:each="err : ${#fields.errors('garrisonResources')}" th:text="${err}"></li>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="form-group mt-2">
-                <label class="form-label m-0">War Paint</label> <input type="number" name="warPaint" th:value="*{warPaint}" class="text-center form-control   " required th:classappend="${#fields.hasErrors('warPaint')} ? is-invalid : ''">
+                <label class="form-label m-0">War Paint</label> <input max="5000" min="0" type="number" name="warPaint" th:value="*{warPaint}" class="text-center form-control   " required th:classappend="${#fields.hasErrors('warPaint')} ? is-invalid : ''">
                 <div class="invalid-feedback text-center mx-auto " th:if="${#fields.hasErrors('warPaint')}">
                     <ul class="  p-0 error-list">
                         <li class=" mx-2 text-center" th:each="err : ${#fields.errors('warPaint')}" th:text="${err}"></li>

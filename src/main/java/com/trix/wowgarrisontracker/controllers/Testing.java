@@ -145,24 +145,23 @@ public class Testing {
 //		return "redirect:/login/page";
 //
 //	}
-
-	@RequestMapping(name = "/login/token/refresh")
-	public String refreshToken(HttpServletRequest httpServletRequest) {
-
-		Cookie[] cookies = httpServletRequest.getCookies();
-
-		for (Cookie tmpCookie : cookies) {
-			if (tmpCookie.getName().equals(AUTHORIZATION)) {
-
-				DefaultClaims claims = (DefaultClaims) httpServletRequest.getAttribute("claims");
-				String newToken = jwTutils
-						.generateToken(new CustomUserDetails(accountService.findUserByUsername(claims.getSubject())));
-				tmpCookie.setValue(newToken);
-			}
-		}
-		logger.info(httpServletRequest.getAttribute("requestUrl").toString());
-		return "/get";
-	}
+//
+//	@RequestMapping(name = "/login/token/refresh")
+//	public String refreshToken(HttpServletRequest httpServletRequest) {
+//
+//		Cookie[] cookies = httpServletRequest.getCookies();
+//
+//		for (Cookie tmpCookie : cookies) {
+//			if (tmpCookie.getName().equals(AUTHORIZATION)) {
+//
+//				DefaultClaims claims = (DefaultClaims) httpServletRequest.getAttribute("claims");
+//				String newToken = jwTutils
+//						.generateToken(new CustomUserDetails(accountService.findUserByUsername(claims.getSubject())));
+//				tmpCookie.setValue(newToken);
+//			}
+//		}
+//		return "/get";
+//	}
 
 	@ResponseBody
 	@PostMapping(value = "login/rest")
@@ -323,6 +322,14 @@ public class Testing {
 
 		return "auctionHouse.html";
 	}
+	
+	@RequestMapping(value = "/auctionhouse/update")
+	public String updateAuctionhouse() {
+		
+			auctionService.updateAuctionHouse();
+			return "redirect:/auctionhouse/get";
+	}
+	
 	@GetMapping(value = "/contact")
 	public String getContact() {
 		return "contact";

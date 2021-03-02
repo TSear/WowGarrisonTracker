@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,6 +38,8 @@ public class AccountController {
 	private JWTutils jwTutils;
 	private RegisterModelValidator registerModelValidator;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	/**
 	 * @param accountService
 	 * @param logger
@@ -68,8 +72,7 @@ public class AccountController {
 		Account account = accountService.findUserByUsername(loginRequest.getLogin());
 
 		if (account != null)
-			isPasswordCorrect = loginRequest.getPassword()
-					.equals(account.getPassword());
+			isPasswordCorrect = passwordEncoder.matches(loginRequest.getPassword(), account.getPassword());
 
 		if (isLoginInDatabase && isPasswordCorrect) {
 			logger.info("Procesing credentials");

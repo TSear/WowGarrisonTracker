@@ -10,7 +10,7 @@
 		class=" row container rounded col-sm-10 offset-sm-1 col-lg-6 offset-lg-3 p-0 loginForm">
 		<h1 class="col-12 my-5">Login</h1>
 		<div class="row-fluid ">
-			<form th:action="@{validate} " method="POST"
+			<form th:action="@{/account/login/validate} " method="POST"
 				th:object="${loginRequest}" class="container d-flex flex-column align-items-center">
 				<div
 					class="alert-danger  w-75 mx-auto error-box mb-4"
