@@ -1,20 +1,12 @@
 package com.trix.wowgarrisontracker;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
-import com.trix.wowgarrisontracker.model.Account;
-import com.trix.wowgarrisontracker.model.AccountCharacter;
-import com.trix.wowgarrisontracker.model.AuctionEntity;
-import com.trix.wowgarrisontracker.model.Entry;
-import com.trix.wowgarrisontracker.model.ItemEntity;
+import com.trix.wowgarrisontracker.model.*;
 import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
 import com.trix.wowgarrisontracker.repository.AuctionEntityRepository;
 import com.trix.wowgarrisontracker.repository.EntryRepository;
 import com.trix.wowgarrisontracker.repository.ItemEntityRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
-import com.trix.wowgarrisontracker.services.interfaces.ItemEntityService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.trix.wowgarrisontracker.model.Account;
-import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
 

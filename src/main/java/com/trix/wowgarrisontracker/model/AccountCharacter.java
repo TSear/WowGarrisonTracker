@@ -5,27 +5,25 @@ import java.util.Set;
 import javax.persistence.*;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @ToString
-@NoArgsConstructor
 @Setter
 @Getter
 
 @Entity
 public class AccountCharacter {
 
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String characterName;
-//
-//	@Column(name = "accountId")
-//	private Long accountId;
-	
+	private Long garrisonResources;
+	private Long warPaint;
+
 	@ManyToOne
     @JoinColumn(name="accountId", referencedColumnName = "id")
 	private Account account;
@@ -33,4 +31,8 @@ public class AccountCharacter {
 	@OneToMany(mappedBy = "accountCharacter")
 	private Set<Entry> entries;
 
+	public AccountCharacter() {
+		this.garrisonResources = 0l;
+		this.warPaint = 0l;
+	}
 }

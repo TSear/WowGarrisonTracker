@@ -49,5 +49,15 @@ public class Entry {
         this.warPaint = 0;
     }
 
+    public Long getUpdatedAccountCharacterGarrisonResources() {
+        if (this.getAccountCharacter() == null)
+            throw new RuntimeException("Entry does not contain account character info");
+        return this.getGarrisonResources() + this.getAccountCharacter().getGarrisonResources();
+    }
 
+    public Long getUpdatedAccountCharacterWarPaint() {
+        if (this.getAccountCharacter() == null)
+            throw new RuntimeException("Entry does not contain account character info");
+        return this.warPaint + this.getAccountCharacter().getWarPaint();
+    }
 }
