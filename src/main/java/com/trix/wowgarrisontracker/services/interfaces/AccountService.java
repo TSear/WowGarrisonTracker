@@ -15,8 +15,6 @@ public interface AccountService {
 
 	void delete(Long id);
 
-	void update(Account account, Long id);
-
 	List<AccountPojo> findAll();
 
 	Account findUserByUsername(String username);
@@ -27,15 +25,11 @@ public interface AccountService {
 
 	boolean isExisting(LoginRequest loginRequest);
 
-	List<EntryPojo> getAllEntries(Long accountId);
 
 	boolean areCredentialsTaken(RegisterModel registerModel);
 
-	Map<String, Long> getAllResourcesByAccountId(Long id);
-
 	Account findById(Long id);
 
-	boolean saveEntry(EntryPojo entryPojo);
 
 
 }

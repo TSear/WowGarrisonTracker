@@ -1,5 +1,6 @@
 package com.trix.wowgarrisontracker.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -32,6 +33,7 @@ public class AccountCharacter {
 	private Set<Entry> entries;
 
 	public AccountCharacter() {
+		this.entries = new HashSet<>();
 		this.garrisonResources = 0l;
 		this.warPaint = 0l;
 	}

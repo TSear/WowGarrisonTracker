@@ -75,7 +75,7 @@ public class TrackController {
 				.getValue()
 				.substring(7));
 		Long id = Long.valueOf((int) claims.get("accountId"));
-		List<EntryPojo> entries = accountService.getAllEntries(id);
+		List<EntryPojo> entries = entryService.accountEntriesConvertedToPojoList(id);
 		entries.sort((EntryPojo pojo1, EntryPojo pojo2) -> pojo2.getEntryDate()
 				.compareTo(pojo1.getEntryDate()));
 		model.addAttribute("entries", entries);
@@ -113,8 +113,8 @@ public class TrackController {
 			redirectAttributes.addFlashAttribute("entry", entry);
 			return "redirect:/track/newEntry";
 		}
-
-		accountService.saveEntry(entry);
+		//TODO Zapisywanie będzie robione w entryService. Raczej garrisonResources i warPaint z Account bedą usunięte
+		//accountService.saveEntry(entry);
 
 		return "redirect:/track";
 	}

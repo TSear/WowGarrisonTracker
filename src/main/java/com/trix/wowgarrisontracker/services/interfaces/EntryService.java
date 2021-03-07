@@ -7,9 +7,11 @@ import com.trix.wowgarrisontracker.pojos.EntryPojo;
 
 public interface EntryService{
 
-    List<Entry> listOfEntries(Long characterId);
+    List<Entry> accountEntriesList(Long accountId);
 
     boolean save(EntryPojo entryPojo);
 
     int getAmountOfDays(Long id);
+
+    List<EntryPojo> accountEntriesConvertedToPojoList(Long accountId);
 }

@@ -125,25 +125,6 @@ public class Testing {
 
     }
 
-    @ResponseBody
-    @RequestMapping("delete")
-    public String deleteAccount(@RequestBody Long id) {
-
-        accountService.delete(id);
-
-        return "asdfasdfasdfasdf";
-    }
-
-    @ResponseBody
-    @RequestMapping("update")
-    public String updateAccount(@Validated @RequestBody AccountPojo account, BindingResult bindingResult, Long id) {
-
-        accountService.update(accountPojoToAccount.convert(account), id);
-
-        return "asdfasdfasdfasdf";
-    }
-
-
     @GetMapping(value = "infoPage")
     public String getInfoPage() {
         return "infoPage.html";

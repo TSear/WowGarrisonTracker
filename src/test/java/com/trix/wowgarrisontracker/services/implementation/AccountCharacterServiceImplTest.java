@@ -4,8 +4,6 @@ import com.trix.wowgarrisontracker.converters.AccountCharacterToAccountCharacter
 import com.trix.wowgarrisontracker.converters.EntryToEntryPojo;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
-import com.trix.wowgarrisontracker.model.Entry;
-import com.trix.wowgarrisontracker.pojos.AccCharacterResourcesPojo;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import com.trix.wowgarrisontracker.repository.EntryRepository;
@@ -19,10 +17,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,71 +40,76 @@ class AccountCharacterServiceImplTest {
 
     Account account;
 
+    List<AccountCharacter> accountCharacters;
+
     @BeforeEach
     void setUp() {
         accountCharacterService = new AccountCharacterServiceImpl(accountCharacterRepository,
-                entryRepository,
                 null,
                 accountCharacterToAccountCharacterPojo);
 
         account = new Account();
         account.setId(1l);
+
+        accountCharacters = new ArrayList<>();
+        AccountCharacter character1 = new AccountCharacter();
+        character1.setId(1l);
+        character1.setAccount(account);
+        character1.setCharacterName("test1");
+        AccountCharacter character2 = new AccountCharacter();
+        character2.setId(2l);
+        character2.setAccount(account);
+        character2.setCharacterName("test2");
+        AccountCharacter character3 = new AccountCharacter();
+        character3.setId(3l);
+        character3.setAccount(account);
+        character3.setCharacterName("test3");
+        accountCharacters.addAll(Arrays.asList(character1, character2, character3));
     }
 
-    @Test
-    void listOfResources() {
-        //given
-
-        AccountCharacter accountCharacter = new AccountCharacter();
-        accountCharacter.setCharacterName("test1");
-        accountCharacter.setAccount(account);
-        accountCharacter.setId(1l);
-
-        Entry entry = new Entry();
-        entry.setId(1l);
-        entry.setAccountCharacter(accountCharacter);
-        entry.setGarrisonResources(100);
-        entry.setWarPaint(100);
-
-        accountCharacter.setEntries(Collections.singleton(entry));
-
-        //when
-        when(accountCharacterRepository.findAllByAccountId(1l))
-                .thenReturn(Collections.singletonList(accountCharacter));
-        when(entryRepository.getGarrisonResourcesByCharacterId(1l)).thenReturn((long) entry.getGarrisonResources());
-        when(entryRepository.getWarPaintByCharacterId(1l)).thenReturn((long) entry.getWarPaint());
-        List<AccCharacterResourcesPojo> accCharacterResourcesPojoList = accountCharacterService.listOfResources(1l);
-
-        //then
-        assertEquals(1, accountCharacterService.listOfAccountCharacters(1l).size());
-        assertEquals(entry.getGarrisonResources(), accCharacterResourcesPojoList.get(0).getGarrisonResources());
-        assertEquals(entry.getWarPaint(), accCharacterResourcesPojoList.get(0).getWarPaint());
-    }
 
     @Test
     void getListOfAccountCharactersConvertedToPojo_correctSizeAndData() {
 
         //given
-        AccountCharacter accountCharacter1 = new AccountCharacter();
-        accountCharacter1.setId(1l);
-        accountCharacter1.setCharacterName("test");
-        accountCharacter1.setAccount(account);
-
-        AccountCharacter accountCharacter2 = new AccountCharacter();
-        accountCharacter2.setId(2l);
-        accountCharacter2.setCharacterName("test2");
-        accountCharacter2.setAccount(account);
-
-        List<AccountCharacter> characters = new ArrayList<>();
-        characters.addAll(Arrays.asList(accountCharacter1, accountCharacter2, accountCharacter1));
 
         //when
-        when(accountCharacterRepository.findAllByAccountId(Mockito.anyLong())).thenReturn(characters);
-        //then
+        when(accountCharacterRepository.findAllByAccountId(Mockito.anyLong())).thenReturn(accountCharacters);
 
+        //then
         List<AccountCharacterPojo> accountCharacterPojoList = accountCharacterService.getListOfAccountCharactersConvertedToPojo(0l);
-        assertEquals(characters.size(), accountCharacterPojoList.size());
-        assertEquals(accountCharacter1.getCharacterName(), accountCharacterPojoList.get(0).getCharacterName());
-        assertEquals(accountCharacter2.getCharacterName(), accountCharacterPojoList.get(1).getCharacterName());
+        assertEquals(accountCharacters.size(), accountCharacterPojoList.size());
+        assertEquals("test1", accountCharacterPojoList.get(0).getCharacterName());
+        assertEquals("test2", accountCharacterPojoList.get(1).getCharacterName());
     }
+
+    @Test
+    void isNameTake() {
+
+        //given
+        //when
+        when(accountCharacterRepository.findAllByAccountId(Mockito.anyLong())).thenReturn(accountCharacters);
+
+        //then
+        assertTrue(accountCharacterService.isNameTaken(Mockito.anyLong(), "test1"));
+        assertFalse(accountCharacterService.isNameTaken(Mockito.anyLong(), "does not exist"));
+    }
+
+    @Test
+    void findById() {
+
+        //when
+        long firstId = 1l;
+        long secondId = 2l;
+        long thirdId = 5l;
+        when(accountCharacterRepository.findById(firstId)).thenReturn(Optional.ofNullable(accountCharacters.get(0)));
+        when(accountCharacterRepository.findById(secondId)).thenReturn(Optional.ofNullable(accountCharacters.get(1)));
+        when(accountCharacterRepository.findById(thirdId)).thenReturn(Optional.empty());
+
+        //then
+        assertTrue(accountCharacterService.findById(firstId)!=null);
+        assertTrue(accountCharacterService.findById(secondId)!=null);
+        assertFalse(accountCharacterService.findById(thirdId)!=null);
+    }
+
 }

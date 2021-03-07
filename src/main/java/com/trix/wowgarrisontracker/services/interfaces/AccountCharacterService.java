@@ -14,7 +14,6 @@ public interface AccountCharacterService {
 
     List<AccountCharacter> listOfAccountCharacters(Long accountId);
 
-    List<AccCharacterResourcesPojo> listOfResources(Long accountId);
 
     boolean isNameTaken(Long accountId, String name);
 
@@ -23,4 +22,6 @@ public interface AccountCharacterService {
     AccountCharacter findById(Long id);
 
     List<AccountCharacterPojo> getListOfAccountCharactersConvertedToPojo(Long characterId);
+
+    List<AccountCharacter> findAllByAccountId(Long accountId);
 }
