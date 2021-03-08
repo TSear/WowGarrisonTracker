@@ -4,6 +4,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AccountController {
 
 	private static final String AUTHORIZATION = "Authorization";
+	private GeneralUtils utils;
 	private AccountService accountService;
 	private Logger logger = LoggerFactory.getLogger(Slf4j.class);
 	private JWTutils jwTutils;
@@ -40,16 +42,13 @@ public class AccountController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	/**
-	 * @param accountService
-	 * @param logger
-	 * @param jwTutils
-	 */
+
 	public AccountController(AccountService accountService, JWTutils jwTutils,
-			RegisterModelValidator registerModelValidator) {
+			RegisterModelValidator registerModelValidator, GeneralUtils utils) {
 		this.registerModelValidator = registerModelValidator;
 		this.accountService = accountService;
 		this.jwTutils = jwTutils;
+		this.utils = utils;
 	}
 
 	@GetMapping("login/page")
@@ -68,7 +67,7 @@ public class AccountController {
 			HttpServletResponse httpServletResponse) {
 
 		boolean isPasswordCorrect = false;
-		boolean isLoginInDatabase = accountService.isExisting(loginRequest);
+		boolean isLoginInDatabase = accountService.isAccountInDatabase(loginRequest);
 		Account account = accountService.findUserByUsername(loginRequest.getLogin());
 
 		if (account != null)
@@ -134,7 +133,18 @@ public class AccountController {
 		Account account = new Account();
 		account.setLogin(registerModel.getLogin());
 		account.setPassword(registerModel.getPassword());
-		accountService.save(account);
+		accountService.saveAccount(account);
+		return "redirect:/account/login/page";
+	}
+
+	@GetMapping(value = "login/logout")
+	public String logout(HttpServletRequest servletRequest, HttpServletResponse httpServletResponse) {
+
+		Cookie authorizationCookie = new Cookie(AUTHORIZATION, null);
+		authorizationCookie.setMaxAge(0);
+		authorizationCookie.setPath("/");
+		httpServletResponse.addCookie(authorizationCookie);
+
 		return "redirect:/account/login/page";
 	}
 }

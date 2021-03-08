@@ -44,15 +44,7 @@ public class TrackController {
 	private AccountService accountService;
 	private EntryRepository entryRepository;
 
-	/**
-	 * @param jwtUtils
-	 * @param utils
-	 * @param accountCharacterService
-	 * @param accountCharacterToPojo
-	 * @param entryDTOValidator
-	 * @param accountCharacterToAccountCharacterPojo
-	 * @param entryService
-	 */
+
 	public TrackController(JWTutils jwtUtils, GeneralUtils utils, AccountCharacterService accountCharacterService,
 			AccountCharacterToAccountCharacterPojo accountCharacterToPojo,
 			AccountCharacterToAccountCharacterPojo accountCharacterToAccountCharacterPojo, EntryService entryService,
@@ -114,7 +106,7 @@ public class TrackController {
 			return "redirect:/track/newEntry";
 		}
 		//TODO Zapisywanie będzie robione w entryService. Raczej garrisonResources i warPaint z Account bedą usunięte
-		//accountService.saveEntry(entry);
+		entryService.save(entry);
 
 		return "redirect:/track";
 	}

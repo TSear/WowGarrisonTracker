@@ -9,7 +9,7 @@ public interface EntryService{
 
     List<Entry> accountEntriesList(Long accountId);
 
-    boolean save(EntryPojo entryPojo);
+    void save(EntryPojo entryPojo);
 
     int getAmountOfDays(Long id);
 

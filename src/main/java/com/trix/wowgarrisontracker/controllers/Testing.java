@@ -4,9 +4,9 @@ import com.trix.wowgarrisontracker.converters.AccountCharacterToAccountCharacter
 import com.trix.wowgarrisontracker.converters.AccountPojoToAccount;
 import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
 import com.trix.wowgarrisontracker.converters.AuctionToAuctionPojo;
-import com.trix.wowgarrisontracker.model.*;
+import com.trix.wowgarrisontracker.model.AuctionEntity;
+import com.trix.wowgarrisontracker.model.ItemEntity;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
-import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.pojos.AuctionHouseInfoPojo;
 import com.trix.wowgarrisontracker.pojos.AuctionPojo;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
@@ -25,9 +25,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
@@ -88,43 +89,6 @@ public class Testing {
     }
 
 
-    @ResponseBody
-    @PostMapping(value = "login/rest")
-    public String restLogin(@RequestBody LoginRequest loginRequest) {
-        Account account = accountService.correctCredentials(loginRequest);
-        if (account != null) {
-            logger.info("Procesing credentials");
-            return jwTutils.generateToken(new CustomUserDetails(account));
-        }
-        return "bad credentials";
-    }
-
-    @ResponseBody
-    @RequestMapping("get")
-    public List<AccountPojo> getObjects() {
-        return accountService.findAll();
-    }
-
-    @ResponseBody
-    @PostMapping("create")
-    public String saveAccount(@RequestBody AccountPojo account, BindingResult bindingResult) {
-        logger.info("creating");
-        accountDTOValidator.validate(account, bindingResult);
-        if (!bindingResult.hasErrors()) {
-            accountService.save(accountPojoToAccount.convert(account));
-            return "saving";
-        }
-        String errorMessage = "";
-        StringBuilder errorMessageBuilder = new StringBuilder(errorMessage);
-        for (FieldError tmp : bindingResult.getFieldErrors()) {
-            errorMessageBuilder.append(tmp.getDefaultMessage());
-            errorMessageBuilder.append("\n");
-        }
-        errorMessage = errorMessageBuilder.toString();
-        return errorMessage;
-
-    }
-
     @GetMapping(value = "infoPage")
     public String getInfoPage() {
         return "infoPage.html";
@@ -132,15 +96,11 @@ public class Testing {
 
     @GetMapping(value = "login/logout")
     public String logout(HttpServletRequest servletRequest, HttpServletResponse httpServletResponse) {
-        for (Cookie cookie : servletRequest.getCookies()) {
-            if ((AUTHORIZATION).equals(cookie.getName())) {
-                Cookie cookieExpired = new Cookie(AUTHORIZATION, null);
-                cookieExpired.setMaxAge(0);
-                cookieExpired.setPath("/");
-                httpServletResponse.addCookie(cookieExpired);
-            }
-        }
-        return "redirect:/login/page";
+
+        Cookie authorizationCookie = utils.extractCookie(AUTHORIZATION, servletRequest.getCookies());
+        authorizationCookie.setMaxAge(0);
+
+        return "redirect:/account/login/page";
     }
 
 

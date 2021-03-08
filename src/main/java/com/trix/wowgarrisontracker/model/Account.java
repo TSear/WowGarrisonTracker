@@ -1,19 +1,13 @@
 package com.trix.wowgarrisontracker.model;
 
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @ToString
 @Getter
@@ -21,7 +15,7 @@ import lombok.ToString;
 @Table(name = "account")
 @Entity
 public class Account {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -32,19 +26,26 @@ public class Account {
 
     @Column(name = "password")
     private String password;
-    
-    @OneToMany(mappedBy = "account" )
-    private Set<AccountCharacter> accountCharacters;
-	private Long garrisonResources;
-	private Long warPaint;
-	private Long amountOfEntries;
-	
-	public Account() {
-		this.garrisonResources = 0l;
-		this.warPaint = 0l;
-		this.amountOfEntries = 0l;
-	}
-    //@OneToMany(mappedBy = "accountId")
-    //private Set<AccountCharacter> accountCharacters;   
 
+    @OneToMany(mappedBy = "account")
+    private Set<AccountCharacter> accountCharacters;
+
+    private Long amountOfEntries;
+
+    public Account() {
+        accountCharacters = new HashSet<>();
+        this.amountOfEntries = 0l;
+    }
+
+    public Long getTotalGarrisonResources(){
+        return this.accountCharacters.stream()
+                .map(entry -> entry.getGarrisonResources())
+                .reduce(0l, Long::sum);
+    }
+
+    public Long getTotalWarPaint(){
+        return this.accountCharacters.stream()
+                .map(entry -> entry.getWarPaint())
+                .reduce(0l, Long::sum);
+    }
 }

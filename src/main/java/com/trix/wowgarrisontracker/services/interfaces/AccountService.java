@@ -11,19 +11,17 @@ import com.trix.wowgarrisontracker.pojos.RegisterModel;
 
 public interface AccountService {
 
-	void save(Account account);
+	void saveAccount(Account account);
 
-	void delete(Long id);
+	void deleteAccount(Long id);
 
-	List<AccountPojo> findAll();
+	List<AccountPojo> findAllAccounts();
 
 	Account findUserByUsername(String username);
 
-	boolean correctCredentials(Account inDatabase, LoginRequest fromForm);
-
 	Account correctCredentials(LoginRequest fromForm);
 
-	boolean isExisting(LoginRequest loginRequest);
+	boolean isAccountInDatabase(LoginRequest loginRequest);
 
 
 	boolean areCredentialsTaken(RegisterModel registerModel);

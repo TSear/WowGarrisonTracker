@@ -15,10 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -56,15 +53,22 @@ class AccountCharacterServiceImplTest {
         character1.setId(1l);
         character1.setAccount(account);
         character1.setCharacterName("test1");
+        character1.setGarrisonResources(100l);
+        character1.setWarPaint(200l);
         AccountCharacter character2 = new AccountCharacter();
         character2.setId(2l);
         character2.setAccount(account);
         character2.setCharacterName("test2");
+        character2.setGarrisonResources(200l);
+        character2.setWarPaint(100l);
         AccountCharacter character3 = new AccountCharacter();
         character3.setId(3l);
         character3.setAccount(account);
         character3.setCharacterName("test3");
+        character3.setGarrisonResources(0l);
+        character3.setWarPaint(0l);
         accountCharacters.addAll(Arrays.asList(character1, character2, character3));
+        account.getAccountCharacters().addAll(new HashSet<>(Arrays.asList(character1,character2,character3)));
     }
 
 
@@ -112,4 +116,32 @@ class AccountCharacterServiceImplTest {
         assertFalse(accountCharacterService.findById(thirdId)!=null);
     }
 
+    @Test
+    void accountGetTotalGarrisonResources(){
+
+        assertEquals(300l, account.getTotalGarrisonResources());
+        assertNotEquals(400l, account.getTotalGarrisonResources());
+
+        AccountCharacter accountCharacter = new AccountCharacter();
+        accountCharacter.setGarrisonResources(50l);
+        accountCharacter.setAccount(account);
+        account.getAccountCharacters().add(accountCharacter);
+
+        assertEquals(350l, account.getTotalGarrisonResources());
+        assertNotEquals(300l, account.getTotalGarrisonResources());
+    }
+    @Test
+    void accountGetWarPaint(){
+
+        assertEquals(300l, account.getTotalWarPaint());
+        assertNotEquals(400l, account.getTotalWarPaint());
+
+        AccountCharacter accountCharacter = new AccountCharacter();
+        accountCharacter.setWarPaint(50l);
+        accountCharacter.setAccount(account);
+        account.getAccountCharacters().add(accountCharacter);
+
+        assertEquals(350l, account.getTotalWarPaint());
+        assertNotEquals(300l, account.getTotalWarPaint());
+    }
 }

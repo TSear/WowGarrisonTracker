@@ -32,15 +32,11 @@ public class AccountToAccountPojo implements Converter<Account, AccountPojo>{
         accountPojo.setId(source.getId());
         accountPojo.setLogin(source.getLogin());
         accountPojo.setPassword(source.getPassword());
-        accountPojo.setGarrisonResources(source.getGarrisonResources());
+        accountPojo.setGarrisonResources(source.getTotalGarrisonResources());
         accountPojo.setAmountOfEntries(source.getAmountOfEntries());
-        accountPojo.setWarPaint(source.getWarPaint());
+        accountPojo.setWarPaint(source.getTotalWarPaint());
         Set<AccountCharacterPojo> accountCharacterPojos = new HashSet<>();
         
-//        for(AccountCharacter tmp : source.getAccountCharacters()){
-//            accountCharacterPojos.add(accountCharacterConverter.convert(tmp));
-//        }
-
         accountPojo.setAccountCharacters(accountCharacterPojos);
 
         return accountPojo;

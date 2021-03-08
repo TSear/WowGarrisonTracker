@@ -27,7 +27,7 @@ public class LoginRequestValidator implements Validator {
         ValidationUtils.rejectIfEmpty(errors, "login", "login.empty", "Login can't be empty");
         ValidationUtils.rejectIfEmpty(errors, "password", "password.empty", "Password can't be empty");
 
-        if(!accountService.isExisting(loginRequest)){
+        if(!accountService.isAccountInDatabase(loginRequest)){
             errors.reject("account.notexist", "Wrong login or password");
         }
 

@@ -29,22 +29,17 @@ public class AccountServicesImpl implements AccountService {
     private AccountRepository accountRepository;
     private Logger logger = LoggerFactory.getLogger(Slf4j.class);
     private AccountToAccountPojo accountToAccountPojo;
-    private AccountCharacterService accountCharacterService;
-    private EntryToEntryPojo entryToEntryPojo;
     private PasswordEncoder passwordEncoder;
 
     public AccountServicesImpl(AccountRepository accountRepository, AccountToAccountPojo accountToAccountPojo,
-                               AccountCharacterService accountCharacterService,
-                               EntryToEntryPojo entryToEntryPojo, PasswordEncoder passwordEncoder) {
+                               PasswordEncoder passwordEncoder) {
         this.accountRepository = accountRepository;
         this.accountToAccountPojo = accountToAccountPojo;
-        this.accountCharacterService = accountCharacterService;
-        this.entryToEntryPojo = entryToEntryPojo;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void save(Account account) {
+    public void saveAccount(Account account) {
 
         if (!account.getLogin()
                 .isEmpty() && this.findUserByUsername(account.getLogin()) == null) {
@@ -55,7 +50,7 @@ public class AccountServicesImpl implements AccountService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteAccount(Long id) {
 
         if (accountRepository.existsById(id))
             accountRepository.deleteById(id);
@@ -65,7 +60,7 @@ public class AccountServicesImpl implements AccountService {
     }
 
     @Override
-    public List<AccountPojo> findAll() {
+    public List<AccountPojo> findAllAccounts() {
         List<AccountPojo> accountPojos = new ArrayList<>();
 
         for (Account tmp : accountRepository.findAll()) {
@@ -82,19 +77,10 @@ public class AccountServicesImpl implements AccountService {
     }
 
     @Override
-    public boolean correctCredentials(Account inDatabase, LoginRequest fromForm) {
-
-        return inDatabase.getLogin()
-                .equals(fromForm.getLogin())
-                && inDatabase.getPassword()
-                .equals(fromForm.getPassword());
-
-    }
-
-    @Override
     public Account correctCredentials(LoginRequest fromForm) {
 
         Account account = this.findUserByUsername(fromForm.getLogin());
+
         if (account != null && account.getPassword()
                 .equals(fromForm.getPassword())) {
             return account;
@@ -103,7 +89,7 @@ public class AccountServicesImpl implements AccountService {
     }
 
     @Override
-    public boolean isExisting(LoginRequest loginRequest) {
+    public boolean isAccountInDatabase(LoginRequest loginRequest) {
         Account account = this.findUserByUsername(loginRequest.getLogin());
         if (account == null)
             return false;

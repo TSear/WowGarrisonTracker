@@ -42,19 +42,17 @@ public class EntryServiceImpl implements EntryService {
 
 
     @Override
-    public boolean save(EntryPojo entryPojo) {
+    public void save(EntryPojo entryPojo) {
 
         Entry entry = entryPojoToEntry.convert(entryPojo);
         entryRepository.save(entry);
         accountCharacterService.updateAccountCharacterGarrisonResourcesAndWarPaint(entry);
-        return true;
     }
 
     @Override
     public int getAmountOfDays(Long id) {
 
         List<Long> listOfEntriesEachDay = entryRepository.getListOfEntriesEachDay(id);
-
         return listOfEntriesEachDay.size();
     }
 
