@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:insert="fragments/header.html :: header(titleName='Error Page')">
+
+</head>
+<body class="d-flex flex-column">
+
+<div class="flex-grow-1 container-fluid">
+    <h1 class="fs-1 text-center my-5">Whopss</h1>
+    <h2 th:text="${status +' '+error}" class="text-center fs-2 my-5"></h2>
+</div>
+
+<div th:replace="fragments/footer.html :: footer"></div>
+<div th:replace="fragments/header.html :: scripts"></div>
+</body>
+</html>
