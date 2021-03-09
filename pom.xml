@@ -14,7 +14,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>WowGarrisonTracker</name>
     <description>Will be filled later</description>
-    <packaging>war</packaging>
 
     <properties>
         <java.version>11</java.version>
