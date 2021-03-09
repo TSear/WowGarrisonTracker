@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.trix</groupId>
     <artifactId>wow-garrison-tracker</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>version_1.0</version>
     <name>WowGarrisonTracker</name>
     <description>Will be filled later</description>
 
