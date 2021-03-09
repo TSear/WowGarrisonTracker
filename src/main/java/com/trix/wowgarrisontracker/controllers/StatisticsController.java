@@ -38,10 +38,14 @@ public class StatisticsController {
 		Long id = jwtUtils.extractId(jwtCookie);
 		AccountPojo accountPojo = accountToAccountPojo.convert(accountService.findById(id));
 		accountPojo.setDays(Long.valueOf(entryService.getAmountOfDays(id)));
-		accountPojo.setAverageGRPerDay(accountPojo.getGarrisonResources()/accountPojo.getDays());
-		accountPojo.setAverageWPPerDay(accountPojo.getWarPaint()/accountPojo.getDays());
+		accountPojo.setAverageGRPerDay(accountPojo.getGarrisonResources()/ checkIfNumberOfDaysIsZero(accountPojo));
+		accountPojo.setAverageWPPerDay(accountPojo.getWarPaint()/checkIfNumberOfDaysIsZero(accountPojo));
 		model.addAttribute("account", accountPojo);
 		return "statistics";
+	}
+
+	private long checkIfNumberOfDaysIsZero(AccountPojo accountPojo) {
+		return Math.max(accountPojo.getDays(), 1);
 	}
 
 }
