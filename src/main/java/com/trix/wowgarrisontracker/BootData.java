@@ -1,17 +1,10 @@
 package com.trix.wowgarrisontracker;
 
 import com.trix.wowgarrisontracker.model.*;
-import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
-import com.trix.wowgarrisontracker.repository.AccountRepository;
-import com.trix.wowgarrisontracker.repository.AuctionEntityRepository;
-import com.trix.wowgarrisontracker.repository.EntryRepository;
-import com.trix.wowgarrisontracker.repository.ItemEntityRepository;
+import com.trix.wowgarrisontracker.repository.*;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 public class BootData implements CommandLineRunner {
