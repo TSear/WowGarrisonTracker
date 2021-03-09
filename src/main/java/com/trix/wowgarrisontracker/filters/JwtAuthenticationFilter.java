@@ -10,8 +10,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -34,7 +32,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	private AuthenticationManager authenticationManager;
 	private JWTutils utils;
 	private int jwtCookieMaxAge = 60000;
-	private Logger logger = LoggerFactory.getLogger(Slf4j.class);
 
 	
 	public JwtAuthenticationFilter(AuthenticationManager auth, JWTutils utils) {

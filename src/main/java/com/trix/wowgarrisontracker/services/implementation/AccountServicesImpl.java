@@ -1,33 +1,24 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
-import com.trix.wowgarrisontracker.converters.EntryToEntryPojo;
 import com.trix.wowgarrisontracker.model.Account;
-import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.LoginRequest;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
-import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.pojos.RegisterModel;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
-import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 
 public class AccountServicesImpl implements AccountService {
 
     private AccountRepository accountRepository;
-    private Logger logger = LoggerFactory.getLogger(Slf4j.class);
     private AccountToAccountPojo accountToAccountPojo;
     private PasswordEncoder passwordEncoder;
 
@@ -54,8 +45,6 @@ public class AccountServicesImpl implements AccountService {
 
         if (accountRepository.existsById(id))
             accountRepository.deleteById(id);
-        else
-            logger.info("Nie znaleziono konta");
 
     }
 

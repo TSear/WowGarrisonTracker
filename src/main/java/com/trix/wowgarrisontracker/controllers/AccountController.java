@@ -9,9 +9,6 @@ import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.trix.wowgarrisontracker.utils.JWTutils;
 import com.trix.wowgarrisontracker.validators.RegisterModelValidator;
 import io.jsonwebtoken.impl.DefaultClaims;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -34,7 +31,6 @@ public class AccountController {
     private static final String AUTHORIZATION = "Authorization";
     private GeneralUtils utils;
     private AccountService accountService;
-    private Logger logger = LoggerFactory.getLogger(Slf4j.class);
     private JWTutils jwTutils;
     private RegisterModelValidator registerModelValidator;
 
@@ -72,7 +68,6 @@ public class AccountController {
             isPasswordCorrect = passwordEncoder.matches(loginRequest.getPassword(), account.getPassword());
 
         if (isLoginInDatabase && isPasswordCorrect) {
-            logger.info("Procesing credentials");
             Cookie cookie = new Cookie(AUTHORIZATION, jwTutils.generateToken(new CustomUserDetails(account)));
             cookie.setPath("/");
             cookie.setMaxAge(-1);
@@ -102,8 +97,6 @@ public class AccountController {
                 tmpCookie.setValue(newToken);
             }
         }
-        logger.info(httpServletRequest.getAttribute("requestUrl")
-                .toString());
         return "redirect:/account/get";
     }
 

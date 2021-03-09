@@ -19,9 +19,6 @@ import com.trix.wowgarrisontracker.validators.AccountCharacterDTOValidator;
 import com.trix.wowgarrisontracker.validators.AccountDTOValidator;
 import com.trix.wowgarrisontracker.validators.EntryDTOValidator;
 import com.trix.wowgarrisontracker.validators.LoginRequestValidator;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,7 +42,6 @@ public class Testing {
     private AccountCharacterService accountCharacterService;
     private AccountService accountService;
     private EntryService entryService;
-    private Logger logger = LoggerFactory.getLogger(Slf4j.class);
     private AccountPojoToAccount accountPojoToAccount;
     private AccountToAccountPojo accountToAccountPojo;
     private AccountDTOValidator accountDTOValidator;

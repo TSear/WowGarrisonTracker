@@ -1,13 +1,5 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.trix.wowgarrisontracker.model.AuctionEntity;
 import com.trix.wowgarrisontracker.model.Auctions;
 import com.trix.wowgarrisontracker.model.ItemEntity;
@@ -16,8 +8,11 @@ import com.trix.wowgarrisontracker.repository.ItemEntityRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
 import com.trix.wowgarrisontracker.services.interfaces.ItemEntityService;
 import com.trix.wowgarrisontracker.utils.BlizzardRequestUtils;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuctionServiceImpl implements AuctionService {
@@ -25,7 +20,6 @@ public class AuctionServiceImpl implements AuctionService {
     private ItemEntityRepository itemRepository;
     private AuctionEntityRepository repository;
     private BlizzardRequestUtils blizzardRequestUtils;
-    private Logger logger = LoggerFactory.getLogger(Slf4j.class);
     private ItemEntityService itemEntityService;
 
 
@@ -78,11 +72,9 @@ public class AuctionServiceImpl implements AuctionService {
             List<ItemEntity> items = itemEntityService.findAllItemEntities();
             this.removeAll();
             auctions.getAuctions().stream().filter(x -> items.contains(new ItemEntity(x.getItemId()))).forEach(this::save);
-            logger.info("Updating auction house");
             try {
                 Thread.sleep(30 * 60 * 1000);
             } catch (InterruptedException e) {
-                logger.error("Interrupted thread sleep");
                 break;
             }
 

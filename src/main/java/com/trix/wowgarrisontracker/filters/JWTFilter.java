@@ -10,8 +10,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +24,6 @@ import com.trix.wowgarrisontracker.utils.JWTutils;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 public class JWTFilter extends OncePerRequestFilter {
@@ -38,7 +35,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
 
 
-	Logger logger = LoggerFactory.getLogger(Slf4j.class);
 
 	//TODO To trzeba całe zmienić -> https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
 	// TODO Trzeba obsłużyć SignatureException.
