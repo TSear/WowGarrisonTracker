@@ -6,43 +6,52 @@
 
 <body class="d-flex flex-column">
 
-    <div th:replace="fragments/menuBar.html :: menuBar(active=1)"></div>
+<div th:replace="fragments/menuBar.html :: menuBar(active=1)"></div>
 
-    <div class="container-fluid flex-grow-1 align-items-center d-flex flex-column">
+<div class="container-fluid flex-grow-1 align-items-center d-flex flex-column">
 
-        <div class="row-fluid col-12 align-items-center my-5 " th:if="${not #lists.isEmpty(entries)}">
+    <div class="row-fluid col-12 align-items-center my-5 " th:if="${not #lists.isEmpty(entries)}">
 
-            <h2 class="text-center mx-auto">
-                List of all entries
-                <a href="#" th:href="@{/track/newEntry}" class="btn btn-outline-secondary d-inline float-left col-3 "> <i class="fas fa-plus"></i>
-                </a>
-            </h2>
-        </div>
-        <div class="row-flud flex-grow-1 p-5" th:if="${#lists.isEmpty(entries)}">
-            <p class="text-center fs-2 align-middle m-5 ">You don't have any entries. <br>
-                <span class="fs-2" style="font-weight: bold;"><a th:href="@{/track/newEntry}" class="d-inline flat-left" style="color: #C9ADA7">Create entries and start tracking your progress</a></span></p>
-        </div>
-        <table class="table-hover rounded w-75 mx-auto col-lg-8 my-5 table table-striped table-default table-borderless " th:if="${not #lists.isEmpty(entries)}">
-
-            <tr class="border-bottom">
-                <th class=" flex-column h-100 flex-grow-1 col-3 text-center font-large p-3">Data</th>
-                <th class="col-3 text-center font-large p-3">Id postaci</th>
-                <th class="col-3 text-center font-large p-3">War Paint</th>
-                <th class="col-3 text-center font-large p-3">Garrison Resource</th>
-            </tr>
-
-            <tr th:each="entry : ${entries} " th:object="${entry}">
-                <td class="col-3 text-center p-3" th:text="*{entryDate}"></td>
-                <td class="col-3 text-center p-3" th:text="*{characterName}"></td>
-                <td class="col-3 text-center p-3" th:text="*{warPaint}"></td>
-                <td class="col-3 text-center p-3" th:text="*{garrisonResources}"></td>
-            </tr>
-
-        </table>
+        <h2 class="text-center mx-auto">
+            List of all entries
+            <a href="#" th:href="@{/track/newEntry}" class="btn btn-outline-secondary d-inline float-left col-3 "> <i
+                    class="fas fa-plus"></i>
+            </a>
+        </h2>
     </div>
+    <div class="row-flud flex-grow-1 p-5" th:if="${#lists.isEmpty(entries)}">
+        <p class="text-center fs-2 align-middle m-5 ">You don't have any entries. <br>
+            <span class="fs-2" style="font-weight: bold;"><a th:href="@{/track/newEntry}" class="d-inline flat-left"
+                                                             style="color: #C9ADA7">Create entries and start tracking your progress</a></span>
+        </p>
+    </div>
+    <table class="table-hover rounded w-75 mx-auto col-lg-8 my-5 table table-striped table-default table-borderless "
+           th:if="${not #lists.isEmpty(entries)}">
 
-    <div th:replace="fragments/footer.html :: footer "></div>
-    <div th:replace="fragments/header.html :: scripts "></div>
+        <tr class="border-bottom">
+            <th class=" flex-column h-100 flex-grow-1 col-3 text-center font-large p-3">Data</th>
+            <th class="col-3 text-center font-large p-3">Id postaci</th>
+            <th class="col-3 text-center font-large p-3">War Paint</th>
+            <th class="col-3 text-center font-large p-3">Garrison Resource</th>
+            <th></th>
+        </tr>
+
+        <tr th:each="entry : ${entries} " th:object="${entry}">
+            <td class="col-3 text-center p-3" th:text="*{entryDate}"></td>
+            <td class="col-3 text-center p-3" th:text="*{characterName}"></td>
+            <td class="col-3 text-center p-3" th:text="*{warPaint}"></td>
+            <td class="col-3 text-center p-3" th:text="*{garrisonResources}"></td>
+            <td class="">
+                <a type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#confirmationBox"
+                   th:href="@{'/track/delete/' + *{id}}"><i class="fas fa-trash"></i></a>
+            </td>
+        </tr>
+
+    </table>
+</div>
+
+<div th:replace="fragments/footer.html :: footer "></div>
+<div th:replace="fragments/header.html :: scripts "></div>
 </body>
 
 </html>

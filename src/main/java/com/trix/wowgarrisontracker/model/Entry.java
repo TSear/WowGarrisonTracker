@@ -60,4 +60,12 @@ public class Entry {
             throw new RuntimeException("Entry does not contain account character info");
         return this.warPaint + this.getAccountCharacter().getWarPaint();
     }
+
+    public void setWarPaintToNegative() {
+        this.setWarPaint(-this.getWarPaint());
+    }
+
+    public void setGarrisonResourcesToNegative() {
+        this.setGarrisonResources(-this.getGarrisonResources());
+    }
 }

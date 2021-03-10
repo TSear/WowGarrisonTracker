@@ -79,4 +79,9 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     public List<AccountCharacter> findAllByAccountId(Long accountId) {
        return accountCharacterRepository.findAllByAccountId(accountId);
     }
+
+    @Override
+    public void delete(Long id) {
+        accountCharacterRepository.deleteById(id);
+    }
 }

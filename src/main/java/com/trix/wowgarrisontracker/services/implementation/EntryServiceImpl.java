@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,5 +65,27 @@ public class EntryServiceImpl implements EntryService {
                 .collect(Collectors.toList());
         return listOfAccountEntriesConvertedToPojo;
     }
+
+    @Override
+    public void delete(Long id) {
+        Entry entry = this.findById(id);
+        entry.setGarrisonResourcesToNegative();
+        entry.setWarPaintToNegative();
+        accountCharacterService.updateAccountCharacterGarrisonResourcesAndWarPaint(entry);
+        entryRepository.deleteById(id);
+    }
+
+
+    @Override
+    public Entry findById(Long id) {
+        Optional<Entry> optionalEntry = entryRepository.findById(id);
+
+        if(optionalEntry.isEmpty())
+            throw new RuntimeException("Entity with id: "+id +"was not found");
+
+        return optionalEntry.get();
+
+    }
+
 
 }

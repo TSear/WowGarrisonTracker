@@ -24,4 +24,6 @@ public interface AccountCharacterService {
     List<AccountCharacterPojo> getListOfAccountCharactersConvertedToPojo(Long characterId);
 
     List<AccountCharacter> findAllByAccountId(Long accountId);
+
+    void delete(Long id);
 }

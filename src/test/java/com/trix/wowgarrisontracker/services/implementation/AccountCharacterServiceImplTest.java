@@ -144,4 +144,5 @@ class AccountCharacterServiceImplTest {
         assertEquals(350l, account.getTotalWarPaint());
         assertNotEquals(300l, account.getTotalWarPaint());
     }
+
 }

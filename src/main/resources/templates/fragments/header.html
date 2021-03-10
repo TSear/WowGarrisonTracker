@@ -2,33 +2,33 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 
 <head th:fragment="header(titleName)">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"
-	shrink-to-fit=no>
-<link rel="stylesheet" href="#" th:href="@{'/css/bootstrap.min.css'}">
-<link rel="stylesheet" href="#" th:href="@{'/css/global.css'}">
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<title th:text="${titleName}"></title>
-<script src="https://kit.fontawesome.com/766ef7f87f.js"
-	crossorigin="anonymous"></script>
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@200;400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"
+          shrink-to-fit=no>
+    <link rel="stylesheet" href="#" th:href="@{'/css/bootstrap.min.css'}">
+    <link rel="stylesheet" href="#" th:href="@{'/css/global.css'}">
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <title th:text="${titleName}"></title>
+    <script src="https://kit.fontawesome.com/766ef7f87f.js"
+            crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@200;400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
 
-	<div th:fragment="scripts">
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js "
-			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo "
-			crossorigin="anonymous "></script>
-		<script
-			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js "
-			integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49 "
-			crossorigin="anonymous "></script>
-		<script th:src="@{ '/js/bootstrap.min.js'} "></script>
-	</div>
+<div th:fragment="scripts">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js "
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo "
+            crossorigin="anonymous "></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js "
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49 "
+            crossorigin="anonymous "></script>
+    <script th:src="@{ '/js/bootstrap.min.js'} "></script>
+</div>
 
 </body>
 

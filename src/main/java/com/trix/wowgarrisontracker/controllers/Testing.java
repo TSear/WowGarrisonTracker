@@ -22,10 +22,7 @@ import com.trix.wowgarrisontracker.validators.LoginRequestValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
@@ -112,6 +109,11 @@ public class Testing {
 
     }
 
+    @GetMapping(value = "/character/delete/{id}")
+    public String deleteCharacter(@PathVariable Long id){
+        accountCharacterService.delete(id);
+        return "redirect:/characters";
+    }
 
     @GetMapping(value = "/characters/new")
     public String getCharacterForm(Model model) {
