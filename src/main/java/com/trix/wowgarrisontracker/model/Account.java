@@ -37,6 +37,12 @@ public class Account {
         this.amountOfEntries = 0l;
     }
 
+    public int getAmountOfEntries(){
+        return this.accountCharacters.stream()
+                .map(accountCharacter -> accountCharacter.getEntries().size())
+                .reduce(0, Integer::sum);
+    }
+
     public Long getTotalGarrisonResources(){
         return this.accountCharacters.stream()
                 .map(entry -> entry.getGarrisonResources())

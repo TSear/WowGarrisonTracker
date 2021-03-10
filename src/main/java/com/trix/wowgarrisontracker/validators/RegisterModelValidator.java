@@ -35,6 +35,13 @@ public class RegisterModelValidator implements Validator {
 		if(accountService.areCredentialsTaken(registerModel)) {
 			errors.rejectValue("login", "login.taken", "Login is already taken");
 		}
+		if(registerModel.isLoginTooLong())
+			errors.rejectValue("login", "login.tooLong", "Login is too long!");
+		if(registerModel.isPasswordTooLong())
+			errors.rejectValue("password", "password.tooLong", "Password is too long!");
+		if(registerModel.isRepeatedPasswordTooLong())
+			errors.rejectValue("repeatedPassword", "repeatedPassword.tooLong", "Repeated Password is too long!");
+
 	}
 
 }

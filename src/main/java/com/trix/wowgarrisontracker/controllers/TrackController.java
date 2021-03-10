@@ -105,7 +105,6 @@ public class TrackController {
 			redirectAttributes.addFlashAttribute("entry", entry);
 			return "redirect:/track/newEntry";
 		}
-		//TODO Zapisywanie będzie robione w entryService. Raczej garrisonResources i warPaint z Account bedą usunięte
 		entryService.save(entry);
 
 		return "redirect:/track";

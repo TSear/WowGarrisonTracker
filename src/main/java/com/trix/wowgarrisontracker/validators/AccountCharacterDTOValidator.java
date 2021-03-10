@@ -26,6 +26,9 @@ public class AccountCharacterDTOValidator implements Validator {
         if (accountCharacterService.isNameTaken(pojo.getAccountId(), pojo.getCharacterName())) {
             errors.rejectValue("characterName", "name.taken", "This name already exist");
         }
+        if(pojo.getCharacterName().length()>100){
+            errors.rejectValue("characterName","name.toolong", "This name it too long");
+        }
     }
 
 }
