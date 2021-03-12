@@ -29,7 +29,7 @@ public class AccountCharacter {
     @JoinColumn(name="accountId", referencedColumnName = "id")
 	private Account account;
 
-	@OneToMany(mappedBy = "accountCharacter")
+	@OneToMany(fetch = FetchType.EAGER,  mappedBy = "accountCharacter")
 	private Set<Entry> entries;
 
 	public AccountCharacter() {

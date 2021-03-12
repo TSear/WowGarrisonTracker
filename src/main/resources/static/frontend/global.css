@@ -1,0 +1,39 @@
+.content-background {
+    background: #252422 ;
+}
+
+.add-button {
+    background-color: #eb5e28;
+    color: #CCC5B9;
+}
+
+.track-grid,
+.track-grid>*,
+.track-grid>*>* {
+    background-color: #403D39;
+    line-height: 20px;
+    text-align: center;
+}
+
+th {
+    background-color: #403D39;
+}
+
+[part="cell"] {
+    background-color: #403D39;
+}
+
+[part="row"] {
+    background-color: black;
+}
+
+
+vaadin-vertical-layout {
+    background: rgb(64, 61, 57);
+    background: linear-gradient(0deg, rgba(64, 61, 57, 1) 0%, rgba(37, 36, 34, 1) 100%);
+}
+
+[slot="app-bar-content"] {
+    color: #CCC5B9;
+    font-size: 25px;
+}

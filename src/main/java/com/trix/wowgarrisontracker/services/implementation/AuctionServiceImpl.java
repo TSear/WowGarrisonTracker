@@ -74,6 +74,8 @@ public class AuctionServiceImpl implements AuctionService {
             auctions.getAuctions().stream().filter(x -> items.contains(new ItemEntity(x.getItemId()))).forEach(this::save);
             try {
                 Thread.sleep(30 * 60 * 1000);
+//                Thread.sleep(1000*60);
+                System.out.println("Updating auction House");
             } catch (InterruptedException e) {
                 break;
             }

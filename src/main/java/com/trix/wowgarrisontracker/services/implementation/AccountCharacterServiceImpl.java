@@ -67,8 +67,8 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     }
 
     @Override
-    public List<AccountCharacterPojo> getListOfAccountCharactersConvertedToPojo(Long characterId) {
-        List<AccountCharacterPojo> accountCharacterPojoList = this.listOfAccountCharacters(characterId)
+    public List<AccountCharacterPojo> getListOfAccountCharactersConvertedToPojo(Long accountId) {
+        List<AccountCharacterPojo> accountCharacterPojoList = this.listOfAccountCharacters(accountId)
                 .stream()
                 .map(accountCharacterToAccountCharacterPojo::convert)
                 .collect(Collectors.toList());

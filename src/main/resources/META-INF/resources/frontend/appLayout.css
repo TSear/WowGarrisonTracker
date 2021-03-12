@@ -1,0 +1,10 @@
+[part="app-bar"]{
+    background: #252422;
+}
+app-toolbar{
+    background: none;
+}
+
+[slot="app-bar-content"]>*>*{
+    color: #CCC5B9;
+}

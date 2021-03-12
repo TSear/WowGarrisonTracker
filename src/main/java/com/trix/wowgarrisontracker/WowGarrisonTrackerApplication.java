@@ -16,6 +16,7 @@ public class WowGarrisonTrackerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WowGarrisonTrackerApplication.class, args);
 	}
+
 	@Bean
 	public Executor taskExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();

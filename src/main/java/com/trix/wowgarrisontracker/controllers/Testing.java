@@ -19,6 +19,7 @@ import com.trix.wowgarrisontracker.validators.AccountCharacterDTOValidator;
 import com.trix.wowgarrisontracker.validators.AccountDTOValidator;
 import com.trix.wowgarrisontracker.validators.EntryDTOValidator;
 import com.trix.wowgarrisontracker.validators.LoginRequestValidator;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+@Profile("spring")
 @RequestMapping("")
 @Controller
 public class Testing {
@@ -92,6 +94,8 @@ public class Testing {
 
         Cookie authorizationCookie = utils.extractCookie(AUTHORIZATION, servletRequest.getCookies());
         authorizationCookie.setMaxAge(0);
+
+
 
         return "redirect:/account/login/page";
     }

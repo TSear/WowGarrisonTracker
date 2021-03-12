@@ -1,0 +1,20 @@
+#header {
+    border-bottom: 2px solid #CCC5B9;
+}
+
+#items [part="row"] {
+    box-sizing: border-box;
+}
+
+#items [part="row"]:hover {
+    border: 2px solid #eb5e28;
+    background-color: black;
+}
+
+[part~="row"]:hover [part~="body-cell"] {
+    background-color: rgba(0, 55, 108, 0.12);
+}
+
+#table #items {
+    background-color: black;
+}

@@ -27,4 +27,9 @@ public class GeneralUtils {
 		Cookie cookie = this.extractCookie("Authorization", httpServletRequest.getCookies());
 		return jwtUtils.extractId(cookie);
 	}
+
+	public Long getId(Cookie [] cookies){
+		Cookie cookie = this.extractCookie("Authorization", cookies);
+		return jwtUtils.extractId(cookie);
+	}
 }

@@ -2,10 +2,16 @@ package com.trix.wowgarrisontracker.pojos;
 
 import java.time.LocalDate;
 
+import com.trix.wowgarrisontracker.model.AccountCharacter;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 
 @Setter
@@ -14,11 +20,26 @@ import lombok.Setter;
 public class EntryPojo {
     
     private Long id;
+
+    @NotNull(message = "Entry date cannot be empty")
     private LocalDate entryDate;
+
+    @Min(value = 0, message = "Minimum value is 0")
+    @Max(value = 10000, message = "Maximum value is 10000")
     private int garrisonResources;
+
+    @Min(value = 0, message = "Minimum value is 0")
+    @Max(value = 10000, message = "Maximum value is 10000")
     private int warPaint;
     private Long accountCharacterId;
+
+    @NotBlank(message = "You must insert character name")
+    @NotNull(message = "You must insert character name")
     private String characterName;
+
+    @NotNull(message = "Account character cannot be null")
+    private AccountCharacter accountCharacter;
+
 
     public EntryPojo(){
         this.entryDate = LocalDate.now();

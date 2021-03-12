@@ -27,7 +27,7 @@ public class Account {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")
     private Set<AccountCharacter> accountCharacters;
 
     private Long amountOfEntries;
