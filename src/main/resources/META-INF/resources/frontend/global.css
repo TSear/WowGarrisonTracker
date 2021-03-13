@@ -1,5 +1,5 @@
 .content-background {
-    background: #252422 ;
+    background: #252422;
 }
 
 .add-button {
@@ -10,8 +10,6 @@
 .track-grid,
 .track-grid>*,
 .track-grid>*>* {
-    background-color: #403D39;
-    line-height: 20px;
     text-align: center;
 }
 
@@ -27,7 +25,6 @@ th {
     background-color: black;
 }
 
-
 vaadin-vertical-layout {
     background: rgb(64, 61, 57);
     background: linear-gradient(0deg, rgba(64, 61, 57, 1) 0%, rgba(37, 36, 34, 1) 100%);
@@ -36,4 +33,12 @@ vaadin-vertical-layout {
 [slot="app-bar-content"] {
     color: #CCC5B9;
     font-size: 25px;
+}
+
+.dialog-layout {
+    background: #252422;
+}
+.date-label {
+    text-align: center;
+    margin-top: 1em;
 }

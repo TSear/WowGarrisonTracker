@@ -1,0 +1,15 @@
+[part="overlay"] {
+    background: rgb(235, 94, 40);
+    background: linear-gradient(130deg, rgba(235, 94, 40, 1) 0%, rgba(64, 61, 57, 1) 50%, rgba(37, 36, 34, 1) 100%);
+    box-shadow: 0 0 1.5em rgb(235, 94, 40);
+}
+
+[part="content"] {
+    padding: 7px;
+    padding-top: 20px;
+    border-radius: var(--lumo-border-radius-m);
+}
+
+[part="backdrop"] {
+    background-color: rgba(0, 0, 0, 0.5);
+}

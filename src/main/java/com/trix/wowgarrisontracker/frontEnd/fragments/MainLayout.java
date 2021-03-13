@@ -18,6 +18,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.material.Material;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,7 @@ import static com.github.appreciated.app.layout.entity.Section.FOOTER;
 
 @Profile("vaadin")
 @StyleSheet("global.css")
+@CssImport("./modified-lumo.css")
 @Push
 @Component
 @UIScope

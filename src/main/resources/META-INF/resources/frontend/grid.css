@@ -4,17 +4,17 @@
 
 #items [part="row"] {
     box-sizing: border-box;
+    transition: 0.2s;
 }
 
 #items [part="row"]:hover {
-    border: 2px solid #eb5e28;
-    background-color: black;
-}
-
-[part~="row"]:hover [part~="body-cell"] {
-    background-color: rgba(0, 55, 108, 0.12);
+    background-color: rgba(235, 94, 40, 0.5);
 }
 
 #table #items {
-    background-color: black;
+    background-color: #403D39;
+}
+
+[part~="cell"] {
+    background-color: transparent;
 }

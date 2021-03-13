@@ -1,25 +1,26 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
-import com.mysql.cj.result.IntegerValueFactory;
+import com.trix.wowgarrisontracker.frontEnd.fragments.TrackLayout;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
-import com.trix.wowgarrisontracker.model.Entry;
-import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
+import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
-import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.flow.data.validator.RangeValidator;
+import com.vaadin.flow.data.validator.IntegerRangeValidator;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +30,33 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.List;
 
-
+@CssImport(value = "./inputFields.css", themeFor = "vaadin-integer-field")
+@CssImport(value = "./inputFields.css", themeFor = "vaadin-combo-box")
+@CssImport(value = "./inputFields.css", themeFor = "vaadin-text-field")
+@CssImport(value = "./dialogBox.css", themeFor = "vaadin-dialog-overlay")
+@CssImport(value = "./inputFields.css", themeFor = "vaadin-date-picker")
 @Component
 @UIScope
 public class EntryFormDialog extends Dialog {
 
-    GeneralUtils utils;
-    AccountCharacterService accountCharacterService;
-    Binder<EntryPojo> entryPojoBinder = new Binder<>();
+    @Autowired
+    private GeneralUtils utils;
+    @Autowired
+    private AccountCharacterService accountCharacterService;
+    @Autowired
+    private EntryService entryService;
 
-    public EntryFormDialog( @Autowired AccountCharacterService accountCharacterService, @Autowired GeneralUtils utils) {
+    private Binder<EntryPojo> entryPojoBinder = new Binder<>();
+    private EntryPojo entryPojo = new EntryPojo();
+    private final static String REQUIRED = "Please fill this field";
+    private final static String NUMBER_RANGE_ERROR_MESSAGE = "You must pass number between 0-10000";
+    private Grid<EntryPojo> layout;
+    private Long id;
 
+
+    public EntryFormDialog() {
+
+        this.entryService = entryService;
         this.utils = utils;
         this.accountCharacterService = accountCharacterService;
     }
@@ -48,7 +65,6 @@ public class EntryFormDialog extends Dialog {
     private void generateDialogBox() {
         this.configureDialog();
 
-        EntryPojo entryPojo = new EntryPojo();
         entryPojoBinder.readBean(entryPojo);
 
         Long id = utils.getId(VaadinService.getCurrentRequest().getCookies());
@@ -59,24 +75,15 @@ public class EntryFormDialog extends Dialog {
 
         List<AccountCharacter> accountCharacterList = accountCharacterService.findAllByAccountId(id);
 
-        ComboBox<AccountCharacter> accountCharacters = createAccountCharacterPojoComboBox(accountCharacterList);
-        entryPojoBinder.forField(accountCharacters)
-                .bind(EntryPojo::getAccountCharacter, EntryPojo::setAccountCharacter);
+        ComboBox<AccountCharacter> accountCharactersComboBox = createAccountCharacterPojoComboBox(accountCharacterList);
 
-        IntegerField garrisonResources = new IntegerField("Garrison Resources");
-        entryPojoBinder.forField(garrisonResources)
-                    .bind(EntryPojo::getGarrisonResources,EntryPojo::setGarrisonResources);
+        IntegerField garrisonResourcesIntegerField = createGarrisonResourcesIntegerField();
 
-        IntegerField warPaint = new IntegerField("War Paint");
-        entryPojoBinder.forField(warPaint)
-                .bind(EntryPojo::getWarPaint,EntryPojo::setWarPaint);
+        IntegerField warPaintIntegerField = createWarPaintIntegerField();
 
-        Label entryDate = new Label("Entry Date: " + LocalDate.now().toString());
-
-        entryFormLayout.add(accountCharacters);
-        entryFormLayout.add(garrisonResources);
-        entryFormLayout.add(warPaint);
-        entryFormLayout.add(entryDate);
+        entryFormLayout.add(accountCharactersComboBox);
+        entryFormLayout.add(garrisonResourcesIntegerField);
+        entryFormLayout.add(warPaintIntegerField);
 
         mainDialogBoxLayout.add(entryFormLayout);
 
@@ -91,8 +98,39 @@ public class EntryFormDialog extends Dialog {
 
         this.add(mainDialogBoxLayout);
         mainDialogBoxLayout.setFlexGrow(1, buttonLayout);
-        mainDialogBoxLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
 
+    }
+
+    private IntegerField createWarPaintIntegerField() {
+        IntegerField warPaint = new IntegerField("War Paint");
+        warPaint.setValue(0);
+        warPaint.setMax(5000);
+        warPaint.setMin(0);
+        warPaint.setStep(1);
+        warPaint.setHasControls(true);
+        entryPojoBinder.forField(warPaint)
+                .withValidator(new IntegerRangeValidator(NUMBER_RANGE_ERROR_MESSAGE, 0, 10000))
+                .withValidator(value -> value!= null, REQUIRED)
+                .bind(EntryPojo::getWarPaint, EntryPojo::setWarPaint);
+        return warPaint;
+    }
+
+    private IntegerField createGarrisonResourcesIntegerField() {
+        IntegerField garrisonResources = new IntegerField("Garrison Resources");
+        garrisonResources.setValue(0);
+        garrisonResources.setMin(0);
+        garrisonResources.setMax(10000);
+        garrisonResources.setStep(1);
+        garrisonResources.setHasControls(true);
+
+        entryPojoBinder.forField(garrisonResources)
+                .withValidator(new IntegerRangeValidator(NUMBER_RANGE_ERROR_MESSAGE,
+                        0,
+                        10000))
+                .withValidator(integer -> integer != null, REQUIRED)
+                .bind(EntryPojo::getGarrisonResources, EntryPojo::setGarrisonResources);
+
+        return garrisonResources;
     }
 
     private Button createCancelButton(Dialog dialog, String cancel) {
@@ -106,14 +144,19 @@ public class EntryFormDialog extends Dialog {
     private Button createCreateEntryButton(Dialog dialog, String s) {
         Button confirmButton = new Button(s);
         confirmButton.addClickListener(event -> {
-            EntryPojo entryPojo = new EntryPojo();
             try {
                 entryPojoBinder.writeBean(entryPojo);
+                dialog.close();
+                entryService.save(entryPojo);
+                entryPojo.clean();
+                entryPojoBinder.readBean(entryPojo);
+                //TODO THIS IS TEMPORARY IMPLEMENTATION. NEED TO CHANGE ASAP
+                layout.setItems(entryService.accountEntriesConvertedToPojoList(id));
+
             } catch (ValidationException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
             //TODO Need to add saving to database
-            dialog.close();
         });
         return confirmButton;
     }
@@ -130,6 +173,16 @@ public class EntryFormDialog extends Dialog {
         accountCharacters.setItems(accountCharacterPojoList);
         accountCharacters.setLabel("Account Characters");
         accountCharacters.setValue(accountCharacterPojoList.get(0));
+        accountCharacters.setAllowCustomValue(false);
+        accountCharacters.addAttachListener(event -> {
+            accountCharacters.setRequired(true);
+            accountCharacters.setRequiredIndicatorVisible(true);
+        });
+        accountCharacters.setPlaceholder("Chose Characters");
+        entryPojoBinder.forField(accountCharacters)
+                .withValidator(selected -> selected != null , REQUIRED)
+                .bind(EntryPojo::getAccountCharacter, EntryPojo::setAccountCharacter);
+
         return accountCharacters;
     }
 
@@ -142,6 +195,9 @@ public class EntryFormDialog extends Dialog {
     private VerticalLayout createMainDialogLayout() {
         VerticalLayout mainDialogBoxLayout = new VerticalLayout();
         mainDialogBoxLayout.setMaxWidth("400px");
+        mainDialogBoxLayout.setClassName("dialog-layout");
+        mainDialogBoxLayout.setSizeFull();
+        mainDialogBoxLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
         return mainDialogBoxLayout;
     }
 
@@ -149,6 +205,13 @@ public class EntryFormDialog extends Dialog {
         this.setCloseOnEsc(true);
         this.setDraggable(true);
         this.setCloseOnOutsideClick(false);
+
     }
 
+    public void setGrid(Grid<EntryPojo> layout) {
+        this.layout = layout;
+    }
+    public void setId(Long id){
+        this.id = id;
+    }
 }

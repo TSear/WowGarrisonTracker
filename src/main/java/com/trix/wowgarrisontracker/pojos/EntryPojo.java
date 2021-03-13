@@ -24,6 +24,7 @@ public class EntryPojo {
     @NotNull(message = "Entry date cannot be empty")
     private LocalDate entryDate;
 
+
     @Min(value = 0, message = "Minimum value is 0")
     @Max(value = 10000, message = "Maximum value is 10000")
     private int garrisonResources;
@@ -46,6 +47,15 @@ public class EntryPojo {
         this.garrisonResources = 0;
         this.warPaint = 0;
         this.characterName = "";
+    }
+
+    public void clean(){
+       this.entryDate = LocalDate.now();
+       this.garrisonResources = 0;
+       this.warPaint = 0;
+       this.characterName = "";
+       this.accountCharacter = null;
+       this.accountCharacterId = null;
     }
 
 }
