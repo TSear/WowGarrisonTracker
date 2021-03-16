@@ -4,6 +4,7 @@ import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.pojos.AccCharacterResourcesPojo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,5 +22,5 @@ public interface AccountCharacterRepository extends JpaRepository<AccountCharact
 	@Modifying
 	@Query("Update AccountCharacter acc set acc.garrisonResources = :garrisonResources, acc.warPaint = :warPaint where acc.id = :id")
 	void updateGarrisonResourcesAndWarPaint(Long id, Long garrisonResources, Long warPaint);
-
+	Optional<AccountCharacter> findAccountCharacterByCharacterName(String name);
 }

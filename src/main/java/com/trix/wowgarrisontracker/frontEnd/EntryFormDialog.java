@@ -30,11 +30,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.List;
 
-@CssImport(value = "./inputFields.css", themeFor = "vaadin-integer-field")
-@CssImport(value = "./inputFields.css", themeFor = "vaadin-combo-box")
-@CssImport(value = "./inputFields.css", themeFor = "vaadin-text-field")
-@CssImport(value = "./dialogBox.css", themeFor = "vaadin-dialog-overlay")
-@CssImport(value = "./inputFields.css", themeFor = "vaadin-date-picker")
+
 @Component
 @UIScope
 public class EntryFormDialog extends Dialog {
@@ -156,7 +152,6 @@ public class EntryFormDialog extends Dialog {
             } catch (ValidationException e) {
                 System.out.println(e.getMessage());
             }
-            //TODO Need to add saving to database
         });
         return confirmButton;
     }

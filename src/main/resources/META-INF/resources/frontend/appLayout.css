@@ -1,10 +1,28 @@
-[part="app-bar"]{
+[part="app-bar"] {
     background: #252422;
+    box-shadow: 0 0 5px #eb5e28;
 }
-app-toolbar{
+
+app-toolbar {
     background: none;
 }
 
-[slot="app-bar-content"]>*>*{
+[slot="app-bar-content"]>*>* {
     color: #CCC5B9;
 }
+
+#drawer {
+    box-shadow: 0 0 5px #eb5e28;
+}
+
+#drawer .drawer-content {
+    background: rgb(64, 61, 57);
+    background: linear-gradient(0deg, rgba(64, 61, 57, 1) 0%, rgba(37, 36, 34, 1) 100%)
+}
+
+.application-content {
+    background: #252422;
+    height: 100%;
+}
+
+[slot="drawer-content"] {}

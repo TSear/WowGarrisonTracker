@@ -3,6 +3,8 @@ package com.trix.wowgarrisontracker.services.implementation;
 import com.trix.wowgarrisontracker.model.AuctionEntity;
 import com.trix.wowgarrisontracker.model.Auctions;
 import com.trix.wowgarrisontracker.model.ItemEntity;
+import com.trix.wowgarrisontracker.pojos.AuctionPojo;
+import com.trix.wowgarrisontracker.pojos.AuctionPojoWrapper;
 import com.trix.wowgarrisontracker.repository.AuctionEntityRepository;
 import com.trix.wowgarrisontracker.repository.ItemEntityRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
@@ -11,6 +13,7 @@ import com.trix.wowgarrisontracker.utils.BlizzardRequestUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,5 +86,29 @@ public class AuctionServiceImpl implements AuctionService {
         }
     }
 
+    @Override
+    public List<AuctionPojoWrapper> findAllAuctions() {
+        List<ItemEntity> itemEntities = itemEntityService.findAllItemEntities();
+        List<AuctionPojoWrapper> listOfAuctionPojos = new ArrayList<>();
 
+        for (ItemEntity tmp : itemEntities) {
+            AuctionPojoWrapper tmpAuctionPojo = new AuctionPojoWrapper();
+            tmpAuctionPojo.setItemName(tmp.getName());
+
+            List<AuctionPojo> converted = new ArrayList<>();
+            for (AuctionEntity tmpAuctionEntity : getAuctionsByItemId(tmp.getId())) {
+                AuctionPojo pojo = new AuctionPojo();
+                pojo.setQuantity(tmpAuctionEntity.getQuantity());
+                pojo.setUnitPrice(tmpAuctionEntity.getUnitPrice());
+                if(converted.contains(pojo))
+                    converted.get(converted.indexOf(pojo)).addQuantity(pojo.getQuantity());
+                else
+                    converted.add(pojo);
+            }
+            tmpAuctionPojo.setInfo(converted);
+            listOfAuctionPojos.add(tmpAuctionPojo);
+        }
+
+        return listOfAuctionPojos;
+    }
 }

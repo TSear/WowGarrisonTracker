@@ -25,20 +25,25 @@ th {
     background-color: black;
 }
 
-vaadin-vertical-layout {
-    background: rgb(64, 61, 57);
-    background: linear-gradient(0deg, rgba(64, 61, 57, 1) 0%, rgba(37, 36, 34, 1) 100%);
-}
-
 [slot="app-bar-content"] {
     color: #CCC5B9;
     font-size: 25px;
+    box-shadow: none;
 }
 
 .dialog-layout {
     background: #252422;
 }
+
 .date-label {
     text-align: center;
     margin-top: 1em;
+}
+
+.statistics-div {
+    width: 25%;
+    height: 25%;
+    background-color: #252525;
+    box-shadow: 0 0 5px #eb5e28;
+    margin: 15px;
 }

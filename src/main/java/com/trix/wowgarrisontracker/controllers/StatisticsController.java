@@ -3,6 +3,7 @@ package com.trix.wowgarrisontracker.controllers;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.trix.wowgarrisontracker.utils.JWTutils;
 
 @Controller
+@Profile("spring")
 public class StatisticsController {
 
 	private GeneralUtils utils;

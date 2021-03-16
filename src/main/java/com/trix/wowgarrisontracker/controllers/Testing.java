@@ -7,8 +7,8 @@ import com.trix.wowgarrisontracker.converters.AuctionToAuctionPojo;
 import com.trix.wowgarrisontracker.model.AuctionEntity;
 import com.trix.wowgarrisontracker.model.ItemEntity;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
-import com.trix.wowgarrisontracker.pojos.AuctionHouseInfoPojo;
 import com.trix.wowgarrisontracker.pojos.AuctionPojo;
+import com.trix.wowgarrisontracker.pojos.AuctionPojoWrapper;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
 import com.trix.wowgarrisontracker.repository.EntryRepository;
 import com.trix.wowgarrisontracker.services.interfaces.*;
@@ -162,14 +162,14 @@ public class Testing {
     public String getAuctionHouse(Model model) {
 
         List<ItemEntity> itemList = itemEntityService.findAllItemEntities();
-        List<AuctionPojo> returnAuctionList = new ArrayList<>();
+        List<AuctionPojoWrapper> returnAuctionList = new ArrayList<>();
 
         for (ItemEntity itemTmp : itemList) {
             List<AuctionEntity> listOfAuctionEntities = auctionService.getAuctionsByItemId(itemTmp.getId());
-            AuctionPojo auctionPojoTmp = new AuctionPojo();
+            AuctionPojoWrapper auctionPojoTmp = new AuctionPojoWrapper();
             auctionPojoTmp.setItemName(itemTmp.getName());
             for (AuctionEntity auctionEntityTmp : listOfAuctionEntities) {
-                AuctionHouseInfoPojo auctionHouseInfoPojo = new AuctionHouseInfoPojo();
+                AuctionPojo auctionHouseInfoPojo = new AuctionPojo();
                 auctionHouseInfoPojo.setQuantity(auctionEntityTmp.getQuantity());
                 auctionHouseInfoPojo.setUnitPrice(auctionEntityTmp.getUnitPrice());
                 auctionPojoTmp.getInfo().add(auctionHouseInfoPojo);
@@ -178,7 +178,7 @@ public class Testing {
             // returnAuctionList.add(listOfAuctionEntities.stream().map(auctionToAuctionPojo::convert).collect(Collectors.toList()));
         }
         returnAuctionList.stream().forEach(item -> item.getInfo().sort(
-                (AuctionHouseInfoPojo o1, AuctionHouseInfoPojo o2) -> o1.getUnitPrice().compareTo(o2.getUnitPrice())));
+                (AuctionPojo o1, AuctionPojo o2) -> o1.getUnitPrice().compareTo(o2.getUnitPrice())));
 
         model.addAttribute("items", returnAuctionList);
 

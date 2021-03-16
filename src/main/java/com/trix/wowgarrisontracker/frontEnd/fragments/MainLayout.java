@@ -17,9 +17,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.spring.annotation.UIScope;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
-import com.vaadin.flow.theme.material.Material;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +25,10 @@ import static com.github.appreciated.app.layout.entity.Section.FOOTER;
 @Profile("vaadin")
 @StyleSheet("global.css")
 @CssImport("./modified-lumo.css")
+@CssImport(value = "./inputFields.css", themeFor = "vaadin-integer-field")
+@CssImport(value = "./inputFields.css", themeFor = "vaadin-combo-box")
+@CssImport(value = "./inputFields.css", themeFor = "vaadin-text-field")
+@CssImport(value = "./dialogBox.css", themeFor = "vaadin-dialog-overlay")
 @Push
 @Component
 @UIScope
@@ -55,17 +56,16 @@ public class MainLayout extends AppLayoutRouterLayout<LeftLayouts.LeftResponsive
                         .build())
                 .withAppMenu(LeftAppMenuBuilder.get()
                         .add(new LeftNavigationItem("Track", VaadinIcon.HOME.create(), TrackLayout.class),
-                                new LeftNavigationItem("Characters", VaadinIcon.TABLE.create(), View2.class),
-                                new LeftNavigationItem("Statistics", VaadinIcon.BAR_CHART, View3.class),
-                                new LeftNavigationItem("Auction House", VaadinIcon.MONEY_EXCHANGE, View4.class),
+                                new LeftNavigationItem("Characters", VaadinIcon.TABLE.create(), CharactersLayout.class),
+                                new LeftNavigationItem("Statistics", VaadinIcon.BAR_CHART, Statistics.class),
+                                new LeftNavigationItem("Auction House", VaadinIcon.MONEY_EXCHANGE, AuctionHouse.class),
                                 new LeftNavigationItem("About", VaadinIcon.INFO, View5.class),
-                                new LeftNavigationItem("Contact", VaadinIcon.PHONE, TrackLayout.class))
+                                new LeftNavigationItem("Contact", VaadinIcon.PHONE, Contact.class))
                         .addToSection(FOOTER,
                                 new Hr(),
                                 new LeftClickableItem("Log Out", VaadinIcon.SIGN_OUT.create(), clickEvent -> Notification.show("You are trying to log out")))
                         .build())
                 .build());
-
         this.getContent().setClassName("content-box");
     }
 

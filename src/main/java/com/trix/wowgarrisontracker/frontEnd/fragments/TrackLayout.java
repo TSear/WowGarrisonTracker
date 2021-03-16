@@ -16,6 +16,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 
+import javax.annotation.PostConstruct;
+
 @Profile("vaadin")
 @CssImport(value = "./grid.css", themeFor = "vaadin-grid")
 @UIScope
@@ -23,15 +25,27 @@ import org.springframework.context.annotation.Profile;
 public class TrackLayout extends VerticalLayout {
 
 
-    EntryFormDialog entryFormDialog;
+    @Autowired
+    private EntryService entryService;
+    @Autowired
+    private GeneralUtils utils;
+    @Autowired
+    private MainLayout mainLayout;
+    @Autowired
+    private EntryFormDialog entryFormDialog;
+    private Long id;
 
-    public TrackLayout(@Autowired MainLayout mainLayout, @Autowired EntryService entryService, @Autowired GeneralUtils utils, @Autowired EntryFormDialog entryFormDialog) {
+    public TrackLayout() {
 
-        this.entryFormDialog = entryFormDialog;
+    }
+
+    @PostConstruct
+    private void init() {
+
 
         configureTrackLayout(entryFormDialog);
 
-        Long id = utils.getId(VaadinService.getCurrentRequest().getCookies());
+        id = utils.getId(VaadinService.getCurrentRequest().getCookies());
 
         Grid<EntryPojo> gridLayout = createGridLayout(entryService, id);
 
@@ -50,16 +64,23 @@ public class TrackLayout extends VerticalLayout {
 
         addEntryButton.addClickListener(event -> entryFormDialog.open());
 
-        Button deleteEntryButton = createDeleteButton();
+        Button deleteEntryButton = createDeleteButton(gridLayout);
 
         buttonLayout.add(deleteEntryButton);
 
     }
 
-    private Button createDeleteButton() {
+    private Button createDeleteButton(Grid<EntryPojo> grid) {
         Button deleteEntryButton = new Button();
         deleteEntryButton.setIcon(VaadinIcon.TRASH.create());
         deleteEntryButton.setIconAfterText(true);
+        deleteEntryButton.addClickListener(event -> {
+            if (grid.getSelectedItems().size() > 0) {
+                grid.getSelectedItems().stream().forEach(item -> entryService.delete(item.getId()));
+                grid.setItems(entryService.accountEntriesConvertedToPojoList(id));
+            }
+
+        });
         return deleteEntryButton;
     }
 

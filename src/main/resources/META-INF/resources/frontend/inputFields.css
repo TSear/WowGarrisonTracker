@@ -21,3 +21,6 @@
 [part="value"] {
     color: #CCC5B9;
 }
+[slot="label"]{
+    color:  #CCC5B9;
+}
