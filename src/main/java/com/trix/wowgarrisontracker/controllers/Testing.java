@@ -5,6 +5,7 @@ import com.trix.wowgarrisontracker.converters.AccountPojoToAccount;
 import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
 import com.trix.wowgarrisontracker.converters.AuctionToAuctionPojo;
 import com.trix.wowgarrisontracker.model.AuctionEntity;
+import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.model.ItemEntity;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.pojos.AuctionPojo;
@@ -20,6 +21,9 @@ import com.trix.wowgarrisontracker.validators.AccountDTOValidator;
 import com.trix.wowgarrisontracker.validators.EntryDTOValidator;
 import com.trix.wowgarrisontracker.validators.LoginRequestValidator;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +34,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Profile("spring")
@@ -195,5 +200,22 @@ public class Testing {
     @GetMapping(value = "/contact")
     public String getContact() {
         return "contact";
+    }
+
+
+    @GetMapping(value = "/test")
+    public String test(){
+        try{
+
+            List<Entry> test = entryService.getAllAccountEntriesPaged(1l, PageRequest.of(1,3));
+            System.out.println(test.toString());
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            System.out.println(e.getStackTrace());
+            Arrays.stream(e.getStackTrace()).forEach(System.out::println);
+        }
+
+
+        return "infoPage";
     }
 }

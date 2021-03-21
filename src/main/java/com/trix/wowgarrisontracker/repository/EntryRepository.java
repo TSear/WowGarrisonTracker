@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.trix.wowgarrisontracker.model.Entry;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,4 +24,10 @@ public interface EntryRepository extends JpaRepository<Entry, Long>{
 
     @Query("SELECT COUNT(entries.id) FROM Account a JOIN a.accountCharacters accChars JOIN accChars.entries entries WHERE a.id = :accountId GROUP BY entries.entryDate ")
     public List<Long> getListOfEntriesEachDay(@Param("accountId")Long accountId);
+
+    @Query("SELECT entries FROM Account acc JOIN acc.accountCharacters accChars JOIN accChars.entries entries WHERE acc.id = :accountId")
+    public List<Entry> findAllEntriesByAccountId(Long accountId, Pageable pageable);
+
+    @Query("SELECT count(entries.id) FROM Account acc JOIN acc.accountCharacters accChars JOIN accChars.entries entries WHERE acc.id = :accountId")
+    public int getAmountOfEntries(Long accountId);
 }

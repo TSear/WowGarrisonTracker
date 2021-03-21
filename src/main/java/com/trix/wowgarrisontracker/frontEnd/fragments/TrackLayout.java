@@ -10,13 +10,16 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.vaadin.klaudeta.PaginatedGrid;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Profile("vaadin")
 @CssImport(value = "./grid.css", themeFor = "vaadin-grid")
@@ -34,6 +37,8 @@ public class TrackLayout extends VerticalLayout {
     @Autowired
     private EntryFormDialog entryFormDialog;
     private Long id;
+    private PaginatedGrid<EntryPojo> gridLayout;
+    private DataProvider<EntryPojo, Void> dataProvider;
 
     public TrackLayout() {
 
@@ -43,14 +48,13 @@ public class TrackLayout extends VerticalLayout {
     private void init() {
 
 
+        configureDataProvider();
         configureTrackLayout(entryFormDialog);
 
         id = utils.getId(VaadinService.getCurrentRequest().getCookies());
 
-        Grid<EntryPojo> gridLayout = createGridLayout(entryService, id);
+        gridLayout = createGridLayout(entryService, id);
 
-        this.entryFormDialog.setGrid(gridLayout);
-        this.entryFormDialog.setId(id);
 
         add(gridLayout);
 
@@ -67,6 +71,28 @@ public class TrackLayout extends VerticalLayout {
         Button deleteEntryButton = createDeleteButton(gridLayout);
 
         buttonLayout.add(deleteEntryButton);
+
+        entryFormDialog.setView(this);
+        entryFormDialog.addOpenedChangeListener(event -> {
+            if(!event.isOpened()){
+                dataProvider.refreshAll();
+            }
+        });
+
+
+        this.entryFormDialog.setGrid(gridLayout);
+        this.entryFormDialog.setId(id);
+   }
+
+    private void configureDataProvider() {
+
+         dataProvider = DataProvider.fromCallbacks(
+                query -> {
+                    long offset = gridLayout == null ? 0l : gridLayout.getPage()-1;
+                    long limit = query.getLimit();
+                    List<EntryPojo> data = entryService.getAllAccountEntriesPagedPojo(id, offset, 15l);
+                    return data.stream();
+                }, query -> entryService.getAmountOfEntries(id));
 
     }
 
@@ -91,10 +117,15 @@ public class TrackLayout extends VerticalLayout {
         this.setClassName("content-background");
     }
 
-    private Grid<EntryPojo> createGridLayout(EntryService entryService, Long id) {
-        Grid<EntryPojo> gridLayout = new Grid<>();
-        gridLayout.setItems(entryService.accountEntriesConvertedToPojoList(id));
+    private PaginatedGrid<EntryPojo> createGridLayout(EntryService entryService, Long id) {
+        PaginatedGrid<EntryPojo> gridLayout = new PaginatedGrid<>();
+
+
+        gridLayout.setDataProvider(dataProvider);
         gridLayout.setClassName("track-grid");
+        gridLayout.setPageSize(15);
+        gridLayout.setPaginatorSize(2);
+        setFlexGrow(1, gridLayout);
 
         gridLayout.addColumn(EntryPojo::getEntryDate).setHeader("Entry Date");
         gridLayout.addColumn(EntryPojo::getCharacterName).setHeader("Character Name");
@@ -108,5 +139,9 @@ public class TrackLayout extends VerticalLayout {
         addEntryButton.setWidthFull();
         addEntryButton.addClassName("add-button");
         return addEntryButton;
+    }
+
+    public void refresh(){
+        this.gridLayout.getDataProvider().refreshAll();
     }
 }

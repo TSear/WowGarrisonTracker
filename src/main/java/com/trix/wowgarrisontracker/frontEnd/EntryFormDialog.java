@@ -8,12 +8,9 @@ import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -25,9 +22,9 @@ import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.vaadin.klaudeta.PaginatedGrid;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -35,19 +32,19 @@ import java.util.List;
 @UIScope
 public class EntryFormDialog extends Dialog {
 
+    private final static String REQUIRED = "Please fill this field";
+    private final static String NUMBER_RANGE_ERROR_MESSAGE = "You must pass number between 0-10000";
     @Autowired
     private GeneralUtils utils;
     @Autowired
     private AccountCharacterService accountCharacterService;
     @Autowired
     private EntryService entryService;
-
     private Binder<EntryPojo> entryPojoBinder = new Binder<>();
     private EntryPojo entryPojo = new EntryPojo();
-    private final static String REQUIRED = "Please fill this field";
-    private final static String NUMBER_RANGE_ERROR_MESSAGE = "You must pass number between 0-10000";
-    private Grid<EntryPojo> layout;
+    private PaginatedGrid<EntryPojo> layout;
     private Long id;
+    private TrackLayout parent;
 
 
     public EntryFormDialog() {
@@ -106,7 +103,7 @@ public class EntryFormDialog extends Dialog {
         warPaint.setHasControls(true);
         entryPojoBinder.forField(warPaint)
                 .withValidator(new IntegerRangeValidator(NUMBER_RANGE_ERROR_MESSAGE, 0, 10000))
-                .withValidator(value -> value!= null, REQUIRED)
+                .withValidator(value -> value != null, REQUIRED)
                 .bind(EntryPojo::getWarPaint, EntryPojo::setWarPaint);
         return warPaint;
     }
@@ -142,13 +139,10 @@ public class EntryFormDialog extends Dialog {
         confirmButton.addClickListener(event -> {
             try {
                 entryPojoBinder.writeBean(entryPojo);
-                dialog.close();
                 entryService.save(entryPojo);
+                dialog.close();
                 entryPojo.clean();
                 entryPojoBinder.readBean(entryPojo);
-                //TODO THIS IS TEMPORARY IMPLEMENTATION. NEED TO CHANGE ASAP
-                layout.setItems(entryService.accountEntriesConvertedToPojoList(id));
-
             } catch (ValidationException e) {
                 System.out.println(e.getMessage());
             }
@@ -167,7 +161,6 @@ public class EntryFormDialog extends Dialog {
         accountCharacters.setItemLabelGenerator(AccountCharacter::getCharacterName);
         accountCharacters.setItems(accountCharacterPojoList);
         accountCharacters.setLabel("Account Characters");
-        accountCharacters.setValue(accountCharacterPojoList.get(0));
         accountCharacters.setAllowCustomValue(false);
         accountCharacters.addAttachListener(event -> {
             accountCharacters.setRequired(true);
@@ -175,7 +168,7 @@ public class EntryFormDialog extends Dialog {
         });
         accountCharacters.setPlaceholder("Chose Characters");
         entryPojoBinder.forField(accountCharacters)
-                .withValidator(selected -> selected != null , REQUIRED)
+                .withValidator(selected -> selected != null, REQUIRED)
                 .bind(EntryPojo::getAccountCharacter, EntryPojo::setAccountCharacter);
 
         return accountCharacters;
@@ -203,10 +196,15 @@ public class EntryFormDialog extends Dialog {
 
     }
 
-    public void setGrid(Grid<EntryPojo> layout) {
+    public void setView(TrackLayout tmp) {
+        this.parent = tmp;
+    }
+
+    public void setGrid(PaginatedGrid<EntryPojo> layout) {
         this.layout = layout;
     }
-    public void setId(Long id){
+
+    public void setId(Long id) {
         this.id = id;
     }
 }

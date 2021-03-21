@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
+import org.springframework.data.domain.Pageable;
 
 public interface EntryService{
 
@@ -19,4 +20,10 @@ public interface EntryService{
     void delete(Long id);
 
     Entry findById(Long id);
+
+    List<Entry> getAllAccountEntriesPaged(Long accountId, Pageable pageable);
+
+    List<EntryPojo> getAllAccountEntriesPagedPojo(Long id, Long offset, Long limit);
+
+    int getAmountOfEntries(Long accountId);
 }

@@ -8,6 +8,8 @@ import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.repository.EntryRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -86,6 +88,24 @@ public class EntryServiceImpl implements EntryService {
         return optionalEntry.get();
 
     }
+
+    @Override
+    public List<Entry> getAllAccountEntriesPaged(Long accountId, Pageable pageable) {
+       return entryRepository.findAllEntriesByAccountId(accountId, pageable);
+    }
+
+    @Override
+    public List<EntryPojo> getAllAccountEntriesPagedPojo(Long id, Long offset, Long limit) {
+       List<Entry> entries = this.getAllAccountEntriesPaged(id, PageRequest.of(offset.intValue(),limit.intValue()));
+
+       return entries.stream().map(entryToEntryPojo::convert).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public int getAmountOfEntries(Long accountId) {
+        return entryRepository.getAmountOfEntries(accountId);
+        }
 
 
 }

@@ -4,6 +4,7 @@ import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.AccCharacterResourcesPojo;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -24,6 +25,10 @@ public interface AccountCharacterService {
     List<AccountCharacterPojo> getListOfAccountCharactersConvertedToPojo(Long characterId);
 
     List<AccountCharacter> findAllByAccountId(Long accountId);
+
+    List<AccountCharacter> findAllByAccountId(Long accountId, Pageable pageable);
+
+
 
     void delete(Long id);
 }

@@ -1,6 +1,7 @@
 package com.trix.wowgarrisontracker.pojos;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import lombok.Data;
@@ -41,6 +42,19 @@ public class EntryPojo {
     @NotNull(message = "Account character cannot be null")
     private AccountCharacter accountCharacter;
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EntryPojo entryPojo = (EntryPojo) o;
+        return Objects.equals(id, entryPojo.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     public EntryPojo(){
         this.entryDate = LocalDate.now();
