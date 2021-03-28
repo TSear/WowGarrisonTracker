@@ -1,5 +1,6 @@
-package com.trix.wowgarrisontracker.frontEnd.fragments;
+package com.trix.wowgarrisontracker.frontEnd;
 
+import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;

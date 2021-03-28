@@ -1,6 +1,8 @@
-package com.trix.wowgarrisontracker.frontEnd.fragments;
+package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.frontEnd.CharacterFormDialog;
+import com.trix.wowgarrisontracker.frontEnd.fragments.AddButton;
+import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
@@ -55,21 +57,12 @@ public class CharactersLayout extends VerticalLayout {
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setWidthFull();
 
-        Button addCharacterButton = createAddButton();
-        buttonLayout.add(addCharacterButton);
+        Button addCharacterButton = new AddButton(buttonLayout, "Create New Character", dialog);
 
         Button deleteCharacterButton = createDeleteButton(accountCharacterPojoGrid);
         buttonLayout.add(deleteCharacterButton);
 
         add(buttonLayout);
-    }
-
-    private Button createAddButton() {
-        Button addCharacterButton = new Button("Add New Character");
-        addCharacterButton.setWidthFull();
-        addCharacterButton.addClickListener(event -> dialog.open());
-        addCharacterButton.addClassName("add-button");
-        return addCharacterButton;
     }
 
     private Grid createGridLayout() {

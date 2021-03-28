@@ -11,6 +11,7 @@ import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.trix.wowgarrisontracker.utils.JWTutils;
 import com.trix.wowgarrisontracker.validators.EntryDTOValidator;
 import io.jsonwebtoken.Claims;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequestMapping(value = "/track")
+@Profile("spring")
 @Controller
 public class TrackController {
 

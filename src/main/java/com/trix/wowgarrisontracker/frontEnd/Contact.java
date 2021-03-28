@@ -1,5 +1,6 @@
-package com.trix.wowgarrisontracker.frontEnd.fragments;
+package com.trix.wowgarrisontracker.frontEnd;
 
+import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Div;

@@ -1,5 +1,6 @@
-package com.trix.wowgarrisontracker.frontEnd.fragments;
+package com.trix.wowgarrisontracker.frontEnd;
 
+import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.pojos.AuctionPojo;
 import com.trix.wowgarrisontracker.pojos.AuctionPojoWrapper;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;

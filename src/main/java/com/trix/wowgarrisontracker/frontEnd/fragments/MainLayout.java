@@ -10,6 +10,7 @@ import com.github.appreciated.app.layout.component.menu.left.items.LeftClickable
 import com.github.appreciated.app.layout.component.menu.left.items.LeftNavigationItem;
 import com.github.appreciated.app.layout.component.router.AppLayoutRouterLayout;
 import com.github.appreciated.app.layout.entity.DefaultBadgeHolder;
+import com.trix.wowgarrisontracker.frontEnd.*;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Hr;
@@ -29,6 +30,7 @@ import static com.github.appreciated.app.layout.entity.Section.FOOTER;
 @CssImport(value = "./inputFields.css", themeFor = "vaadin-combo-box")
 @CssImport(value = "./inputFields.css", themeFor = "vaadin-text-field")
 @CssImport(value = "./dialogBox.css", themeFor = "vaadin-dialog-overlay")
+@CssImport(value = "./appLayout.css", themeFor = "vaadin-vertical-layout")
 @Push
 @Component
 @UIScope
@@ -42,12 +44,10 @@ public class MainLayout extends AppLayoutRouterLayout<LeftLayouts.LeftResponsive
 
         notifications.addClickListener(notification -> {/* ... */});
 
+
         LeftNavigationItem menuEntry = new LeftNavigationItem("Menu", VaadinIcon.MENU.create(), View6.class);
 
         badge.bind(menuEntry.getBadge());
-
-
-
 
         init(AppLayoutBuilder.get(LeftLayouts.LeftResponsive.class)
                 .withTitle("Garrison Tracker")

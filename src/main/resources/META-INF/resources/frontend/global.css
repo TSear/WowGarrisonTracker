@@ -47,3 +47,16 @@ th {
     box-shadow: 0 0 5px #eb5e28;
     margin: 15px;
 }
+
+.app-menu-item:hover,
+.app-menu-item[highlight] {
+    background: rgba(204, 197, 185, 0.1);
+}
+
+iron-overlay-backdrop {
+    background-color: #252525;
+}
+
+:host(.opened) {
+    opacity: 0.8;
+}
