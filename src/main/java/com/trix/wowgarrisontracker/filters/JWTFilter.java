@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
-@Component
+//@Component
 public class JWTFilter extends OncePerRequestFilter {
 
     @Autowired

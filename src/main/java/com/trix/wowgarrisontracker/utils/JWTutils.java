@@ -65,7 +65,7 @@ public class JWTutils {
     }
 
     public Boolean isExpired(String token) {
-        return (this.extractClaims(token).getExpiration().after(new Date(System.currentTimeMillis())));
+        return (this.extractClaims(token).getExpiration().before(new Date(System.currentTimeMillis())));
     }
 
     public Boolean isTokenValid(String token, UserDetails userDetails) {

@@ -3,6 +3,7 @@ package com.trix.wowgarrisontracker.services.interfaces;
 import java.util.List;
 import java.util.Map;
 
+import com.trix.wowgarrisontracker.exceptions.AccountNotFoundException;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.LoginRequest;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
@@ -20,6 +21,8 @@ public interface AccountService {
 	Account findUserByUsername(String username);
 
 	Account correctCredentials(LoginRequest fromForm);
+
+	Account areCredentialsCorrect(String login, String password) throws AccountNotFoundException;
 
 	boolean isAccountInDatabase(LoginRequest loginRequest);
 

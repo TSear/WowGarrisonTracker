@@ -5,6 +5,7 @@ import com.trix.wowgarrisontracker.converters.AccountCharacterToAccountCharacter
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
+import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import org.springframework.data.domain.Pageable;
@@ -36,10 +37,12 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     }
 
     @Override
-    public void updateAccountCharacterGarrisonResourcesAndWarPaint(Entry entry) {
-        accountCharacterRepository.updateGarrisonResourcesAndWarPaint(entry.getAccountCharacter().getId(),
-                entry.getUpdatedAccountCharacterGarrisonResources(),
-                entry.getUpdatedAccountCharacterWarPaint());
+    public void updateAccountCharacterGarrisonResourcesAndWarPaint(EntryPojo entryPojo) {
+        AccountCharacter accountCharacter = findById(entryPojo.getAccountCharacterId());
+        accountCharacterRepository.updateGarrisonResourcesAndWarPaint(
+                entryPojo.getAccountCharacterId(),
+                accountCharacter.getGarrisonResources() + entryPojo.getGarrisonResources(),
+                accountCharacter.getWarPaint() + entryPojo.getWarPaint());
     }
 
 
@@ -52,7 +55,10 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     @Override
     public boolean isNameTaken(Long accountId, String name) {
 
-        Optional<AccountCharacter> optionalAccountCharacter = accountCharacterRepository.findAccountCharacterByCharacterName(name);
+        Optional<AccountCharacter> optionalAccountCharacter = accountCharacterRepository.findAllByAccountId(accountId)
+                .stream()
+                .filter(accountCharacter -> accountCharacter.getCharacterName().equals(name))
+                .findFirst();
 
         return optionalAccountCharacter.isPresent();
     }

@@ -1,17 +1,15 @@
 package com.trix.wowgarrisontracker.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.*;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 @Setter
 @Getter
-
+@Table(name = "accountCharacter")
 @Entity
 public class AccountCharacter {
 

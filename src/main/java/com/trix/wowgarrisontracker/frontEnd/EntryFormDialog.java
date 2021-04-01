@@ -1,5 +1,6 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
+import com.trix.wowgarrisontracker.controllers.AccountController;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
@@ -23,7 +24,10 @@ import org.springframework.stereotype.Component;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -156,6 +160,7 @@ public class EntryFormDialog extends Dialog {
 
     private ComboBox<AccountCharacter> createAccountCharacterPojoComboBox(List<AccountCharacter> accountCharacterPojoList) {
         ComboBox<AccountCharacter> accountCharacters = new ComboBox<>();
+
         accountCharacters.setItemLabelGenerator(AccountCharacter::getCharacterName);
         accountCharacters.setItems(accountCharacterPojoList);
         accountCharacters.setLabel("Account Characters");
@@ -167,10 +172,12 @@ public class EntryFormDialog extends Dialog {
         accountCharacters.setPlaceholder("Chose Characters");
         entryPojoBinder.forField(accountCharacters)
                 .withValidator(selected -> selected != null, REQUIRED)
-                .bind(EntryPojo::getAccountCharacter, EntryPojo::setAccountCharacter);
+                .bind(EntryPojo::getAccountCharacter,
+                        (entryPojo1, accountCharacter) -> entryPojo1.setAccountCharacterId(accountCharacter.getId()));
 
         return accountCharacters;
     }
+
 
     private FormLayout createEntryFormLayout() {
         FormLayout entryFormLayout = new FormLayout();

@@ -10,6 +10,7 @@ import com.trix.wowgarrisontracker.utils.JWTutils;
 import com.trix.wowgarrisontracker.validators.RegisterModelValidator;
 import io.jsonwebtoken.impl.DefaultClaims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Profile("spring")
 @Controller
 @RequestMapping("account/")
 public class AccountController {

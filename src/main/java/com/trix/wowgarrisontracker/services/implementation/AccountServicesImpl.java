@@ -1,6 +1,7 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
+import com.trix.wowgarrisontracker.exceptions.AccountNotFoundException;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.LoginRequest;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
@@ -78,6 +79,18 @@ public class AccountServicesImpl implements AccountService {
     }
 
     @Override
+    public Account areCredentialsCorrect(String login, String password) throws AccountNotFoundException {
+
+        Account account = this.findUserByUsername(login);
+
+        if (account != null && passwordEncoder.matches(password, account.getPassword())) {
+            return account;
+        }
+
+        throw new AccountNotFoundException();
+    }
+
+    @Override
     public boolean isAccountInDatabase(LoginRequest loginRequest) {
         Account account = this.findUserByUsername(loginRequest.getLogin());
         if (account == null)
@@ -100,8 +113,6 @@ public class AccountServicesImpl implements AccountService {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         return optionalAccount.isPresent() ? optionalAccount.get() : null;
     }
-
-
 
 
 }
