@@ -1,12 +1,9 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
-import com.trix.wowgarrisontracker.controllers.AccountController;
-import com.trix.wowgarrisontracker.enums.SecurityValues;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
-import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -18,7 +15,6 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.IntegerRangeValidator;
-import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +22,7 @@ import org.springframework.stereotype.Component;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Component
@@ -38,8 +31,6 @@ public class EntryFormDialog extends Dialog {
 
     private final static String REQUIRED = "Please fill this field";
     private final static String NUMBER_RANGE_ERROR_MESSAGE = "You must pass number between 0-10000";
-    @Autowired
-    private GeneralUtils utils;
     @Autowired
     private AccountCharacterService accountCharacterService;
     @Autowired
@@ -54,7 +45,6 @@ public class EntryFormDialog extends Dialog {
     public EntryFormDialog() {
 
         this.entryService = entryService;
-        this.utils = utils;
         this.accountCharacterService = accountCharacterService;
     }
 

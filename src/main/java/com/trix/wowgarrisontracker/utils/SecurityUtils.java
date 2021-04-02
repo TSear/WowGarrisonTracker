@@ -1,10 +1,7 @@
 package com.trix.wowgarrisontracker.utils;
 
-import com.trix.wowgarrisontracker.enums.SecurityValues;
 import com.vaadin.flow.server.HandlerHelper;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.shared.ApplicationConstants;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,15 +15,8 @@ import java.util.stream.Stream;
 @Component
 public class SecurityUtils {
 
-    @Autowired
-    private JWTutils jwTutils;
 
-    @Autowired
-    private GeneralUtils utils;
-
-    public SecurityUtils(JWTutils jwTutils, GeneralUtils utils) {
-        this.jwTutils = jwTutils;
-        this.utils = utils;
+    public SecurityUtils() {
     }
 
     static public boolean isFrameworkInternalRequest(HttpServletRequest request) {

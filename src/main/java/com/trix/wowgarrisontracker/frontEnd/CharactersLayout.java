@@ -1,6 +1,5 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
-import com.trix.wowgarrisontracker.frontEnd.CharacterFormDialog;
 import com.trix.wowgarrisontracker.frontEnd.fragments.AddButton;
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
@@ -43,7 +42,7 @@ public class CharactersLayout extends VerticalLayout {
         setHeightFull();
         setClassName("content-background");
 
-        id = utils.getId(VaadinService.getCurrentRequest().getCookies());
+        id = utils.getCurrentlyLoggedUserId();
 
         dialog.setId(id);
 
