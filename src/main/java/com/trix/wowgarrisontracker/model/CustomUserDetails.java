@@ -1,12 +1,12 @@
 package com.trix.wowgarrisontracker.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -15,6 +15,7 @@ public class CustomUserDetails implements UserDetails {
     public CustomUserDetails() {
     	
     }
+
     public CustomUserDetails(Account account) {
         this.account = account;
     }
@@ -22,7 +23,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>(Arrays.asList(new SimpleGrantedAuthority("TYMCZASOWA")));
+        return new ArrayList<>(Collections.singletonList(new SimpleGrantedAuthority("TYMCZASOWA")));
     }
 
     @Override
@@ -55,7 +56,9 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
- 
+    public Long getId(){
+        return this.account.getId();
+    }
 
 
 
