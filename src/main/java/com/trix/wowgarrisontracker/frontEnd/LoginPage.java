@@ -19,6 +19,7 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -56,22 +57,17 @@ public class LoginPage extends FlexLayout {
 
         LoginForm loginForm = new LoginForm();
         loginForm.setAction("login");
-//        loginForm.addLoginListener(loginEvent -> {
-//            String login = loginEvent.getUsername();
-//            String password = loginEvent.getPassword();
-//            try {
-//                Account account = accountService.areCredentialsCorrect(login, password);
-//                Cookie jwtCookie = utils.createJWTCookie(account.getLogin());
-//                VaadinService.getCurrentResponse().addCookie(jwtCookie);
-//                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(loginEvent.getUsername(), loginEvent.getPassword(), new ArrayList<>()));
-//                UI.getCurrent().navigate(TrackLayout.class);
-//
-//
-//            } catch (AccountNotFoundException e) {
-//                loginForm.setError(true);
-//                System.out.println(e.getMessage());
-//            }
-//        });
+        loginForm.addLoginListener(loginEvent -> {
+            String login = loginEvent.getUsername();
+            String password = loginEvent.getPassword();
+            try {
+                Account account = accountService.areCredentialsCorrect(login, password);
+                VaadinSession.getCurrent().setAttribute("id", account.getId());
+            } catch (AccountNotFoundException e) {
+                loginForm.setError(true);
+                System.out.println(e.getMessage());
+            }
+        });
 
         add(loginForm);
     }

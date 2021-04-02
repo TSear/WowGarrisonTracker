@@ -2,12 +2,9 @@ package com.trix.wowgarrisontracker.config;
 
 import com.trix.wowgarrisontracker.services.implementation.AccountDetailsService;
 import com.trix.wowgarrisontracker.utils.SecurityUtils;
-import org.apache.catalina.security.SecurityUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -16,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.savedrequest.RequestCache;
 
 @Profile("vaadin")
 @Configuration
@@ -69,8 +65,8 @@ public class VaadinSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage(LOGIN_URL).permitAll()
                 .loginProcessingUrl(LOGIN_PROCESSING_URL)
                 .failureUrl(LOGIN_FAILURE_URL)
-                .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL);
+//                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     }
 

@@ -38,4 +38,7 @@ public class GeneralUtils {
         Cookie cookie = this.extractCookie("Authorization", cookies);
         return jwtUtils.extractId(cookie);
     }
+    public Long getId(String token){
+        return jwtUtils.extractId(token);
+    }
 }

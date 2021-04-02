@@ -1,6 +1,7 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.controllers.AccountController;
+import com.trix.wowgarrisontracker.enums.SecurityValues;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
@@ -18,6 +19,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.IntegerRangeValidator;
 import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -62,7 +64,7 @@ public class EntryFormDialog extends Dialog {
 
         entryPojoBinder.readBean(entryPojo);
 
-        Long id = utils.getId(VaadinService.getCurrentRequest().getCookies());
+        Long id = (long)VaadinSession.getCurrent().getAttribute("id");
 
         VerticalLayout mainDialogBoxLayout = createMainDialogLayout();
 

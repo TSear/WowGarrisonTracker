@@ -11,6 +11,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinServiceInitListener;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -46,14 +47,12 @@ public class VaadinFilter implements VaadinServiceInitListener {
 
         Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
         Cookie jwtCookie = utils.extractCookie(SecurityValues.AUTHRORIZATION.toString(), cookies);
-        boolean isUserLoggedIn = securityUtils.isUserLoggedIn();
+        boolean isUserLoggedIn = SecurityUtils.isUserLoggedIn();
 
         if (!LoginPage.class.equals(beforeEnterEvent.getNavigationTarget()) && !isUserLoggedIn) {
             beforeEnterEvent.rerouteTo(LoginPage.class);
 
         }
-
-        SecurityContextHolder.getContext().setAuthentication(SecurityContextHolder.getContext().getAuthentication());
 //
 //        if (LoginPage.class.equals(beforeEnterEvent.getNavigationTarget())
 //                && isUserLoggedIn) {

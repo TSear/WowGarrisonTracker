@@ -1,5 +1,6 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
+import com.trix.wowgarrisontracker.enums.SecurityValues;
 import com.trix.wowgarrisontracker.frontEnd.fragments.AddButton;
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
@@ -14,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -53,7 +55,7 @@ public class TrackLayout extends VerticalLayout {
         configureDataProvider();
         configureTrackLayout(entryFormDialog);
 
-        id = utils.getId(VaadinService.getCurrentRequest().getCookies());
+        id = (long)VaadinSession.getCurrent().getAttribute("id");
 
         gridLayout = createGridLayout();
 
