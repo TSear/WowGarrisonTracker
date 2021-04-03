@@ -1,5 +1,6 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
+import com.trix.wowgarrisontracker.converters.AccountPojoToAccount;
 import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
 import com.trix.wowgarrisontracker.exceptions.AccountNotFoundException;
 import com.trix.wowgarrisontracker.model.Account;
@@ -22,12 +23,14 @@ public class AccountServicesImpl implements AccountService {
     private AccountRepository accountRepository;
     private AccountToAccountPojo accountToAccountPojo;
     private PasswordEncoder passwordEncoder;
+    private AccountPojoToAccount accountPojoToAccount;
 
     public AccountServicesImpl(AccountRepository accountRepository, AccountToAccountPojo accountToAccountPojo,
-                               PasswordEncoder passwordEncoder) {
+                               PasswordEncoder passwordEncoder, AccountPojoToAccount accountPojoToAccount) {
         this.accountRepository = accountRepository;
         this.accountToAccountPojo = accountToAccountPojo;
         this.passwordEncoder = passwordEncoder;
+        this.accountPojoToAccount = accountPojoToAccount;
     }
 
     @Override
@@ -113,6 +116,8 @@ public class AccountServicesImpl implements AccountService {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         return optionalAccount.isPresent() ? optionalAccount.get() : null;
     }
+
+
 
 
 }

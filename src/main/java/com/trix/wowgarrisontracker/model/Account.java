@@ -21,6 +21,9 @@ public class Account {
     @Column(name = "id")
     private Long id;
 
+    @OneToOne
+    private Options options;
+
     @Column(name = "login")
     private String login;
 
@@ -32,9 +35,10 @@ public class Account {
 
     private Long amountOfEntries;
 
+
     public Account() {
         accountCharacters = new HashSet<>();
-        this.amountOfEntries = 0l;
+        this.amountOfEntries = 0L;
     }
 
     public int getAmountOfEntries(){
