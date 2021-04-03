@@ -1,0 +1,8 @@
+:host {
+  background: var(--background-secondary-color);
+  box-shadow: 0 0 var(--base-shadow-range) var(--primary-contrast-color);
+}
+
+[part="form-title"] {
+  color: var(--font-primary-color);
+}

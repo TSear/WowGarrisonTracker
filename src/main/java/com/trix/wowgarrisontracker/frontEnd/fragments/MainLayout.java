@@ -7,34 +7,39 @@ import com.github.appreciated.app.layout.component.applayout.LeftLayouts;
 import com.github.appreciated.app.layout.component.builder.AppLayoutBuilder;
 import com.github.appreciated.app.layout.component.menu.left.builder.LeftAppMenuBuilder;
 import com.github.appreciated.app.layout.component.menu.left.items.LeftClickableItem;
+import com.github.appreciated.app.layout.component.menu.left.items.LeftIconItem;
 import com.github.appreciated.app.layout.component.menu.left.items.LeftNavigationItem;
 import com.github.appreciated.app.layout.component.router.AppLayoutRouterLayout;
 import com.github.appreciated.app.layout.entity.DefaultBadgeHolder;
 import com.trix.wowgarrisontracker.frontEnd.*;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.StyleSheet;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.theme.NoTheme;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import static com.github.appreciated.app.layout.entity.Section.FOOTER;
 
 @Profile("vaadin")
-@StyleSheet("global.css")
+//@StyleSheet("global.css")
 @CssImport("./modified-lumo.css")
-@CssImport(value = "./inputFields.css", themeFor = "vaadin-integer-field")
-@CssImport(value = "./inputFields.css", themeFor = "vaadin-combo-box")
-@CssImport(value = "./inputFields.css", themeFor = "vaadin-text-field")
-@CssImport(value = "./dialogBox.css", themeFor = "vaadin-dialog-overlay")
-@CssImport(value = "./appLayout.css", themeFor = "vaadin-vertical-layout")
+//@CssImport(value = "./inputFields.css", themeFor = "vaadin-integer-field")
+//@CssImport(value = "./inputFields.css", themeFor = "vaadin-combo-box")
+//@CssImport(value = "./inputFields.css", themeFor = "vaadin-text-field")
+//@CssImport(value = "./dialogBox.css", themeFor = "vaadin-dialog-overlay")
+//@CssImport(value = "./appLayout.css", themeFor = "vaadin-vertical-layout")
 @Push
 @Component
 @UIScope
-@CssImport(value="./appLayout.css", themeFor = LeftLayouts.LeftResponsive.TAG)
+//@CssImport(value = "./appLayout.css", themeFor = LeftLayouts.LeftResponsive.TAG)
 public class MainLayout extends AppLayoutRouterLayout<LeftLayouts.LeftResponsive> {
 
     private DefaultNotificationHolder notifications = new DefaultNotificationHolder();
@@ -63,7 +68,7 @@ public class MainLayout extends AppLayoutRouterLayout<LeftLayouts.LeftResponsive
                                 new LeftNavigationItem("Contact", VaadinIcon.PHONE, Contact.class))
                         .addToSection(FOOTER,
                                 new Hr(),
-                                new LeftClickableItem("Log Out", VaadinIcon.SIGN_OUT.create(), clickEvent -> Notification.show("You are trying to log out")))
+                                new LeftClickableItem("Log Out", VaadinIcon.SIGN_OUT.create(), clickEvent -> UI.getCurrent().getPage().setLocation("/logout")))
                         .build())
                 .build());
         this.getContent().setClassName("content-box");

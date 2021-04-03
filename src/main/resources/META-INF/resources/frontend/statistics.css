@@ -1,44 +1,44 @@
 .statistic-div vaadin-vertical-layout {
-    height: 250px!important;
-    background: #252422;
+  height: 250px !important;
+  background: var(--background-primary-color);
 }
 
 .statistic-div {
-    width: 25%;
-    margin: 1%;
-    flex-grow: 0;
-    min-width: 250px;
-    max-width: 350px;
-    padding: 5px;
-    background: rgb(235, 94, 40);
-    background: linear-gradient(0deg, rgba(235, 94, 40, 0.5) 0%, rgba(64, 61, 57, 1) 50%);
-    border-radius: 5px;
+  width: 25%;
+  margin: 1%;
+  flex-grow: 0;
+  min-width: 250px;
+  max-width: 350px;
+  padding: 5px;
+  background: var(--primary-contrast-color);
+  background: linear-gradient(0deg, rgba(235, 94, 40, 0.5) 0%, rgba(64, 61, 57, 1) 50%);
+  border-radius: 5px;
 }
 
 .statistics-container {
-    box-sizing: border-box;
-    padding: 15px;
-    align-content: baseline;
-    justify-content: center;
-    overflow-y: auto;
-    text-align: center;
+  box-sizing: border-box;
+  padding: 15px;
+  align-content: baseline;
+  justify-content: center;
+  overflow-y: auto;
+  text-align: center;
 }
 
 @media(min-width:1200px) {
-    .statistic-div {
-        min-width: 350px;
-    }
+  .statistic-div {
+    min-width: 350px;
+  }
 }
 
 .statistic-description {
-    font-size: 1.3em;
-    text-decoration: double;
-    height: 50%;
-    font-style: italic;
-    font-weight: bold;
+  font-size: 1.3em;
+  text-decoration: double;
+  height: 50%;
+  font-style: italic;
+  font-weight: bold;
 }
 
 .statistic-value {
-    font-size: 1.7em;
-    height: 50%;
+  font-size: 1.7em;
+  height: 50%;
 }

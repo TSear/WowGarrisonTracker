@@ -79,6 +79,7 @@ public class CharacterFormDialog extends Dialog {
 
         Button cancelButton = new Button("Cancel");
         cancelButton.addClickListener(event -> this.close());
+        cancelButton.addClassName("secondary-button");
 
         buttonLayout.add(createButton, cancelButton);
 

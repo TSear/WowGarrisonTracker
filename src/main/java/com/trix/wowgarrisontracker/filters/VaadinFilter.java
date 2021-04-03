@@ -28,8 +28,9 @@ public class VaadinFilter implements VaadinServiceInitListener {
     private void authenticateNavigation(BeforeEnterEvent beforeEnterEvent) {
 
         boolean isUserLoggedIn = SecurityUtils.isUserLoggedIn();
+        boolean isTargetPageNotALoginPage = !LoginPage.class.equals(beforeEnterEvent.getNavigationTarget());
 
-        if (!LoginPage.class.equals(beforeEnterEvent.getNavigationTarget()) && !isUserLoggedIn) {
+        if (isTargetPageNotALoginPage && !isUserLoggedIn) {
             beforeEnterEvent.rerouteTo(LoginPage.class);
         }
 

@@ -21,8 +21,8 @@ import javax.annotation.PostConstruct;
 
 @Component
 @UIScope
-@StyleSheet("./statistics.css")
-@CssImport(value = "./statistics.css", themeFor = "vaadin-horizontal-layout")
+//@StyleSheet("./statistics.css")
+//@CssImport(value = "./statistics.css", themeFor = "vaadin-horizontal-layout")
 @Route(value = "statistics", layout = MainLayout.class)
 public class Statistics extends FlexLayout {
 

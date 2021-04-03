@@ -13,7 +13,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -23,9 +23,17 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Profile("vaadin")
-@CssImport(value = "./grid.css", themeFor = "vaadin-grid")
-@CssImport(value = "./checkBox.css", themeFor = "vaadin-checkbox")
 @UIScope
+@CssImport(value = "globalVariables.css")
+@CssImport(value = "/css/global.css")
+@CssImport(value = "textField.css", themeFor = "vaadin-text-field")
+@CssImport(value = "textField.css", themeFor = "vaadin-password-field")
+@CssImport(value = "grid.css", themeFor = "vaadin-grid")
+@CssImport(value = "login.css", themeFor = "vaadin-login-form-wrapper")
+@CssImport(value = "dialogBox.css", themeFor = "vaadin-dialog-overlay")
+@CssImport(value = "statistics.css")
+@CssImport(value = "contact.css")
+@RouteAlias(value = "", layout = MainLayout.class)
 @Route(value = "track", layout = MainLayout.class)
 public class TrackLayout extends VerticalLayout {
 
@@ -95,6 +103,7 @@ public class TrackLayout extends VerticalLayout {
 
     private Button createDeleteButton(Grid<EntryPojo> grid) {
         Button deleteEntryButton = new Button();
+        deleteEntryButton.addClassName("secondary-button");
         deleteEntryButton.setIcon(VaadinIcon.TRASH.create());
         deleteEntryButton.setIconAfterText(true);
         deleteEntryButton.addClickListener(event -> {

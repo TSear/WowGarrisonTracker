@@ -1,0 +1,49 @@
+html {
+  /* My variables */
+  --background-primary-color: #252422;
+  --background-primary-color-5pct: hsl(40, 4%, 19%);
+  --background-secondary-color: #403D39;
+  --primary-contrast-color: #EB5E28;
+  --font-primary-color: #CCC5B9;
+  --base-shadow-range: 0.5em;
+  --small-shadow-range: 0.2em;
+  --big-shadow-range: 1em;
+  --mega-shadow-range: 1.5em;
+  /* Lumo */
+  --lumo-body-text-color: var(--font-primary-color);
+  --lumo-primary-text-color: #fffcf2;
+  --_lumo-button-primary-background-color: #EB5E28;
+  --lumo-contrast-90pct: rgba(235, 94, 40, 0.9);
+  --lumo-error-color: #ba181b;
+  --lumo-error-color-10pct: rgba(186, 24, 27, 0.1);
+  --lumo-error-color-70pct: rgba(186, 24, 27, 0.7);
+  --lumo-primary-color: var(--font-primary-color);
+  --lumo-primary-color-10pct: rgba(235, 94, 40, 0.1);
+  --lumo-base-color: var(--background-secondary-color);
+  --lumo-font-size-s: 1em;
+  --lumo-contrast-20pct: rgba(204, 197, 185, 0.2);
+  --lumo-contrast-30pct: rgba(204, 197, 185, 0.3);
+  --_lumo-button-background-color: var(--primary-contrast-color);
+  --lumo-shade-20pct: rgba(37, 36, 34, 0.2);
+  --lumo-shade-80pct: rgba(37, 36, 34, 0.8);
+  --lumo-contrast-60pct: rgba(204, 197, 185, 0.6);
+  --lumo-contrast-10pct: rgba(204, 197, 185, 0.1);
+  /* App layout */
+  --app-layout-bar-background-base-color: var(--background-primary-color);
+  --app-layout-bar-background-color: var(--background-primary-color);
+  --app-layout-bar-font-color: var(--primary-contrast-color);
+  --app-layout-bar-shadow: 0 0 var(--small-shadow-range) var(--primary-contrast-color);
+  --app-layout-drawer-background-base-color: var(--background-primary-color);
+  --app-layout-drawer-shadow: 0 0 var(--small-shadow-range) var(--primary-contrast-color);
+  --app-layout-drawer-background-color: var(--background-primary-color);
+  --app-layout-app-color: var(--font-primary-color);
+  --app-layout-background: var(--background-primary-color);
+}
+
+.dialog-layout {
+  background-color: var(--background-primary-color);
+}
+
+.secondary-button {
+  background: var(--lumo-contrast-30pct);
+}

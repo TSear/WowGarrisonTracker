@@ -10,8 +10,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
-@StyleSheet("./contact.css")
-@CssImport(value = "./contact.css",themeFor = "vaadin-vertical-layout")
+//@StyleSheet("./contact.css")
+//@CssImport(value = "./contact.css",themeFor = "vaadin-vertical-layout")
 @Route(value = "contact", layout = MainLayout.class)
 public class Contact extends FlexLayout {
 

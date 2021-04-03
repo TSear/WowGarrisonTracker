@@ -4,6 +4,7 @@ import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
+import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -15,7 +16,6 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.IntegerRangeValidator;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,10 +40,11 @@ public class EntryFormDialog extends Dialog {
     private PaginatedGrid<EntryPojo> layout;
     private Long id;
     private TrackLayout parent;
+    private GeneralUtils utils;
 
 
     public EntryFormDialog() {
-
+        this.utils = new GeneralUtils();
         this.entryService = entryService;
         this.accountCharacterService = accountCharacterService;
     }
@@ -52,9 +53,10 @@ public class EntryFormDialog extends Dialog {
     private void generateDialogBox() {
         this.configureDialog();
 
+
         entryPojoBinder.readBean(entryPojo);
 
-        Long id = (long)VaadinSession.getCurrent().getAttribute("id");
+        Long id =  utils.getCurrentlyLoggedUserId();
 
         VerticalLayout mainDialogBoxLayout = createMainDialogLayout();
 
@@ -77,6 +79,7 @@ public class EntryFormDialog extends Dialog {
         HorizontalLayout buttonLayout = createButtonLayout();
 
         Button confirmButton = createCreateEntryButton(this, "Create Entry");
+        buttonLayout.setFlexGrow(1, confirmButton);
 
         Button cancelButton = createCancelButton(this, "Cancel");
 
@@ -122,6 +125,7 @@ public class EntryFormDialog extends Dialog {
 
     private Button createCancelButton(Dialog dialog, String cancel) {
         Button cancelButton = new Button(cancel);
+        cancelButton.addClassName("secondary-button");
         cancelButton.addClickListener(event -> {
             dialog.close();
         });
@@ -155,13 +159,13 @@ public class EntryFormDialog extends Dialog {
 
         accountCharacters.setItemLabelGenerator(AccountCharacter::getCharacterName);
         accountCharacters.setItems(accountCharacterPojoList);
-        accountCharacters.setLabel("Account Characters");
+        accountCharacters.setLabel("Account Character");
         accountCharacters.setAllowCustomValue(false);
         accountCharacters.addAttachListener(event -> {
             accountCharacters.setRequired(true);
             accountCharacters.setRequiredIndicatorVisible(true);
         });
-        accountCharacters.setPlaceholder("Chose Characters");
+        accountCharacters.setPlaceholder("Chose Character");
         entryPojoBinder.forField(accountCharacters)
                 .withValidator(selected -> selected != null, REQUIRED)
                 .bind(EntryPojo::getAccountCharacter,
@@ -190,6 +194,7 @@ public class EntryFormDialog extends Dialog {
         this.setCloseOnEsc(true);
         this.setDraggable(true);
         this.setCloseOnOutsideClick(false);
+
 
     }
 

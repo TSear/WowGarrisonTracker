@@ -1,0 +1,16 @@
+[part="label"] {
+  color: var(--font-primary-color);
+}
+
+[part="input-field"] {
+  background-color: var(--background-primary-color-5pct);
+  box-sizing: border-box;
+}
+
+[part="reveal-button"] {
+  color: var(--primary-contrast-color);
+}
+
+:host([invalid]) [part="input-field"] {
+  border: 1px solid var(--lumo-error-color-70pct);
+}

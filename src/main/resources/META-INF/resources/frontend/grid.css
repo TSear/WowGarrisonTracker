@@ -1,21 +1,7 @@
-#header {
-    border-bottom: 2px solid #CCC5B9;
-}
-
-#items [part="row"] {
-    box-sizing: border-box;
-    transition: 0.2s;
-}
-
-#items [part="row"]:hover {
-    background-color: rgba(235, 94, 40, 0.5);
-}
-
-#table #items {
-    background-color: #403D39;
+:host {
+  text-align: center;
 }
 
 [part~="cell"] {
-    background-color: transparent;
-    text-align: center;
+  border-top: none !important;
 }

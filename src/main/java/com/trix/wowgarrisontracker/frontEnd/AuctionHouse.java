@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-@CssImport(value="./auctionHouse.css", themeFor = "vaadin-grid")
+//@CssImport(value="./auctionHouse.css", themeFor = "vaadin-grid")
 @Route(value = "auctionHouse", layout = MainLayout.class)
 
 public class AuctionHouse extends FlexLayout {

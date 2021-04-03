@@ -6,13 +6,11 @@ import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -21,7 +19,6 @@ import javax.annotation.PostConstruct;
 
 @Profile("vaadin")
 @UIScope
-@CssImport(value = "./grid.css", themeFor = "vaadin-grid")
 @Route(value = "characters", layout = MainLayout.class)
 public class CharactersLayout extends VerticalLayout {
 
@@ -56,15 +53,16 @@ public class CharactersLayout extends VerticalLayout {
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setWidthFull();
 
-        Button addCharacterButton = new AddButton(buttonLayout, "Create New Character", dialog);
+        new AddButton(buttonLayout, "Create New Character", dialog);
 
         Button deleteCharacterButton = createDeleteButton(accountCharacterPojoGrid);
+        deleteCharacterButton.addClassName("secondary-button");
         buttonLayout.add(deleteCharacterButton);
 
         add(buttonLayout);
     }
 
-    private Grid createGridLayout() {
+    private Grid<AccountCharacterPojo> createGridLayout() {
         Grid<AccountCharacterPojo> tmp = new Grid<>();
         tmp.setItems(accountCharacterService.getListOfAccountCharactersConvertedToPojo(id));
         tmp.addColumn(AccountCharacterPojo::getCharacterName).setHeader("Character Name");
@@ -80,7 +78,7 @@ public class CharactersLayout extends VerticalLayout {
         deleteEntryButton.setIconAfterText(true);
         deleteEntryButton.addClickListener(event -> {
             if (grid.getSelectedItems().size() > 0) {
-                grid.getSelectedItems().stream().forEach(item -> accountCharacterService.delete(item.getId()));
+                grid.getSelectedItems().forEach(item -> accountCharacterService.delete(item.getId()));
                 grid.setItems(accountCharacterService.getListOfAccountCharactersConvertedToPojo(id));
             }
 
