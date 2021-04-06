@@ -80,10 +80,14 @@ public class RegisterPage extends VerticalLayout {
                 .bind(RegisterPojo::getEmail, RegisterPojo::setEmail);
 
 
-        PasswordField repeatedPasswordField = new PasswordField();
-        repeatedPasswordField.setLabel("Repeat Password");
-
         PasswordField passwordField = new PasswordField();
+        PasswordField repeatedPasswordField = new PasswordField();
+
+        passwordField.addValueChangeListener(event -> checkIfValid(passwordField, repeatedPasswordField));
+
+        repeatedPasswordField.setLabel("Repeat Password");
+        repeatedPasswordField.addValueChangeListener(event -> checkIfValid(passwordField, repeatedPasswordField));
+
         passwordField.setLabel("Password");
         pojoBinder.forField(passwordField)
                 .withValidator(new StringLengthValidator("Password must be between 8-30 characters", 8, 30))
@@ -106,9 +110,9 @@ public class RegisterPage extends VerticalLayout {
                 .withValidator(Objects::nonNull, "Pick server")
                 .bind(RegisterPojo::getServer, RegisterPojo::setServer);
 
-        region.addValueChangeListener(event -> {
-            server.setItems(servers.stream().filter(server1 -> event.getValue().toLowerCase().equals(server1.getRegion())).collect(Collectors.toList()));
-        });
+        region.addValueChangeListener(event -> server.setItems(servers.stream()
+                .filter(server1 -> event.getValue().toLowerCase().equals(server1.getRegion()))
+                .collect(Collectors.toList())));
 
 
         formLayout.add(registerHeader, loginField, emailField, passwordField, passwordField, repeatedPasswordField, region, server);
@@ -124,7 +128,7 @@ public class RegisterPage extends VerticalLayout {
                 accountService.createAccount(pojo);
 
             } catch (ValidationException e) {
-                e.getMessage();
+                System.out.println(e.getMessage());
             }
 
         });
@@ -133,6 +137,17 @@ public class RegisterPage extends VerticalLayout {
 
 
         add(formLayout);
+    }
+
+    private void checkIfValid(PasswordField password, PasswordField repeated) {
+        if (password.getValue().equals(repeated.getValue())) {
+            repeated.setInvalid(false);
+            password.setInvalid(false);
+        } else {
+            repeated.setInvalid(true);
+            repeated.setErrorMessage("Passwords do not match");
+            password.setInvalid(true);
+        }
     }
 
 }
