@@ -7,7 +7,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @ToString
 @Getter
@@ -21,7 +20,7 @@ public class Account {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     private Options options;
 
     @Column(name = "login")
@@ -39,6 +38,7 @@ public class Account {
     public Account() {
         accountCharacters = new HashSet<>();
         this.amountOfEntries = 0L;
+        options = new Options(this);
     }
 
     public int getAmountOfEntries(){
@@ -49,13 +49,13 @@ public class Account {
 
     public Long getTotalGarrisonResources(){
         return this.accountCharacters.stream()
-                .map(entry -> entry.getGarrisonResources())
-                .reduce(0l, Long::sum);
+                .map(AccountCharacter::getGarrisonResources)
+                .reduce(0L, Long::sum);
     }
 
     public Long getTotalWarPaint(){
         return this.accountCharacters.stream()
-                .map(entry -> entry.getWarPaint())
-                .reduce(0l, Long::sum);
+                .map(AccountCharacter::getWarPaint)
+                .reduce(0L, Long::sum);
     }
 }

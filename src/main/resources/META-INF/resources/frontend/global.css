@@ -2,7 +2,13 @@
     background: #252422;
 }
 
+.register-form *{
+    width: 100%;
+}
 
+.register-form{
+    background: black;
+}
 
 .add-button {
     background-color: #eb5e28;

@@ -5,10 +5,13 @@ import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
 import com.trix.wowgarrisontracker.exceptions.AccountNotFoundException;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.LoginRequest;
+import com.trix.wowgarrisontracker.model.Options;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.pojos.RegisterModel;
+import com.trix.wowgarrisontracker.pojos.RegisterPojo;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
+import com.trix.wowgarrisontracker.services.interfaces.OptionsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +27,14 @@ public class AccountServicesImpl implements AccountService {
     private AccountToAccountPojo accountToAccountPojo;
     private PasswordEncoder passwordEncoder;
     private AccountPojoToAccount accountPojoToAccount;
+    private OptionsService optionsService;
 
-    public AccountServicesImpl(AccountRepository accountRepository, AccountToAccountPojo accountToAccountPojo,
-                               PasswordEncoder passwordEncoder, AccountPojoToAccount accountPojoToAccount) {
+    public AccountServicesImpl(AccountRepository accountRepository, AccountToAccountPojo accountToAccountPojo, PasswordEncoder passwordEncoder, AccountPojoToAccount accountPojoToAccount, OptionsService optionsService) {
         this.accountRepository = accountRepository;
         this.accountToAccountPojo = accountToAccountPojo;
         this.passwordEncoder = passwordEncoder;
         this.accountPojoToAccount = accountPojoToAccount;
+        this.optionsService = optionsService;
     }
 
     @Override
@@ -41,6 +45,20 @@ public class AccountServicesImpl implements AccountService {
             account.setPassword(passwordEncoder.encode(account.getPassword()));
             accountRepository.save(account);
         }
+
+    }
+
+    @Override
+    public void createAccount(RegisterPojo registerPojo) {
+
+
+        Account account = new Account();
+        account.getOptions().setServerName(registerPojo.getServer().getName());
+
+        account.setPassword(passwordEncoder.encode(registerPojo.getPassword()));
+        account.setLogin(registerPojo.getLogin());
+
+        accountRepository.save(account);
 
     }
 
@@ -65,7 +83,7 @@ public class AccountServicesImpl implements AccountService {
     @Override
     public Account findUserByUsername(String username) {
         Optional<Account> optionalAccount = accountRepository.findByLogin(username);
-        return optionalAccount.isPresent() ? optionalAccount.get() : null;
+        return optionalAccount.orElse(null);
 
     }
 
@@ -116,8 +134,6 @@ public class AccountServicesImpl implements AccountService {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         return optionalAccount.isPresent() ? optionalAccount.get() : null;
     }
-
-
 
 
 }

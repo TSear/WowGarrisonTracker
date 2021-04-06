@@ -1,6 +1,7 @@
 package com.trix.wowgarrisontracker.filters;
 
 import com.trix.wowgarrisontracker.frontEnd.LoginPage;
+import com.trix.wowgarrisontracker.frontEnd.RegisterPage;
 import com.trix.wowgarrisontracker.utils.SecurityUtils;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -29,8 +30,11 @@ public class VaadinFilter implements VaadinServiceInitListener {
 
         boolean isUserLoggedIn = SecurityUtils.isUserLoggedIn();
         boolean isTargetPageNotALoginPage = !LoginPage.class.equals(beforeEnterEvent.getNavigationTarget());
+        boolean isTargetRegisterPage = RegisterPage.class.equals(beforeEnterEvent.getNavigationTarget());
 
-        if (isTargetPageNotALoginPage && !isUserLoggedIn) {
+        if (isTargetRegisterPage) {
+            beforeEnterEvent.rerouteTo(RegisterPage.class);
+        } else if (isTargetPageNotALoginPage && !isUserLoggedIn) {
             beforeEnterEvent.rerouteTo(LoginPage.class);
         }
 

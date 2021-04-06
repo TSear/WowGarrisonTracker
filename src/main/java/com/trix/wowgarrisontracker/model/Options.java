@@ -13,9 +13,11 @@ public class Options {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @OneToOne
+    @JoinColumn(name = "accountId", referencedColumnName = "id")
     private Account account;
 
     @Column(name = "serverName")
@@ -27,5 +29,10 @@ public class Options {
     public Options() {
         this.serverName = "";
         this.receiveEmailNotifications = false;
+    }
+
+    public Options(Account account) {
+        this();
+        this.account = account;
     }
 }

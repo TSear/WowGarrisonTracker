@@ -28,6 +28,7 @@ html {
   --lumo-shade-80pct: rgba(37, 36, 34, 0.8);
   --lumo-contrast-60pct: rgba(204, 197, 185, 0.6);
   --lumo-contrast-10pct: rgba(204, 197, 185, 0.1);
+  --lumo-header-text-color: #EE845E;
   /* App layout */
   --app-layout-bar-background-base-color: var(--background-primary-color);
   --app-layout-bar-background-color: var(--background-primary-color);
@@ -46,4 +47,17 @@ html {
 
 .secondary-button {
   background: var(--lumo-contrast-30pct);
+}
+
+.register-form * {
+  width: 100%;
+}
+
+.register-form {
+  padding: 1em;
+}
+
+.box-shadow {
+  background: var(--background-secondary-color);
+  box-shadow: 0 0 var(--base-shadow-range) var(--primary-contrast-color);
 }

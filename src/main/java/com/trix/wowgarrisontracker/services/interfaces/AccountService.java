@@ -9,10 +9,13 @@ import com.trix.wowgarrisontracker.model.LoginRequest;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.pojos.RegisterModel;
+import com.trix.wowgarrisontracker.pojos.RegisterPojo;
 
 public interface AccountService {
 
 	void saveAccount(Account account);
+
+	void createAccount(RegisterPojo registerPojo);
 
 	void deleteAccount(Long id);
 

@@ -1,6 +1,8 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
-import com.vaadin.flow.component.dependency.CssImport;
+import com.trix.wowgarrisontracker.utils.BlizzardRequestUtils;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -19,8 +21,10 @@ public class LoginPage extends FlexLayout implements BeforeEnterObserver {
 
 
     private LoginForm loginForm = new LoginForm();
+    private BlizzardRequestUtils requestUtils;
 
     public LoginPage() {
+        this.requestUtils = new BlizzardRequestUtils();
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setAlignItems(Alignment.CENTER);
@@ -28,6 +32,13 @@ public class LoginPage extends FlexLayout implements BeforeEnterObserver {
 
         loginForm.setAction("login");
         add(loginForm);
+
+        Anchor registerLink = new Anchor("register", "Register");
+        add(registerLink);
+
+        Button request = new Button("Make blizzard request");
+        request.addClickListener(event -> requestUtils.getListOfServers());
+        add(request);
 
     }
 
