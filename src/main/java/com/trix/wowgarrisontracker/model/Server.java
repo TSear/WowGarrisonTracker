@@ -27,4 +27,9 @@ public class Server {
     private String slug;
 
     private String region;
+
+    @Override
+    public String toString() {
+        return name + " - " + region.toUpperCase();
+    }
 }

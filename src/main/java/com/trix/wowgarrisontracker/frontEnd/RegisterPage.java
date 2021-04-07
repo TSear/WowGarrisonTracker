@@ -4,10 +4,12 @@ import com.trix.wowgarrisontracker.model.Server;
 import com.trix.wowgarrisontracker.pojos.RegisterPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.ServerService;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -31,20 +33,14 @@ import java.util.stream.Collectors;
 @Route(value = "register")
 public class RegisterPage extends VerticalLayout {
 
-    private AccountService accountService;
+    private final AccountService accountService;
 
-    private ServerService serverService;
+    private final List<Server> servers;
 
-    private FormLayout formLayout;
-
-    private List<Server> servers;
-
-    private Binder<RegisterPojo> pojoBinder = new Binder<>();
+    private final Binder<RegisterPojo> pojoBinder = new Binder<>();
 
     public RegisterPage(AccountService accountService, ServerService serverService) {
         this.accountService = accountService;
-        this.serverService = serverService;
-        formLayout = new FormLayout();
         servers = serverService.getServers();
     }
 
@@ -97,43 +93,56 @@ public class RegisterPage extends VerticalLayout {
 
         ComboBox<String> region = new ComboBox<>();
         region.setLabel("Pick Region");
-        region.setItems(Arrays.asList("EU", "US"));
+        region.setItems(Arrays.asList("All", "EU", "US"));
         region.setValue("EU");
         region.setAllowCustomValue(false);
 
 
         ComboBox<Server> server = new ComboBox<>();
         server.setLabel("Pick Server");
-        server.setItemLabelGenerator(Server::getName);
+        server.setItemLabelGenerator(Server::toString);
         server.setItems(servers.stream().filter(server1 -> server1.getRegion().equalsIgnoreCase("eu")).collect(Collectors.toList()));
         pojoBinder.forField(server)
                 .withValidator(Objects::nonNull, "Pick server")
                 .bind(RegisterPojo::getServer, RegisterPojo::setServer);
 
-        region.addValueChangeListener(event -> server.setItems(servers.stream()
-                .filter(server1 -> event.getValue().toLowerCase().equals(server1.getRegion()))
-                .collect(Collectors.toList())));
+        region.addValueChangeListener(event -> {
+
+            if (region.getValue().equalsIgnoreCase("All"))
+                server.setItems(servers);
+            else
+                server.setItems(servers.stream()
+                        .filter(server1 -> event.getValue().toLowerCase().equals(server1.getRegion())).collect(Collectors.toList()));
+        });
 
 
         formLayout.add(registerHeader, loginField, emailField, passwordField, passwordField, repeatedPasswordField, region, server);
 
+        HorizontalLayout buttonsLayout = new HorizontalLayout();
+        buttonsLayout.getStyle().set("margin-top", "1em");
+
         Button submitButton = new Button("Submit");
-        submitButton.getStyle().set("margin-top", "1em");
 
         submitButton.addClickListener(event -> {
             RegisterPojo pojo = new RegisterPojo();
             try {
                 pojoBinder.writeBean(pojo);
-
                 accountService.createAccount(pojo);
-
+                UI.getCurrent().navigate(LoginPage.class);
             } catch (ValidationException e) {
                 System.out.println(e.getMessage());
             }
 
         });
 
-        formLayout.add(submitButton);
+        Button cancelButton = new Button("Cancel");
+        cancelButton.addClassName("secondary-button");
+        cancelButton.addClickListener(event -> UI.getCurrent().navigate(LoginPage.class));
+
+        buttonsLayout.add(submitButton, cancelButton);
+        buttonsLayout.setFlexGrow(1, submitButton);
+
+        formLayout.add(buttonsLayout);
 
 
         add(formLayout);

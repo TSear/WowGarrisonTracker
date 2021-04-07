@@ -49,7 +49,7 @@ html {
   background: var(--lumo-contrast-30pct);
 }
 
-.register-form * {
+.register-form>* {
   width: 100%;
 }
 
@@ -60,4 +60,10 @@ html {
 .box-shadow {
   background: var(--background-secondary-color);
   box-shadow: 0 0 var(--base-shadow-range) var(--primary-contrast-color);
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 0;
+  color: var(--lumo-header-text-color);
 }

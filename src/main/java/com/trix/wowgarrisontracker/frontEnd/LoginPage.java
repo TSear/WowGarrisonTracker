@@ -1,10 +1,14 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.utils.BlizzardRequestUtils;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
@@ -22,6 +26,7 @@ public class LoginPage extends FlexLayout implements BeforeEnterObserver {
 
     private LoginForm loginForm = new LoginForm();
     private BlizzardRequestUtils requestUtils;
+    private VerticalLayout verticalLayout = new VerticalLayout();
 
     public LoginPage() {
         this.requestUtils = new BlizzardRequestUtils();
@@ -30,16 +35,19 @@ public class LoginPage extends FlexLayout implements BeforeEnterObserver {
         setAlignItems(Alignment.CENTER);
         addClassName("background");
 
+        verticalLayout.addClassName("box-shadow");
+
         loginForm.setAction("login");
-        add(loginForm);
+        verticalLayout.add(loginForm);
+        verticalLayout.setSizeUndefined();
 
-        Anchor registerLink = new Anchor("register", "Register");
-        add(registerLink);
+        Anchor registerLink = new Anchor("register", "Don't have account?");
+        registerLink.addClassName("register-link");
+        registerLink.setWidthFull();
 
-        Button request = new Button("Make blizzard request");
-        request.addClickListener(event -> requestUtils.getListOfServers());
-        add(request);
+        verticalLayout.add(registerLink);
 
+        add(verticalLayout);
     }
 
 
