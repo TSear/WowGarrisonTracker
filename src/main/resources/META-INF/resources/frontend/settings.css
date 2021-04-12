@@ -1,0 +1,15 @@
+:host {
+  width: 50%;
+  margin: auto;
+}
+
+.settings-layout {}
+
+.settings-layout h2 {
+  width: 100%;
+  text-align: center;
+}
+
+:host vaadin-button {
+  margin-top: 2em;
+}

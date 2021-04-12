@@ -20,19 +20,22 @@ public class Options {
     @JoinColumn(name = "accountId", referencedColumnName = "id")
     private Account account;
 
-    @Column(name = "serverName")
-    private String serverName;
+    @ManyToOne
+    @JoinColumn(name = "serverId", referencedColumnName = "id")
+    private Server server;
 
     @Column(name = "emailNotifications")
     private boolean receiveEmailNotifications;
 
     public Options() {
-        this.serverName = "";
+        this.server = new Server();
         this.receiveEmailNotifications = false;
     }
+
 
     public Options(Account account) {
         this();
         this.account = account;
     }
+
 }

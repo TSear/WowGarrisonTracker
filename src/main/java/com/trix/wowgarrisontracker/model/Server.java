@@ -7,7 +7,10 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.swing.text.html.Option;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,6 +30,14 @@ public class Server {
     private String slug;
 
     private String region;
+
+    @OneToMany(mappedBy = "server")
+    private List<Options> options;
+
+    public Server(){
+        this.name = "";
+        this.region = "";
+    }
 
     @Override
     public String toString() {

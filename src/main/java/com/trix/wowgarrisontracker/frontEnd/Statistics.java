@@ -21,8 +21,6 @@ import javax.annotation.PostConstruct;
 
 @Component
 @UIScope
-//@StyleSheet("./statistics.css")
-//@CssImport(value = "./statistics.css", themeFor = "vaadin-horizontal-layout")
 @Route(value = "statistics", layout = MainLayout.class)
 public class Statistics extends FlexLayout {
 
@@ -49,12 +47,12 @@ public class Statistics extends FlexLayout {
         Long id = utils.getCurrentlyLoggedUserId();
 
         Account account = accountService.findById(id);
-        Long days = Long.valueOf(entryService.getAmountOfDays(id));
+        Long days = (long) entryService.getAmountOfDays(id);
 
         Div totalResources = createStatisticDiv("Total Garrison Resources", account.getTotalGarrisonResources() + "");
         Div totalWarPaint = createStatisticDiv("Total War Paint", account.getTotalWarPaint()+"");
-        Div averageWarPaintPD = createStatisticDiv("Average War Paint Per Day", account.getTotalWarPaint() / days + "");
-        Div averageGarrisonResourcesPD = createStatisticDiv("Average Garrison Resources", account.getTotalGarrisonResources() / days + "");
+        Div averageWarPaintPD = createStatisticDiv("Average War Paint Per Day", account.getTotalWarPaint() / Math.max(days,1) + "");
+        Div averageGarrisonResourcesPD = createStatisticDiv("Average Garrison Resources", account.getTotalGarrisonResources() / Math.max(days,1) + "");
         Div amountOfEntries = createStatisticDiv("Entries", account.getAmountOfEntries() +"");
         Div amountOfDays = createStatisticDiv("Days", days+"");
 

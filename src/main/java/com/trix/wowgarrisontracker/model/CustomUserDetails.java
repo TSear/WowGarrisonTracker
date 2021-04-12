@@ -60,6 +60,13 @@ public class CustomUserDetails implements UserDetails {
         return this.account.getId();
     }
 
+    public Options getOptions(){
+        return this.account.getOptions();
+    }
+
+    public Account getAccount(){
+        return this.account;
+    }
 
 
 

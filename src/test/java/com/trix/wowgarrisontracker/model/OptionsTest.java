@@ -11,21 +11,24 @@ import static org.junit.jupiter.api.Assertions.*;
 class OptionsTest {
 
     Options options;
+    Server server;
 
     @BeforeEach
     public void init(){
         options = new Options();
+        server = new Server();
     }
 
     @Test
     void getServerName(){
-        options.setServerName("test1");
+        server.setName("test1");
+        options.setServer(server);
 
-        assertEquals("test1", options.getServerName());
+        assertEquals("test1", options.getServer().getName());
 
-        options.setServerName("test2");
+        server.setName("test2");
 
-        assertNotEquals("test1", options.getServerName());
+        assertNotEquals("test1", options.getServer().getName());
     }
 
     @Test

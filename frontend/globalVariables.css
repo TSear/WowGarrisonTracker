@@ -12,6 +12,7 @@ html {
   /* Lumo */
   --lumo-body-text-color: var(--font-primary-color);
   --lumo-primary-text-color: #fffcf2;
+  --lumo-secondary-text-color: var(--font-primary-color);
   --_lumo-button-primary-background-color: #EB5E28;
   --lumo-contrast-90pct: rgba(235, 94, 40, 0.9);
   --lumo-error-color: #ba181b;
@@ -66,4 +67,18 @@ html {
   text-align: center;
   margin-top: 0;
   color: var(--lumo-header-text-color);
+}
+
+#content-container {
+  background: var(--background-primary-color);
+}
+
+.page-label {
+  width: 100%;
+  text-align: center;
+  font-weight: normal;
+}
+
+.margin-top-big {
+  margin-top: 2em;
 }

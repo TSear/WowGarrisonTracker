@@ -53,7 +53,7 @@ public class AccountServicesImpl implements AccountService {
 
 
         Account account = new Account();
-        account.getOptions().setServerName(registerPojo.getServer().getName());
+        account.getOptions().setServer(registerPojo.getServer());
 
         account.setPassword(passwordEncoder.encode(registerPojo.getPassword()));
         account.setLogin(registerPojo.getLogin());
@@ -130,9 +130,9 @@ public class AccountServicesImpl implements AccountService {
 
 
     @Override
-    public Account findById(Long id) {
+    public Account findById(Long id){
         Optional<Account> optionalAccount = accountRepository.findById(id);
-        return optionalAccount.isPresent() ? optionalAccount.get() : null;
+        return optionalAccount.orElse(null);
     }
 
 

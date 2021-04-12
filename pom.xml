@@ -52,12 +52,12 @@
             <scope>test</scope>
         </dependency>
 
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-security</artifactId>-->
-<!--            <version>2.3.7.RELEASE</version>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-security</artifactId>-->
+        <!--            <version>2.3.7.RELEASE</version>-->
+        <!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter -->
         <dependency>
@@ -152,12 +152,15 @@
             <artifactId>spring-boot</artifactId>
             <version>2.4.1</version>
         </dependency>
+
+
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>
-                vaadin-spring-boot-starter
-            </artifactId>
+            <artifactId>vaadin-spring-boot-starter</artifactId>
+            <version>14.0.1</version>
         </dependency>
+
+
         <dependency>
             <groupId>com.github.appreciated</groupId>
             <artifactId>app-layout-addon</artifactId>
@@ -168,11 +171,7 @@
             <artifactId>grid-pagination</artifactId>
             <version>2.0.10</version>
         </dependency>
-        <dependency>
-            <groupId>com.wontlost</groupId>
-            <artifactId>password-strength-vaadin</artifactId>
-            <version>1.0.1</version>
-        </dependency>
+
     </dependencies>
 
     <repositories>
