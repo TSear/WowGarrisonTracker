@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@CssImport(value = "settings.css", themeFor = "vaadin-form-layout")
+@CssImport(value = "./settings.css", themeFor = "vaadin-form-layout")
 @UIScope
 @Route(value = "settings", layout = MainLayout.class)
 public class Settings extends VerticalLayout {

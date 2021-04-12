@@ -3,6 +3,7 @@
   background: linear-gradient(130deg, rgba(235, 94, 40, 1) 0%, rgba(64, 61, 57, 1) 50%, rgba(37, 36, 34, 1) 100%);
   box-shadow: 0 0 var(--mega-shadow-range) var(--primary-contrast-color);
   height: auto;
+  width: 25vw;
 }
 
 [part="content"] {
@@ -13,4 +14,8 @@
 
 [part="backdrop"] {
   background-color: var(--lumo-shade-80pct);
+}
+
+vaadin-form-layout {
+  width: 100%;
 }

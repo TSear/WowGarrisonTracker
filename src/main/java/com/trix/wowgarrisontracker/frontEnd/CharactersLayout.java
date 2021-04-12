@@ -5,7 +5,10 @@ import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -29,9 +32,10 @@ public class CharactersLayout extends VerticalLayout {
     @Autowired
     private GeneralUtils utils;
     private Long id;
+    private Dialog confirmDelete;
 
     public CharactersLayout() {
-
+        confirmDelete = new Dialog();
     }
 
     @PostConstruct
@@ -59,6 +63,25 @@ public class CharactersLayout extends VerticalLayout {
         deleteCharacterButton.addClassName("secondary-button");
         buttonLayout.add(deleteCharacterButton);
 
+        Text dialogMessage = new Text("Are you sure you want to delete character");
+
+        HorizontalLayout dialogButtonLayout = new HorizontalLayout();
+        Button confirmButton = new Button("Confirm");
+        Button cancelButton = new Button("Cancel");
+
+        cancelButton.addClassName("secondary-button");
+
+        confirmButton.addClickListener(event -> {
+            accountCharacterPojoGrid.getSelectedItems().forEach(accountCharacterPojo -> accountCharacterService.delete(accountCharacterPojo.getId()));
+            accountCharacterPojoGrid.setItems(accountCharacterService.getListOfAccountCharactersConvertedToPojo(id));
+            confirmDelete.close();
+        });
+
+        cancelButton.addClickListener(event -> confirmDelete.close());
+
+        dialogButtonLayout.add(confirmButton, cancelButton);
+        confirmDelete.add(dialogMessage, dialogButtonLayout);
+
         add(buttonLayout);
     }
 
@@ -78,8 +101,7 @@ public class CharactersLayout extends VerticalLayout {
         deleteEntryButton.setIconAfterText(true);
         deleteEntryButton.addClickListener(event -> {
             if (grid.getSelectedItems().size() > 0) {
-                grid.getSelectedItems().forEach(item -> accountCharacterService.delete(item.getId()));
-                grid.setItems(accountCharacterService.getListOfAccountCharactersConvertedToPojo(id));
+                confirmDelete.open();
             }
 
         });

@@ -23,6 +23,7 @@ import org.vaadin.klaudeta.PaginatedGrid;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Objects;
 
 
 @Component
@@ -56,6 +57,7 @@ public class EntryFormDialog extends Dialog {
 
         entryPojoBinder.readBean(entryPojo);
 
+
         Long id =  utils.getCurrentlyLoggedUserId();
 
         VerticalLayout mainDialogBoxLayout = createMainDialogLayout();
@@ -64,7 +66,7 @@ public class EntryFormDialog extends Dialog {
 
         List<AccountCharacter> accountCharacterList = accountCharacterService.findAllByAccountId(id);
 
-        ComboBox<AccountCharacter> accountCharactersComboBox = createAccountCharacterPojoComboBox(accountCharacterList);
+        ComboBox<AccountCharacter> accountCharactersComboBox = createAccountCharacterPojoComboBox();
 
         IntegerField garrisonResourcesIntegerField = createGarrisonResourcesIntegerField();
 
@@ -88,6 +90,13 @@ public class EntryFormDialog extends Dialog {
 
         this.add(mainDialogBoxLayout);
         mainDialogBoxLayout.setFlexGrow(1, buttonLayout);
+
+        this.addOpenedChangeListener(event -> {
+            if(event.isOpened()){
+                System.out.println("called");
+                accountCharactersComboBox.setItems(accountCharacterService.findAllByAccountId(id));
+            }
+        });
 
     }
 
@@ -154,11 +163,10 @@ public class EntryFormDialog extends Dialog {
         return buttonLayout;
     }
 
-    private ComboBox<AccountCharacter> createAccountCharacterPojoComboBox(List<AccountCharacter> accountCharacterPojoList) {
+    private ComboBox<AccountCharacter> createAccountCharacterPojoComboBox() {
         ComboBox<AccountCharacter> accountCharacters = new ComboBox<>();
 
         accountCharacters.setItemLabelGenerator(AccountCharacter::getCharacterName);
-        accountCharacters.setItems(accountCharacterPojoList);
         accountCharacters.setLabel("Account Character");
         accountCharacters.setAllowCustomValue(false);
         accountCharacters.addAttachListener(event -> {
@@ -167,7 +175,7 @@ public class EntryFormDialog extends Dialog {
         });
         accountCharacters.setPlaceholder("Chose Character");
         entryPojoBinder.forField(accountCharacters)
-                .withValidator(selected -> selected != null, REQUIRED)
+                .withValidator(Objects::nonNull, REQUIRED)
                 .bind(EntryPojo::getAccountCharacter,
                         (entryPojo1, accountCharacter) -> entryPojo1.setAccountCharacterId(accountCharacter.getId()));
 
@@ -178,12 +186,12 @@ public class EntryFormDialog extends Dialog {
     private FormLayout createEntryFormLayout() {
         FormLayout entryFormLayout = new FormLayout();
         entryFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP));
+        entryFormLayout.setWidthFull();
         return entryFormLayout;
     }
 
     private VerticalLayout createMainDialogLayout() {
         VerticalLayout mainDialogBoxLayout = new VerticalLayout();
-        mainDialogBoxLayout.setMaxWidth("400px");
         mainDialogBoxLayout.setClassName("dialog-layout");
         mainDialogBoxLayout.setSizeFull();
         mainDialogBoxLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
@@ -194,7 +202,6 @@ public class EntryFormDialog extends Dialog {
         this.setCloseOnEsc(true);
         this.setDraggable(true);
         this.setCloseOnOutsideClick(false);
-
 
     }
 

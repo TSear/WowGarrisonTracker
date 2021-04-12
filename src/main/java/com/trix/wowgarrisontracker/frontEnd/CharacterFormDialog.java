@@ -45,7 +45,9 @@ public class CharacterFormDialog extends Dialog {
 
         FormLayout formLayout = new FormLayout();
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP));
+        formLayout.setWidthFull();
         mainLayout.add(formLayout);
+
 
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setWidthFull();
@@ -57,8 +59,10 @@ public class CharacterFormDialog extends Dialog {
 
         TextField characterNameField = createCharacterNameTextField();
         formLayout.add(characterNameField);
+        characterNameField.setMaxLength(100);
 
         Button createButton = new Button("Create");
+
         createButton.addClickListener(event -> {
             try {
                 binder.writeBean(accountCharacterPojo);
@@ -72,7 +76,7 @@ public class CharacterFormDialog extends Dialog {
                 grid.setItems(listOfAccountCharactersConvertedToPojo);
 
             } catch (ValidationException e) {
-                e.getMessage();
+                System.out.println(e.getMessage());
             }
 
         });
@@ -80,7 +84,7 @@ public class CharacterFormDialog extends Dialog {
         Button cancelButton = new Button("Cancel");
         cancelButton.addClickListener(event -> this.close());
         cancelButton.addClassName("secondary-button");
-
+        buttonLayout.setFlexGrow(1, createButton);
         buttonLayout.add(createButton, cancelButton);
 
     }
