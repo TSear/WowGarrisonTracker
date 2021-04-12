@@ -6,7 +6,9 @@ import com.trix.wowgarrisontracker.pojos.OptionsDTO;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OptionsDTOToOptions implements Converter<OptionsDTO, Options> {
 
     private AccountService accountService;
