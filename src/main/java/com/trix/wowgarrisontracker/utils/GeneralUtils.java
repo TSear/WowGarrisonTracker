@@ -4,6 +4,7 @@ import com.trix.wowgarrisontracker.converters.OptionsToOptionsDTO;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
 import com.trix.wowgarrisontracker.model.Options;
+import com.trix.wowgarrisontracker.model.Server;
 import com.trix.wowgarrisontracker.pojos.OptionsDTO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,6 +42,14 @@ public class GeneralUtils {
     public OptionsDTO getUserSettings(){
         Options accountOptions = this.getCustomUserPrincipal().getOptions();
 
-        return accountOptions != null ? optionsToOptionsDTO.convert(accountOptions) : optionsToOptionsDTO.convert(new Options(getCustomUserPrincipal().getAccount()));
+        Server server = new Server();
+        server.setRegion("");
+        server.setName("Not set");
+
+        if(accountOptions.getServer() == null)
+            accountOptions.setServer(server);
+
+
+        return optionsToOptionsDTO.convert(accountOptions);
     }
 }

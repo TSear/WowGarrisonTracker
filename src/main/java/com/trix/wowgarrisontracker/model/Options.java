@@ -2,6 +2,7 @@ package com.trix.wowgarrisontracker.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -20,7 +21,7 @@ public class Options {
     @JoinColumn(name = "accountId", referencedColumnName = "id")
     private Account account;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "serverId", referencedColumnName = "id")
     private Server server;
 
@@ -28,7 +29,6 @@ public class Options {
     private boolean receiveEmailNotifications;
 
     public Options() {
-        this.server = new Server();
         this.receiveEmailNotifications = false;
     }
 

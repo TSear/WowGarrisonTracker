@@ -29,7 +29,7 @@ public class Account {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.ALL)
     private Set<AccountCharacter> accountCharacters;
 
     private Long amountOfEntries;

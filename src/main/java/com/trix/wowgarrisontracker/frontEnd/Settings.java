@@ -39,14 +39,14 @@ import java.util.stream.Collectors;
 @Route(value = "settings", layout = MainLayout.class)
 public class Settings extends VerticalLayout {
 
-    private GeneralUtils generalUtils;
-    private FormLayout formLayout;
-    private Binder<OptionsDTO> optionsDTOBinder;
+    private final GeneralUtils generalUtils;
+    private final FormLayout formLayout;
+    private final Binder<OptionsDTO> optionsDTOBinder;
     private List<Server> serverList;
-    private OptionsDTO optionsDTO;
+    private final OptionsDTO optionsDTO;
     private OptionsService optionsService;
     private OptionsDTOToOptions optionsDTOToOptions;
-    private Notification savedNotification;
+    private final Notification savedNotification;
 
     public Settings() {
         this.generalUtils = new GeneralUtils();
@@ -96,7 +96,8 @@ public class Settings extends VerticalLayout {
         titleLabel.setClassName("page-label");
 
         regionComboBox.setItems(regions);
-        regionComboBox.setValue(regions.stream().filter(s -> s.equalsIgnoreCase(optionsDTO.getServer().getRegion())).findFirst().orElse("All"));
+        regionComboBox.setValue(regions.stream()
+                .filter(s -> s.equalsIgnoreCase(optionsDTO.getServer().getRegion())).findFirst().orElse("All"));
         regionComboBox.setAllowCustomValue(false);
         regionComboBox.addValueChangeListener(event -> {
             if (regionComboBox.getValue().equalsIgnoreCase("all"))

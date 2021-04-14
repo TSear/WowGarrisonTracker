@@ -26,12 +26,12 @@ public class AccountCharacter {
     @JoinColumn(name="accountId", referencedColumnName = "id")
 	private Account account;
 
-	@OneToMany(fetch = FetchType.EAGER,  mappedBy = "accountCharacter")
+	@OneToMany(fetch = FetchType.EAGER,  mappedBy = "accountCharacter", cascade = CascadeType.ALL)
 	private Set<Entry> entries;
 
 	public AccountCharacter() {
 		this.entries = new HashSet<>();
-		this.garrisonResources = 0l;
-		this.warPaint = 0l;
+		this.garrisonResources = 0L;
+		this.warPaint = 0L;
 	}
 }
