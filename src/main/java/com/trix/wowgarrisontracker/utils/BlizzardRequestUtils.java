@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -22,7 +23,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,36 +40,51 @@ public class BlizzardRequestUtils {
     private String client_secret;
 
     private static String TOKEN;
-    private static LocalTime EXPIRATION_TIME;
+    private static LocalDateTime EXPIRATION_TIME;
 
     private final Logger logger = LogManager.getLogger("blizzard.request.utils");
 
     @PostConstruct
     private void init() {
-        if (!isTokenValid())
-            getAccessToken();
+        if (!isTokenValid(getExpirationTime())) {
+            try {
+                getAccessToken();
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public Auctions getAuctionHouse() {
+    public List<AuctionEntity> getAuctionHouse() {
+
         ObjectMapper auctionMapper = new ObjectMapper();
-        String jsonData = "";
-        ObjectMapper mapper = new ObjectMapper();
-        Auctions ah = new Auctions();
+        List<AuctionEntity> listOfParsedAuctionEntities = new ArrayList<>();
+
+        //This module is needed to parse nested data
+        //TODO read more about json parsing
+        SimpleModule module = new SimpleModule("AuctionHouseResponseDeserializer",
+                new Version(1, 0, 0, null, null, null));
+        module.addDeserializer(AuctionEntity.class, new AuctionHouseResponseDeserializer());
+
+        auctionMapper.registerModule(module);
+        auctionMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        String stringJsonData = getJsonData("curl -X GET https://eu.api.blizzard.com/data/wow/connected-realm/3713/auctions?"
+                + "namespace=dynamic-eu&locale=en_US&access_token=" + getTokenKey());
+
         try {
-            jsonData = getJsonData("curl -X GET https://eu.api.blizzard.com/data/wow/connected-realm/3713/auctions?"
-                    + "namespace=dynamic-eu&locale=en_US&access_token=" + TOKEN);
-            SimpleModule module = new SimpleModule("AuctionHouseResponseDeserializer",
-                    new Version(1, 0, 0, null, null, null));
-            module.addDeserializer(AuctionEntity.class, new AuctionHouseResponseDeserializer());
-            auctionMapper.registerModule(module);
-            auctionMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-            ah = auctionMapper.readValue(jsonData, Auctions.class);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            JsonNode jsonWithAllInformations = auctionMapper.readTree(stringJsonData);
+
+            JsonNode jsonWithAuctions = jsonWithAllInformations.path("auctions");
+            listOfParsedAuctionEntities = auctionMapper.convertValue(jsonWithAuctions, new TypeReference<List<AuctionEntity>>() {
+            });
+
+        } catch (JsonProcessingException e) {
+            logger.error("Error occurred while parsing auction house json");
+            e.printStackTrace();
         }
 
-        return ah;
+        return listOfParsedAuctionEntities;
 
     }
 
@@ -85,7 +101,7 @@ public class BlizzardRequestUtils {
         return jsonData;
     }
 
-    public void getAccessToken() {
+    public void getAccessToken() throws JsonProcessingException {
         String token = "";
 
         String jsonData = this.getJsonData(
@@ -95,17 +111,13 @@ public class BlizzardRequestUtils {
 
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        try {
-            Map<String, Object> mappedString = mapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {
-            });
+        Map<String, Object> mappedString = mapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {
+        });
+        if (mappedString.get("token_type") != null && mappedString.get("access_token") != null)
             token = mappedString.get("token_type") + " " + mappedString.get("access_token");
-        } catch (JsonProcessingException e) {
-            logger.error("Error occurred during token request");
-            e.printStackTrace();
-        }
 
-        BlizzardRequestUtils.TOKEN = token.substring(7);
-        BlizzardRequestUtils.EXPIRATION_TIME = LocalTime.now();
+        BlizzardRequestUtils.TOKEN = token;
+        BlizzardRequestUtils.EXPIRATION_TIME = LocalDateTime.now().plusHours(23);
     }
 
     public List<Server> getListOfServers() {
@@ -120,7 +132,7 @@ public class BlizzardRequestUtils {
         List<Server> servers = new ArrayList<>();
 
         for (String region : regions) {
-            json = getJsonData("curl -X GET https://" + region.toUpperCase() + ".api.blizzard.com/data/wow/realm/index?namespace=dynamic-" + region + "&locale=en_US&access_token=" + TOKEN);
+            json = getJsonData("curl -X GET https://" + region.toUpperCase() + ".api.blizzard.com/data/wow/realm/index?namespace=dynamic-" + region + "&locale=en_US&access_token=" + getTokenKey());
             JsonNode parent = null;
 
             try {
@@ -130,9 +142,10 @@ public class BlizzardRequestUtils {
             }
 
             JsonNode realms = parent.path("realms");
-            servers.addAll(Arrays.stream(mapper.convertValue(realms, Server[].class)).
-                    peek(server -> server.setRegion(region))
-                    .collect(Collectors.toList()));
+            Server[] serverValues = mapper.convertValue(realms, Server[].class);
+            Arrays.stream(serverValues).forEach(server -> server.setRegion(region));
+            servers = Arrays.asList(serverValues);
+
         }
 
 
@@ -140,18 +153,43 @@ public class BlizzardRequestUtils {
     }
 
     public void refreshTokenIfInvalid() {
-        if (!isTokenValid())
-            getAccessToken();
+        if (!isTokenValid(BlizzardRequestUtils.EXPIRATION_TIME)) {
+            try {
+                getAccessToken();
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public static boolean isTokenValid() {
-        if (EXPIRATION_TIME == null || TOKEN == null)
-            return false;
-
-        if (EXPIRATION_TIME.isAfter(EXPIRATION_TIME.plusHours(23)))
-            return false;
-
-        return true;
+    public static String getTokenKey() {
+        return BlizzardRequestUtils.TOKEN.substring(7);
     }
 
+    public static boolean isTokenValid(LocalDateTime expiration) {
+
+        if (TOKEN == null || !TOKEN.startsWith("bearer"))
+            return false;
+
+        if (expiration == null)
+            return false;
+
+        return LocalDateTime.now().isBefore(expiration);
+    }
+
+    public void setClient_id(String client_id) {
+        this.client_id = client_id;
+    }
+
+    public void setClient_secret(String client_secret) {
+        this.client_secret = client_secret;
+    }
+
+    public String getToken() {
+        return TOKEN;
+    }
+
+    public static LocalDateTime getExpirationTime() {
+        return EXPIRATION_TIME;
+    }
 }

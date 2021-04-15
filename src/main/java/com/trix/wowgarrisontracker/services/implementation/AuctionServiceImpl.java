@@ -30,7 +30,7 @@ public class AuctionServiceImpl implements AuctionService {
                               ItemEntityService itemEntityService, BlizzardRequestUtils blizzardRequestUtils) {
         this.itemRepository = itemRepository;
         this.repository = repository;
-        this.blizzardRequestUtils =blizzardRequestUtils;
+        this.blizzardRequestUtils = blizzardRequestUtils;
         this.itemEntityService = itemEntityService;
     }
 
@@ -65,16 +65,16 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
 
+    //TODO this is so awful. Need to read about multi threading and then redo this
     @Async
     @Override
     public void updateAuctionHouse() {
 
         while (true) {
-
-            Auctions auctions = blizzardRequestUtils.getAuctionHouse();
+            List<AuctionEntity> listOfAuctionHouseEntities = blizzardRequestUtils.getAuctionHouse();
             List<ItemEntity> items = itemEntityService.findAllItemEntities();
             this.removeAll();
-            auctions.getAuctions().stream().filter(x -> items.contains(new ItemEntity(x.getItemId()))).forEach(this::save);
+            listOfAuctionHouseEntities.stream().filter(x -> items.contains(new ItemEntity(x.getItemId()))).forEach(this::save);
             try {
                 Thread.sleep(30 * 60 * 1000);
 //                Thread.sleep(1000*60);
@@ -100,7 +100,7 @@ public class AuctionServiceImpl implements AuctionService {
                 AuctionPojo pojo = new AuctionPojo();
                 pojo.setQuantity(tmpAuctionEntity.getQuantity());
                 pojo.setUnitPrice(tmpAuctionEntity.getUnitPrice());
-                if(converted.contains(pojo))
+                if (converted.contains(pojo))
                     converted.get(converted.indexOf(pojo)).addQuantity(pojo.getQuantity());
                 else
                     converted.add(pojo);
