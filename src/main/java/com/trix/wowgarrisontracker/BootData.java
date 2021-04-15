@@ -27,39 +27,42 @@ public class BootData implements CommandLineRunner {
     public BootData(AccountRepository accountRepository, AccountCharacterRepository accountCharacterRepository,
                     EntryRepository entryRepository, ItemEntityRepository itemEntityRepository,
                     AuctionEntityRepository auctionEntityRepository, AuctionService auctionService,
-                    ServerService serverService, PasswordEncoder passwordEncoder) {
+                    ServerService serverService, PasswordEncoder passwordEncoder,
+                    BlizzardRequestUtils blizzardRequestUtils) {
         this.accountRepository = accountRepository;
         this.accountCharacterRepository = accountCharacterRepository;
         this.entryRepository = entryRepository;
         this.itemEntityRepository = itemEntityRepository;
         this.auctionEntityRepository = auctionEntityRepository;
         this.auctionService = auctionService;
-        this.blizzardRequestUtils = new BlizzardRequestUtils();
+        this.blizzardRequestUtils = blizzardRequestUtils;
         this.serverService = serverService;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        auctionService.updateAuctionHouse();
         this.innit();
+        auctionService.updateAuctionHouse();
 
     }
 
     private void innit() {
 
-//        List<Server> servers = blizzardRequestUtils.getListOfServers();
-//        servers.forEach(serverService::save);
-//        ItemEntity itemEntity = new ItemEntity();
-//        itemEntity.setId(109119l);
-//        itemEntity.setName("True Iron Ore");
-//
-//        itemEntityRepository.save(itemEntity);
-////
-//        Account account1 = new Account();
-//        account1.setLogin("login1");
-//        account1.setPassword(passwordEncoder.encode("password1"));
-//        accountRepository.save(account1);
+        List<Server> servers = blizzardRequestUtils.getListOfServers();
+        servers.forEach(serverService::save);
+        ItemEntity itemEntity = new ItemEntity();
+        itemEntity.setId(109119L);
+        itemEntity.setName("True Iron Ore");
+
+        itemEntityRepository.save(itemEntity);
+
+        auctionService.updateAuctionHouse();
+
+        Account account1 = new Account();
+        account1.setLogin("login1");
+        account1.setPassword(passwordEncoder.encode("password1"));
+        accountRepository.save(account1);
 //
 //        AccountCharacter accountCharacter = new AccountCharacter();
 //        accountCharacter.setCharacterName("Calienda");

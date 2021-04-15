@@ -39,6 +39,13 @@ public class Server {
         this.region = "";
     }
 
+    public Server(Integer id){
+        this();
+        this.id=id;
+    }
+
+
+
     @Override
     public String toString() {
         return name + " - " + region.toUpperCase();

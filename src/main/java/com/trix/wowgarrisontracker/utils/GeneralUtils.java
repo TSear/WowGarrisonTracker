@@ -39,16 +39,8 @@ public class GeneralUtils {
     }
 
 
-    public OptionsDTO getUserSettings(){
+    public OptionsDTO getUserSettings() {
         Options accountOptions = this.getCustomUserPrincipal().getOptions();
-
-        Server server = new Server();
-        server.setRegion("");
-        server.setName("Not set");
-
-        if(accountOptions.getServer() == null)
-            accountOptions.setServer(server);
-
 
         return optionsToOptionsDTO.convert(accountOptions);
     }

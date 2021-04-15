@@ -27,10 +27,10 @@ public class AuctionServiceImpl implements AuctionService {
 
 
     public AuctionServiceImpl(ItemEntityRepository itemRepository, AuctionEntityRepository repository,
-                              ItemEntityService itemEntityService) {
+                              ItemEntityService itemEntityService, BlizzardRequestUtils blizzardRequestUtils) {
         this.itemRepository = itemRepository;
         this.repository = repository;
-        this.blizzardRequestUtils = new BlizzardRequestUtils();
+        this.blizzardRequestUtils =blizzardRequestUtils;
         this.itemEntityService = itemEntityService;
     }
 

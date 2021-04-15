@@ -21,8 +21,12 @@ public class Options {
     @JoinColumn(name = "accountId", referencedColumnName = "id")
     private Account account;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "serverId", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "serverId",
+            referencedColumnName = "id",
+            nullable = false,
+            columnDefinition = "INT default 1")
+    @ColumnDefault("1")
     private Server server;
 
     @Column(name = "emailNotifications")
@@ -35,6 +39,7 @@ public class Options {
 
     public Options(Account account) {
         this();
+        this.server = new Server(1);
         this.account = account;
     }
 
