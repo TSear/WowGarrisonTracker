@@ -127,6 +127,7 @@ public class BlizzardRequestUtils {
         ObjectMapper mapper = new ObjectMapper();
         String json = "";
         List<String> regions = Arrays.stream(Regions.values())
+                .skip(1)
                 .map(Regions::getValue)
                 .collect(Collectors.toList());
         List<Server> servers = new ArrayList<>();
