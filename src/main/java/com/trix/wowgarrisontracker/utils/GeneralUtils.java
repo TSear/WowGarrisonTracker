@@ -1,11 +1,7 @@
 package com.trix.wowgarrisontracker.utils;
 
-import com.trix.wowgarrisontracker.converters.OptionsToOptionsDTO;
-import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
 import com.trix.wowgarrisontracker.model.Options;
-import com.trix.wowgarrisontracker.model.Server;
-import com.trix.wowgarrisontracker.pojos.OptionsDTO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -13,17 +9,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class GeneralUtils {
 
-    private OptionsToOptionsDTO optionsToOptionsDTO;
 
     public GeneralUtils() {
-        this.optionsToOptionsDTO = new OptionsToOptionsDTO();
+
     }
 
-    public long getCurrentlyLoggedUserId() {
-        return this.getCustomUserPrincipal().getId();
+    public static long getCurrentlyLoggedUserId() {
+        return GeneralUtils.getCustomUserPrincipal().getId();
     }
 
-    public CustomUserDetails getCustomUserPrincipal() {
+    public static CustomUserDetails getCustomUserPrincipal() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails accountDetails = null;
@@ -39,9 +34,8 @@ public class GeneralUtils {
     }
 
 
-    public OptionsDTO getUserSettings() {
-        Options accountOptions = this.getCustomUserPrincipal().getOptions();
+    public static Options getUserSettings() {
 
-        return optionsToOptionsDTO.convert(accountOptions);
+        return getCustomUserPrincipal().getOptions();
     }
 }

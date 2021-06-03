@@ -1,6 +1,7 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.converters.OptionsDTOToOptions;
+import com.trix.wowgarrisontracker.converters.OptionsToOptionsDTO;
 import com.trix.wowgarrisontracker.enums.Regions;
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
@@ -39,7 +40,6 @@ import java.util.stream.Collectors;
 @Route(value = "settings", layout = MainLayout.class)
 public class Settings extends VerticalLayout {
 
-    private final GeneralUtils generalUtils;
     private final FormLayout formLayout;
     private final Binder<OptionsDTO> optionsDTOBinder;
     private List<Server> serverList;
@@ -49,10 +49,10 @@ public class Settings extends VerticalLayout {
     private final Notification savedNotification;
 
     public Settings() {
-        this.generalUtils = new GeneralUtils();
+        OptionsToOptionsDTO optionsToOptionsDTO = new OptionsToOptionsDTO();
         this.formLayout = new FormLayout();
         this.optionsDTOBinder = new Binder<>();
-        this.optionsDTO = generalUtils.getUserSettings();
+        this.optionsDTO = optionsToOptionsDTO.convert(GeneralUtils.getUserSettings());
         this.savedNotification = new Notification("Options were saved", 2000);
     }
 
@@ -118,7 +118,7 @@ public class Settings extends VerticalLayout {
                 optionsDTOBinder.writeBean(optionsDTO);
                 Options optionsTmp = optionsDTOToOptions.convert(optionsDTO);
                 optionsService.save(optionsTmp);
-                CustomUserDetails tmp = generalUtils.getCustomUserPrincipal();
+                CustomUserDetails tmp = GeneralUtils.getCustomUserPrincipal();
                 tmp.getAccount().setOptions(optionsDTOToOptions.convert(optionsDTO));
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(tmp, null, new ArrayList<>()));
                 savedNotification.open();

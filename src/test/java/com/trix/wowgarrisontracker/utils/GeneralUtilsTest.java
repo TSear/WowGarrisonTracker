@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 @ExtendWith(MockitoExtension.class)
 class GeneralUtilsTest {
 
-    GeneralUtils generalUtils;
 
     CustomUserDetails customUserDetails;
 
@@ -29,7 +28,6 @@ class GeneralUtilsTest {
 
     @BeforeEach
     void setUp() {
-        generalUtils = new GeneralUtils();
         account = new Account();
         options = new Options();
         server = new Server();
@@ -52,12 +50,12 @@ class GeneralUtilsTest {
         options.getServer().setName("test1");
 
         //when
-        OptionsDTO converted = generalUtils.getUserSettings();
+        Options converted = GeneralUtils.getUserSettings();
 
         //then
         assertEquals(options.getServer().getName(), converted.getServer().getName());
         assertEquals(options.getId(), converted.getId());
         assertEquals(options.isReceiveEmailNotifications(), converted.isReceiveEmailNotifications());
-        assertEquals(options.getAccount().getId(), converted.getAccountId());
+        assertEquals(options.getAccount().getId(), converted.getAccount().getId());
     }
 }
