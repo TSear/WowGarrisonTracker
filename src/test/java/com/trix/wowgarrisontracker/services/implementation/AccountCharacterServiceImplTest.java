@@ -4,6 +4,7 @@ import com.trix.wowgarrisontracker.converters.AccountCharacterToAccountCharacter
 import com.trix.wowgarrisontracker.converters.EntryToEntryPojo;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
+import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import com.trix.wowgarrisontracker.repository.EntryRepository;
@@ -53,20 +54,14 @@ class AccountCharacterServiceImplTest {
         character1.setId(1l);
         character1.setAccount(account);
         character1.setCharacterName("test1");
-        character1.setGarrisonResources(100l);
-        character1.setWarPaint(200l);
         AccountCharacter character2 = new AccountCharacter();
         character2.setId(2l);
         character2.setAccount(account);
         character2.setCharacterName("test2");
-        character2.setGarrisonResources(200l);
-        character2.setWarPaint(100l);
         AccountCharacter character3 = new AccountCharacter();
         character3.setId(3l);
         character3.setAccount(account);
         character3.setCharacterName("test3");
-        character3.setGarrisonResources(0l);
-        character3.setWarPaint(0l);
         accountCharacters.addAll(Arrays.asList(character1, character2, character3));
         account.getAccountCharacters().addAll(new HashSet<>(Arrays.asList(character1,character2,character3)));
     }
@@ -117,34 +112,27 @@ class AccountCharacterServiceImplTest {
     }
 
     @Test
-    void accountGetTotalGarrisonResources(){
-
-        assertEquals(300l, account.getTotalGarrisonResources());
-        assertNotEquals(400l, account.getTotalGarrisonResources());
-
-        AccountCharacter accountCharacter = new AccountCharacter();
-        accountCharacter.setGarrisonResources(50l);
-        accountCharacter.setAccount(account);
-        account.getAccountCharacters().add(accountCharacter);
-
-        assertEquals(350l, account.getTotalGarrisonResources());
-        assertNotEquals(300l, account.getTotalGarrisonResources());
-    }
-    @Test
-    void accountGetWarPaint(){
-
-        assertEquals(300l, account.getTotalWarPaint());
-        assertNotEquals(400l, account.getTotalWarPaint());
+    void addNewEntry(){
+        //given
+        Entry testing = new Entry();
+        testing.setWarPaint(100);
+        testing.setGarrisonResources(100);
 
         AccountCharacter accountCharacter = new AccountCharacter();
-        accountCharacter.setWarPaint(50l);
-        accountCharacter.setAccount(account);
-        account.getAccountCharacters().add(accountCharacter);
+        accountCharacter.setId(0L);
+        accountCharacter.setCharacterName("Testing character");
 
-        assertEquals(350l, account.getTotalWarPaint());
-        assertNotEquals(300l, account.getTotalWarPaint());
+
+        //when
+
+        accountCharacter.addNewEntry(testing);
+
+
+        //then
+
+        assertEquals(100, accountCharacter.getTotalGarrisonResorces());
+        assertEquals(100, accountCharacter.getGarrisonResources());
+        assertEquals(accountCharacter.getTotalGarrisonResorces(), accountCharacter.getGarrisonResources());
     }
-
-
 
 }

@@ -47,7 +47,7 @@ public class EntryServiceImpl implements EntryService {
     @Override
     public void save(EntryPojo entryPojo) {
 
-        accountCharacterService.updateAccountCharacterGarrisonResourcesAndWarPaint(entryPojo);
+        accountCharacterService.addNewEntryToAccountCharacter(entryPojoToEntry.convert(entryPojo));
         Entry entry = entryPojoToEntry.convert(entryPojo);
         entryRepository.save(entry);
     }
@@ -71,11 +71,7 @@ public class EntryServiceImpl implements EntryService {
     @Override
     public void delete(Long id) {
         Entry entry = this.findById(id);
-        entry.setGarrisonResourcesToNegative();
-        entry.setWarPaintToNegative();
-        EntryPojo pojo = entryToEntryPojo.convert(entry);
-        pojo.setAccountCharacterId(entry.getAccountCharacter().getId());
-        accountCharacterService.updateAccountCharacterGarrisonResourcesAndWarPaint(pojo);
+        accountCharacterService.removeEntryFromAccountCharacter(entry);
         entryRepository.deleteById(id);
     }
 

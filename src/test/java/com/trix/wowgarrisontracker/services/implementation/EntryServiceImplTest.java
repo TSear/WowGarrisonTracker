@@ -1,14 +1,11 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
-import com.sun.source.tree.ModuleTree;
 import com.trix.wowgarrisontracker.converters.EntryPojoToEntry;
 import com.trix.wowgarrisontracker.converters.EntryToEntryPojo;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.repository.EntryRepository;
-import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,10 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -62,14 +58,14 @@ class EntryServiceImplTest {
         character1.setId(1l);
         character1.setCharacterName("character1");
         entry1.setAccountCharacter(character1);
-        character1.setEntries(Collections.singleton(entry1));
+        character1.addNewEntry(entry1);
 
         AccountCharacter character2 = new AccountCharacter();
         character2.setAccount(account);
         character2.setId(1l);
         character2.setCharacterName("character2");
         entry2.setAccountCharacter(character2);
-        character2.setEntries(Collections.singleton(entry2));
+        character2.addNewEntry(entry2);
 
         AccountCharacter character3 = new AccountCharacter();
         character3.setAccount(account);

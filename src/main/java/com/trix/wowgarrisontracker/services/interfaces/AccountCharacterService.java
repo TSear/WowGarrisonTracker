@@ -12,7 +12,9 @@ import java.util.List;
 
 public interface AccountCharacterService {
 
-    void updateAccountCharacterGarrisonResourcesAndWarPaint(EntryPojo entryPojo);
+    void addNewEntryToAccountCharacter(Entry entry);
+
+    void removeEntryFromAccountCharacter(Entry entry);
 
     List<AccountCharacter> listOfAccountCharacters(Long accountId);
 

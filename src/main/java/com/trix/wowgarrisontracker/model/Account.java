@@ -43,19 +43,19 @@ public class Account {
 
     public int getAmountOfEntries(){
         return this.accountCharacters.stream()
-                .map(accountCharacter -> accountCharacter.getEntries().size())
+                .map(AccountCharacter::getAmountOfEntries)
                 .reduce(0, Integer::sum);
     }
 
     public Long getTotalGarrisonResources(){
         return this.accountCharacters.stream()
-                .map(AccountCharacter::getGarrisonResources)
+                .map(AccountCharacter::getTotalGarrisonResorces)
                 .reduce(0L, Long::sum);
     }
 
     public Long getTotalWarPaint(){
         return this.accountCharacters.stream()
-                .map(AccountCharacter::getWarPaint)
+                .map(AccountCharacter::getTotalWarPaint)
                 .reduce(0L, Long::sum);
     }
 }

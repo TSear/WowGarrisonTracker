@@ -1,6 +1,7 @@
 package com.trix.wowgarrisontracker.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,23 +50,24 @@ public class Entry {
         this.warPaint = 0;
     }
 
-    public Long getUpdatedAccountCharacterGarrisonResources() {
-        if (this.getAccountCharacter() == null)
-            throw new RuntimeException("Entry does not contain account character info");
-        return this.getGarrisonResources() + this.getAccountCharacter().getGarrisonResources();
-    }
-
-    public Long getUpdatedAccountCharacterWarPaint() {
-        if (this.getAccountCharacter() == null)
-            throw new RuntimeException("Entry does not contain account character info");
-        return this.warPaint + this.getAccountCharacter().getWarPaint();
-    }
-
     public void setWarPaintToNegative() {
         this.setWarPaint(-this.getWarPaint());
     }
 
     public void setGarrisonResourcesToNegative() {
         this.setGarrisonResources(-this.getGarrisonResources());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entry entry = (Entry) o;
+        return garrisonResources == entry.garrisonResources && warPaint == entry.warPaint && id.equals(entry.id) && Objects.equals(entryDate, entry.entryDate) && Objects.equals(accountCharacter, entry.accountCharacter);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, entryDate, garrisonResources, warPaint, accountCharacter);
     }
 }

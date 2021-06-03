@@ -2,6 +2,7 @@ package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.converters.AccountCharacterPojoToAccountCharacter;
 import com.trix.wowgarrisontracker.converters.AccountCharacterToAccountCharacterPojo;
+import com.trix.wowgarrisontracker.converters.EntryPojoToEntry;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
@@ -37,12 +38,19 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     }
 
     @Override
-    public void updateAccountCharacterGarrisonResourcesAndWarPaint(EntryPojo entryPojo) {
-        AccountCharacter accountCharacter = findById(entryPojo.getAccountCharacterId());
-        accountCharacterRepository.updateGarrisonResourcesAndWarPaint(
-                entryPojo.getAccountCharacterId(),
-                accountCharacter.getGarrisonResources() + entryPojo.getGarrisonResources(),
-                accountCharacter.getWarPaint() + entryPojo.getWarPaint());
+    public void addNewEntryToAccountCharacter(Entry entry) {
+        AccountCharacter accountCharacter = entry.getAccountCharacter();
+        accountCharacter.addNewEntry(entry);
+        accountCharacterRepository.save(accountCharacter);
+    }
+
+    @Override
+    public void removeEntryFromAccountCharacter(Entry entry) {
+        if (entry != null && entry.getAccountCharacter() != null) {
+            AccountCharacter accountCharacter = entry.getAccountCharacter();
+            entry.getAccountCharacter().removeEntry(entry);
+            accountCharacterRepository.save(accountCharacter);
+        }
     }
 
 

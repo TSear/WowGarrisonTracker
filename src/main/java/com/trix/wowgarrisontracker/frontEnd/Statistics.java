@@ -2,8 +2,10 @@ package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.model.Account;
+import com.trix.wowgarrisontracker.services.implementation.StatisticsServiceImpl;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
+import com.trix.wowgarrisontracker.services.interfaces.StatisticsService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.StyleSheet;
@@ -32,7 +34,14 @@ public class Statistics extends FlexLayout {
     @Autowired
     private GeneralUtils utils;
 
+    private StatisticsService statisticsService;
+
     public Statistics() {
+    }
+
+    @Autowired
+    public void setStatisticsService(StatisticsService statisticsService){
+        this.statisticsService = statisticsService;
     }
 
     @PostConstruct
@@ -43,6 +52,7 @@ public class Statistics extends FlexLayout {
         setClassName("statistics-container");
         getStyle().set("padding", "15px");
         getStyle().set("box-sizing","border-box");
+
 
         Long id = utils.getCurrentlyLoggedUserId();
 

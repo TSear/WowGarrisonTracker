@@ -19,43 +19,6 @@ class EntryTest {
     }
 
     @Test
-    void getUpdatedAccountCharacter_ThrowExceptionWhenAccountCharacterIsNull() {
-        //given
-        entry.setAccountCharacter(null);
-
-        //when
-        Exception exception1 = assertThrows(RuntimeException.class, () -> entry.getUpdatedAccountCharacterGarrisonResources());
-        Exception exception2 = assertThrows(RuntimeException.class, () -> entry.getUpdatedAccountCharacterWarPaint());
-        //then
-
-    }
-
-    @Test
-    void getUpdatedAccountCharacter_DoesntThrowExceptionWhenAccountCharacterIsNotNull() {
-        //given
-        entry.setAccountCharacter(new AccountCharacter());
-
-        //when
-        assertDoesNotThrow(() -> entry.getUpdatedAccountCharacterGarrisonResources());
-        assertDoesNotThrow(() -> entry.getUpdatedAccountCharacterWarPaint());
-        //then
-    }
-
-    @ParameterizedTest
-    @CsvSource(value = {"100,200", "100,300", "200,400"})
-    void getUpdateAccountCharacter_CorrectAmountReturned(int resources, int characterResources) {
-        AccountCharacter accountCharacter = new AccountCharacter();
-        accountCharacter.setGarrisonResources((long) characterResources);
-        accountCharacter.setWarPaint((long) characterResources);
-        entry.setAccountCharacter(accountCharacter);
-        entry.setGarrisonResources(resources);
-        entry.setWarPaint(resources);
-
-        assertEquals(resources + characterResources, entry.getUpdatedAccountCharacterGarrisonResources());
-        assertEquals(resources + characterResources, entry.getUpdatedAccountCharacterWarPaint());
-    }
-
-    @Test
     void changeGarrisonResourcesToNegative() {
         //when
         entry.setGarrisonResourcesToNegative();
