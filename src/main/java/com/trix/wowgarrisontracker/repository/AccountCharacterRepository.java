@@ -18,10 +18,6 @@ public interface AccountCharacterRepository extends JpaRepository<AccountCharact
 
 	List<AccountCharacter> findAllByAccountId(Long accountId);
 
-	@Transactional
-	@Modifying
-	@Query("Update AccountCharacter acc set acc.garrisonResources = :garrisonResources, acc.warPaint = :warPaint where acc.id = :id")
-	void updateGarrisonResourcesAndWarPaint(Long id, Long garrisonResources, Long warPaint);
 	Optional<AccountCharacter> findAccountCharacterByCharacterName(String name);
 
 }

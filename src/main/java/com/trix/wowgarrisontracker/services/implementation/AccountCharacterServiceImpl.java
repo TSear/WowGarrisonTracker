@@ -40,7 +40,7 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     @Override
     public void addNewEntryToAccountCharacter(Entry entry) {
         AccountCharacter accountCharacter = entry.getAccountCharacter();
-        accountCharacter.addNewEntry(entry);
+        accountCharacter.addResources(entry);
         accountCharacterRepository.save(accountCharacter);
     }
 
@@ -48,7 +48,7 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     public void removeEntryFromAccountCharacter(Entry entry) {
         if (entry != null && entry.getAccountCharacter() != null) {
             AccountCharacter accountCharacter = entry.getAccountCharacter();
-            entry.getAccountCharacter().removeEntry(entry);
+            entry.getAccountCharacter().removeResources(entry);
             accountCharacterRepository.save(accountCharacter);
         }
     }

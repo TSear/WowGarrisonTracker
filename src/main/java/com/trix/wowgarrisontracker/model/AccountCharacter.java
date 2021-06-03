@@ -39,6 +39,18 @@ public class AccountCharacter {
         }
     }
 
+    public void addResources(Entry entry){
+       totalCharacterGarrisonResources += entry.getGarrisonResources();
+       totalCharacterWarPaint += entry.getWarPaint();
+    }
+
+    public void removeResources(Entry entry){
+        if(entries.contains(entry)){
+            totalCharacterGarrisonResources -= entry.getGarrisonResources();
+            totalCharacterWarPaint -= entry.getWarPaint();
+        }
+    }
+
     public boolean removeEntry(Entry entry){
         if(containsEntry(entry)){
             totalCharacterGarrisonResources -= entry.getGarrisonResources();
