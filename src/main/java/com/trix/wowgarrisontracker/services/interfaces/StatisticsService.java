@@ -6,7 +6,7 @@ public interface StatisticsService {
 
     Long getTotalGarrisonResources(Long accountId);
 
-    int getTotalWarPaint(Long accountId);
+    Long getTotalWarPaint(Long accountId);
 
     int getAverageWarPaintPerDay(Long accountId);
 

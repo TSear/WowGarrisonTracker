@@ -7,12 +7,18 @@ import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.services.interfaces.StatisticsService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.Push;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterListener;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -24,7 +30,7 @@ import javax.annotation.PostConstruct;
 @Component
 @UIScope
 @Route(value = "statistics", layout = MainLayout.class)
-public class Statistics extends FlexLayout {
+public class Statistics extends FlexLayout implements BeforeEnterObserver {
 
 
     @Autowired
@@ -36,11 +42,22 @@ public class Statistics extends FlexLayout {
 
     private StatisticsService statisticsService;
 
+    private Account account;
+    private Long id;
+
+    private Label totalResourcesLabel;
+    private Label totalWarPaintLabel;
+    private Label averageWarPaintPDLabel;
+    private Label averageResourcesPDLabel;
+    private Label amountOfEntriesLabel;
+    private Label amountOfDaysLabel;
+
+
     public Statistics() {
     }
 
     @Autowired
-    public void setStatisticsService(StatisticsService statisticsService){
+    public void setStatisticsService(StatisticsService statisticsService) {
         this.statisticsService = statisticsService;
     }
 
@@ -51,22 +68,20 @@ public class Statistics extends FlexLayout {
         setFlexWrap(FlexWrap.WRAP);
         setClassName("statistics-container");
         getStyle().set("padding", "15px");
-        getStyle().set("box-sizing","border-box");
+        getStyle().set("box-sizing", "border-box");
 
+        updateAccount();
 
-        Long id = utils.getCurrentlyLoggedUserId();
-
-        Account account = accountService.findById(id);
         Long days = (long) entryService.getAmountOfDays(id);
 
         Div totalResources = createStatisticDiv("Total Garrison Resources", account.getTotalGarrisonResources() + "");
-        Div totalWarPaint = createStatisticDiv("Total War Paint", account.getTotalWarPaint()+"");
-        Div averageWarPaintPD = createStatisticDiv("Average War Paint Per Day", account.getTotalWarPaint() / Math.max(days,1) + "");
-        Div averageGarrisonResourcesPD = createStatisticDiv("Average Garrison Resources", account.getTotalGarrisonResources() / Math.max(days,1) + "");
-        Div amountOfEntries = createStatisticDiv("Entries", account.getAmountOfEntries() +"");
-        Div amountOfDays = createStatisticDiv("Days", days+"");
+        Div totalWarPaint = createStatisticDiv("Total War Paint", account.getTotalWarPaint() + "");
+        Div averageWarPaintPD = createStatisticDiv("Average War Paint Per Day", account.getTotalWarPaint() / Math.max(days, 1) + "");
+        Div averageGarrisonResourcesPD = createStatisticDiv("Average Garrison Resources", account.getTotalGarrisonResources() / Math.max(days, 1) + "");
+        Div amountOfEntries = createStatisticDiv("Entries", account.getAmountOfEntries() + "");
+        Div amountOfDays = createStatisticDiv("Days", days + "");
 
-        add(totalResources,totalWarPaint,averageGarrisonResourcesPD,averageWarPaintPD,amountOfEntries,amountOfDays);
+        add(totalResources, totalWarPaint, averageGarrisonResourcesPD, averageWarPaintPD, amountOfEntries, amountOfDays);
     }
 
     private Div createStatisticDiv(String label, String value) {
@@ -77,6 +92,7 @@ public class Statistics extends FlexLayout {
 
         Label divDescription = new Label(label);
         Label divValue = new Label(value);
+
         divDescription.setClassName("statistic-description");
         divValue.setClassName("statistic-value");
         verticalLayout.add(divDescription, divValue);
@@ -85,5 +101,19 @@ public class Statistics extends FlexLayout {
         divValue.setWidthFull();
 
         return tmp;
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+    }
+
+    public void update(){
+        UI.getCurrent().getPage().reload();
+    }
+
+    private void updateAccount() {
+        Long id = GeneralUtils.getCurrentlyLoggedUserId();
+        account = accountService.findById(id);
+
     }
 }

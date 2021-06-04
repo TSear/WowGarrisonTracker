@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
 
-    private AccountService accountService;
+    private final AccountService accountService;
 
     public StatisticsServiceImpl(AccountService accountService) {
         this.accountService = accountService;
@@ -22,32 +22,46 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public int getTotalWarPaint(Long accountId) {
-        return 0;
+    public Long getTotalWarPaint(Long accountId) {
+        Account account = accountService.findById(accountId);
+        return account.getTotalWarPaint();
     }
 
     @Override
     public int getAverageWarPaintPerDay(Long accountId) {
-        return 0;
+        Account account = accountService.findById(accountId);
+        return (int) (account.getTotalWarPaint() / 1);
     }
 
     @Override
     public int getAverageGarrisonResourcesPerDay(Long accountId) {
-        return 0;
+        Account account = accountService.findById(accountId);
+        return (int) (account.getTotalGarrisonResources() / 1);
     }
 
     @Override
     public int getAmountOfEntries(Long accountId) {
-        return 0;
+        Account account = accountService.findById(accountId);
+        return account.getAmountOfEntries();
     }
 
     @Override
     public int getAmountOfDays(Long accountId) {
-        return 0;
+        return 1;
     }
 
     @Override
     public Statistics getAllStatistics(Long accountId) {
-        return null;
+        Account account = accountService.findById(accountId);
+        Statistics statistics = new Statistics();
+
+        statistics.setAmountOfEntries(account.getAmountOfEntries());
+        statistics.setDays(1);
+        statistics.setAverageDailyGarrisonResources((int) (account.getTotalGarrisonResources() / 1));
+        statistics.setAverageDailyWarPaint((int) (account.getTotalWarPaint() / 1));
+        statistics.setTotalGarrisonResources(account.getTotalGarrisonResources());
+        statistics.setTotalWarPaint(account.getTotalWarPaint());
+
+        return statistics;
     }
 }

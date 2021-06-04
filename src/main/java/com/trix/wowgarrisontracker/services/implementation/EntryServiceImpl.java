@@ -46,10 +46,9 @@ public class EntryServiceImpl implements EntryService {
 
     @Override
     public void save(EntryPojo entryPojo) {
-
-        accountCharacterService.addNewEntryToAccountCharacter(entryPojoToEntry.convert(entryPojo));
-        Entry entry = entryPojoToEntry.convert(entryPojo);
-        entryRepository.save(entry);
+        Entry entryConverted = entryPojoToEntry.convert(entryPojo);
+        accountCharacterService.addNewEntryToAccountCharacter(entryConverted);
+        entryRepository.save(entryConverted);
     }
 
     @Override

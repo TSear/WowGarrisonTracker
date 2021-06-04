@@ -5,6 +5,7 @@ import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -43,11 +44,18 @@ public class EntryFormDialog extends Dialog {
     private TrackLayout parent;
     private GeneralUtils utils;
 
+    private Statistics statistics;
+
 
     public EntryFormDialog() {
         this.utils = new GeneralUtils();
         this.entryService = entryService;
         this.accountCharacterService = accountCharacterService;
+    }
+
+    @Autowired
+    public void setStatistics(Statistics statistics){
+        this.statistics = statistics;
     }
 
     @PostConstruct
@@ -150,6 +158,8 @@ public class EntryFormDialog extends Dialog {
                 dialog.close();
                 entryPojo.clean();
                 entryPojoBinder.readBean(entryPojo);
+                statistics.update();
+
             } catch (ValidationException e) {
                 System.out.println(e.getMessage());
             }
