@@ -20,7 +20,7 @@ public interface EntryRepository extends JpaRepository<Entry, Long>{
     public Long getGarrisonResourcesByCharacterId(@Param("id")Long id);
 
     @Query("SELECT e FROM Entry e WHERE e.accountCharacter.id = :accountCharacterId")
-    public List<Entry>	findByAccountCharacterId(@Param("accountCharacterId")Long accountCharacterId);
+    public List<Entry> findAllByAccountCharacterId(@Param("accountCharacterId")Long accountCharacterId);
 
     @Query("SELECT COUNT(entries.id) FROM Account a JOIN a.accountCharacters accChars JOIN accChars.entries entries WHERE a.id = :accountId GROUP BY entries.entryDate ")
     public List<Long> getListOfEntriesEachDay(@Param("accountId")Long accountId);
@@ -30,4 +30,6 @@ public interface EntryRepository extends JpaRepository<Entry, Long>{
 
     @Query("SELECT count(entries.id) FROM Account acc JOIN acc.accountCharacters accChars JOIN accChars.entries entries WHERE acc.id = :accountId")
     public int getAmountOfEntries(Long accountId);
+
+
 }

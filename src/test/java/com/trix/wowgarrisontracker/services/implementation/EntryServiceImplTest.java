@@ -75,15 +75,14 @@ class EntryServiceImplTest {
         listOfAccountCharacters.addAll(Arrays.asList(character1,character2,character3));
     }
 
+
+
     @Test
-    void accountEntriesConvertedToPojoList() {
+    void findAllByAccountCharacterId_success() {
         //given
 
-
         //when
-        when(accountCharacterService.findAllByAccountId(Mockito.anyLong())).thenReturn(listOfAccountCharacters);
 
         //then
-        assertEquals(2, entryServiceImpl.accountEntriesConvertedToPojoList(anyLong()).size());
     }
 }

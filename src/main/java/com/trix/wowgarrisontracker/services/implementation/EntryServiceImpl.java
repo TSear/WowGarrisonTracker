@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class EntryServiceImpl implements EntryService {
 
-    private EntryRepository entryRepository;
-    private EntryPojoToEntry entryPojoToEntry;
-    private AccountCharacterService accountCharacterService;
-    private EntryToEntryPojo entryToEntryPojo;
+    private final EntryRepository entryRepository;
+    private final EntryPojoToEntry entryPojoToEntry;
+    private final AccountCharacterService accountCharacterService;
+    private final EntryToEntryPojo entryToEntryPojo;
 
     public EntryServiceImpl(EntryRepository entryRepository, EntryPojoToEntry entryPojoToEntry,
                             AccountCharacterService accountCharacterService,
@@ -35,12 +35,8 @@ public class EntryServiceImpl implements EntryService {
     }
 
     @Override
-    public List<Entry> accountEntriesList(Long accountId) {
-        List<AccountCharacter> accountCharacterList = accountCharacterService.findAllByAccountId(accountId);
-        List<Entry> entryList = new ArrayList<>();
-        accountCharacterList.stream()
-                .forEach(accountCharacter -> entryList.addAll(accountCharacter.getEntries()));
-        return entryList;
+    public List<Entry> findAllByAccountCharacterId(Long accountCharacterId) {
+        return entryRepository.findAllByAccountCharacterId(accountCharacterId);
     }
 
 
@@ -58,14 +54,7 @@ public class EntryServiceImpl implements EntryService {
         return listOfEntriesEachDay.size();
     }
 
-    @Override
-    public List<EntryPojo> accountEntriesConvertedToPojoList(Long accountId) {
-        List<Entry> listOfAccountEntries = this.accountEntriesList(accountId);
-        List<EntryPojo> listOfAccountEntriesConvertedToPojo = listOfAccountEntries.stream()
-                .map(entryToEntryPojo::convert)
-                .collect(Collectors.toList());
-        return listOfAccountEntriesConvertedToPojo;
-    }
+
 
     @Override
     public void delete(Long id) {

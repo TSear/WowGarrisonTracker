@@ -7,15 +7,14 @@ import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import org.springframework.data.domain.Pageable;
 
-public interface EntryService{
+public interface EntryService {
 
-    List<Entry> accountEntriesList(Long accountId);
+    List<Entry> findAllByAccountCharacterId(Long accountCharacterId);
 
     void save(EntryPojo entryPojo);
 
     int getAmountOfDays(Long id);
 
-    List<EntryPojo> accountEntriesConvertedToPojoList(Long accountId);
 
     void delete(Long id);
 
