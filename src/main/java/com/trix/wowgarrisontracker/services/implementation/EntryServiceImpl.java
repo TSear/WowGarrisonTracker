@@ -2,7 +2,6 @@ package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.converters.EntryPojoToEntry;
 import com.trix.wowgarrisontracker.converters.EntryToEntryPojo;
-import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.repository.EntryRepository;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,7 +53,6 @@ public class EntryServiceImpl implements EntryService {
     }
 
 
-
     @Override
     public void delete(Long id) {
         Entry entry = this.findById(id);
@@ -68,8 +65,8 @@ public class EntryServiceImpl implements EntryService {
     public Entry findById(Long id) {
         Optional<Entry> optionalEntry = entryRepository.findById(id);
 
-        if(optionalEntry.isEmpty())
-            throw new RuntimeException("Entity with id: "+id +"was not found");
+        if (optionalEntry.isEmpty())
+            throw new RuntimeException("Entity with id: " + id + "was not found");
 
         return optionalEntry.get();
 
@@ -77,21 +74,21 @@ public class EntryServiceImpl implements EntryService {
 
     @Override
     public List<Entry> getAllAccountEntriesPaged(Long accountId, Pageable pageable) {
-       return entryRepository.findAllEntriesByAccountId(accountId, pageable);
+        return entryRepository.findAllEntriesByAccountId(accountId, pageable);
     }
 
     @Override
     public List<EntryPojo> getAllAccountEntriesPagedPojo(Long id, Long offset, Long limit) {
-       List<Entry> entries = this.getAllAccountEntriesPaged(id, PageRequest.of(offset.intValue(),limit.intValue()));
+        List<Entry> entries = this.getAllAccountEntriesPaged(id, PageRequest.of(offset.intValue(), limit.intValue()));
 
-       return entries.stream().map(entryToEntryPojo::convert).collect(Collectors.toList());
+        return entries.stream().map(entryToEntryPojo::convert).collect(Collectors.toList());
 
     }
 
     @Override
     public int getAmountOfEntries(Long accountId) {
         return entryRepository.getAmountOfEntries(accountId);
-        }
+    }
 
 
 }

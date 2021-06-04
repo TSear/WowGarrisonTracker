@@ -12,7 +12,7 @@ import java.util.Set;
 @Component
 public class AccountCharacterToAccountCharacterPojo implements Converter<AccountCharacter, AccountCharacterPojo> {
 
-    private EntryToEntryPojo entryConverter;
+    private final EntryToEntryPojo entryConverter;
 
     /**
      * @param entryConverter

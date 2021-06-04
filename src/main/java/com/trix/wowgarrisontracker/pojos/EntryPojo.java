@@ -1,25 +1,23 @@
 package com.trix.wowgarrisontracker.pojos;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.Objects;
 
 
 @Setter
 @Getter
 @Data
 public class EntryPojo {
-    
+
     private Long id;
 
     @NotNull(message = "Entry date cannot be empty")
@@ -43,6 +41,13 @@ public class EntryPojo {
     private AccountCharacter accountCharacter;
 
 
+    public EntryPojo() {
+        this.entryDate = LocalDate.now();
+        this.garrisonResources = 0;
+        this.warPaint = 0;
+        this.characterName = "";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,20 +61,13 @@ public class EntryPojo {
         return Objects.hash(id);
     }
 
-    public EntryPojo(){
+    public void clean() {
         this.entryDate = LocalDate.now();
         this.garrisonResources = 0;
         this.warPaint = 0;
         this.characterName = "";
-    }
-
-    public void clean(){
-       this.entryDate = LocalDate.now();
-       this.garrisonResources = 0;
-       this.warPaint = 0;
-       this.characterName = "";
-       this.accountCharacter = null;
-       this.accountCharacterId = null;
+        this.accountCharacter = null;
+        this.accountCharacterId = null;
     }
 
 }

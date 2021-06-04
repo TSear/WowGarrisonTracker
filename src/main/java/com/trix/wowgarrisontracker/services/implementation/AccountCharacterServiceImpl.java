@@ -2,11 +2,9 @@ package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.converters.AccountCharacterPojoToAccountCharacter;
 import com.trix.wowgarrisontracker.converters.AccountCharacterToAccountCharacterPojo;
-import com.trix.wowgarrisontracker.converters.EntryPojoToEntry;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
-import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +17,9 @@ import java.util.stream.Collectors;
 @Service
 public class AccountCharacterServiceImpl implements AccountCharacterService {
 
-    private AccountCharacterRepository accountCharacterRepository;
-    private AccountCharacterPojoToAccountCharacter accountCharacterPojoToAccountCharacter;
-    private AccountCharacterToAccountCharacterPojo accountCharacterToAccountCharacterPojo;
+    private final AccountCharacterRepository accountCharacterRepository;
+    private final AccountCharacterPojoToAccountCharacter accountCharacterPojoToAccountCharacter;
+    private final AccountCharacterToAccountCharacterPojo accountCharacterToAccountCharacterPojo;
 
     public AccountCharacterServiceImpl(AccountCharacterRepository accountCharacterRepository,
                                        AccountCharacterPojoToAccountCharacter accountCharacterPojoToAccountCharacter,

@@ -8,5 +8,5 @@ import lombok.Setter;
 public class LoginResponse {
 
     private String jwtToken;
-    
+
 }

@@ -2,40 +2,40 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 
 <head
-	th:insert="fragments/header.html :: header(titleName='Login Page')">
+        th:insert="fragments/header.html :: header(titleName='Login Page')">
 </head>
 
 <body class="h-100 d-flex align-items-center container">
-	<div
-		class=" row container rounded col-sm-10 offset-sm-1 col-lg-6 offset-lg-3 p-0 loginForm">
-		<h1 class="col-12 my-5">Login</h1>
-		<div class="row-fluid ">
-			<form th:action="@{/account/login/validate} " method="POST"
-				th:object="${loginRequest}" class="container d-flex flex-column align-items-center">
-				<div
-					class="alert-danger  w-75 mx-auto error-box mb-4"
-					th:if="${#fields.hasErrors('*')}">
-					<ul class="p-2 m-2 error-list">
-						<li class="my-1 mx-2 text-center"
-							th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
-					</ul>
-				</div>
-				<input placeholder="Login"
-					class="border-1 text-center border border-secondary fs-4 form-control w-75 mx-auto"
-					type="text " name="login" th:classappend="${#fields.hasErrors('*')}?is-invalid : ''">
+<div
+        class=" row container rounded col-sm-10 offset-sm-1 col-lg-6 offset-lg-3 p-0 loginForm">
+    <h1 class="col-12 my-5">Login</h1>
+    <div class="row-fluid ">
+        <form class="container d-flex flex-column align-items-center" method="POST"
+              th:action="@{/account/login/validate} " th:object="${loginRequest}">
+            <div
+                    class="alert-danger  w-75 mx-auto error-box mb-4"
+                    th:if="${#fields.hasErrors('*')}">
+                <ul class="p-2 m-2 error-list">
+                    <li class="my-1 mx-2 text-center"
+                        th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                </ul>
+            </div>
+            <input class="border-1 text-center border border-secondary fs-4 form-control w-75 mx-auto"
+                   name="login"
+                   placeholder="Login" th:classappend="${#fields.hasErrors('*')}?is-invalid : ''" type="text ">
 
-				<input placeholder="Password"
-					class="my-1 border-1 text-center my-2 border border-secondary  fs-4 form-control w-75 mx-auto"
-					type="password" name="password" th:classappend="${#fields.hasErrors('*')}?is-invalid : ''">
+            <input class="my-1 border-1 text-center my-2 border border-secondary  fs-4 form-control w-75 mx-auto"
+                   name="password"
+                   placeholder="Password" th:classappend="${#fields.hasErrors('*')}?is-invalid : ''" type="password">
 
-				<button class="w-75 mx-auto mt-3 btn btn-primary " type="Submit ">Submit</button>
-				<a class="btn btn-secondary w-75 mb-5 mt-2" 
-					th:href="@{/account/register/page/}">Create new Account</a>
-			</form>
-		</div>
-	</div>
+            <button class="w-75 mx-auto mt-3 btn btn-primary " type="Submit ">Submit</button>
+            <a class="btn btn-secondary w-75 mb-5 mt-2"
+               th:href="@{/account/register/page/}">Create new Account</a>
+        </form>
+    </div>
+</div>
 
-	<div th:insert="fragments/header.html :: scripts"></div>
+<div th:insert="fragments/header.html :: scripts"></div>
 
 </body>
 

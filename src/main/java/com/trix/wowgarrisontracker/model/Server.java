@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.swing.text.html.Option;
 import java.util.List;
 
 @Getter
@@ -34,16 +33,15 @@ public class Server {
     @OneToMany(mappedBy = "server")
     private List<Options> options;
 
-    public Server(){
+    public Server() {
         this.name = "";
         this.region = "";
     }
 
-    public Server(Integer id){
+    public Server(Integer id) {
         this();
-        this.id=id;
+        this.id = id;
     }
-
 
 
     @Override

@@ -14,13 +14,13 @@ class OptionsTest {
     Server server;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         options = new Options();
         server = new Server();
     }
 
     @Test
-    void getServerName(){
+    void getServerName() {
         server.setName("test1");
         options.setServer(server);
 
@@ -32,7 +32,7 @@ class OptionsTest {
     }
 
     @Test
-    void receiveNotifications(){
+    void receiveNotifications() {
         options.setReceiveEmailNotifications(false);
 
         assertFalse(options.isReceiveEmailNotifications());

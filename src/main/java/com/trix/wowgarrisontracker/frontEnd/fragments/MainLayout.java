@@ -10,11 +10,9 @@ import com.github.appreciated.app.layout.component.menu.left.items.LeftClickable
 import com.github.appreciated.app.layout.component.menu.left.items.LeftNavigationItem;
 import com.github.appreciated.app.layout.component.router.AppLayoutRouterLayout;
 import com.github.appreciated.app.layout.entity.DefaultBadgeHolder;
-import com.github.appreciated.app.layout.entity.NavigationElementInfo;
 import com.trix.wowgarrisontracker.frontEnd.*;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.page.Push;
@@ -31,8 +29,8 @@ import static com.github.appreciated.app.layout.entity.Section.FOOTER;
 @UIScope
 public class MainLayout extends AppLayoutRouterLayout<LeftLayouts.LeftResponsive> {
 
-    private DefaultNotificationHolder notifications = new DefaultNotificationHolder();
-    private DefaultBadgeHolder badge = new DefaultBadgeHolder(5);
+    private final DefaultNotificationHolder notifications = new DefaultNotificationHolder();
+    private final DefaultBadgeHolder badge = new DefaultBadgeHolder(5);
 
     public MainLayout() {
 

@@ -1,6 +1,8 @@
 package com.trix.wowgarrisontracker;
 
-import com.trix.wowgarrisontracker.model.*;
+import com.trix.wowgarrisontracker.model.Account;
+import com.trix.wowgarrisontracker.model.ItemEntity;
+import com.trix.wowgarrisontracker.model.Server;
 import com.trix.wowgarrisontracker.repository.*;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
 import com.trix.wowgarrisontracker.services.interfaces.ServerService;
@@ -14,15 +16,15 @@ import java.util.List;
 @Component
 public class BootData implements CommandLineRunner {
 
-    private AccountRepository accountRepository;
-    private AccountCharacterRepository accountCharacterRepository;
-    private EntryRepository entryRepository;
-    private ItemEntityRepository itemEntityRepository;
-    private AuctionEntityRepository auctionEntityRepository;
-    private AuctionService auctionService;
-    private BlizzardRequestUtils blizzardRequestUtils;
-    private ServerService serverService;
-    private PasswordEncoder passwordEncoder;
+    private final AccountRepository accountRepository;
+    private final AccountCharacterRepository accountCharacterRepository;
+    private final EntryRepository entryRepository;
+    private final ItemEntityRepository itemEntityRepository;
+    private final AuctionEntityRepository auctionEntityRepository;
+    private final AuctionService auctionService;
+    private final BlizzardRequestUtils blizzardRequestUtils;
+    private final ServerService serverService;
+    private final PasswordEncoder passwordEncoder;
 
     public BootData(AccountRepository accountRepository, AccountCharacterRepository accountCharacterRepository,
                     EntryRepository entryRepository, ItemEntityRepository itemEntityRepository,

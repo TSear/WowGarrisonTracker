@@ -5,7 +5,6 @@ import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -37,12 +36,12 @@ public class EntryFormDialog extends Dialog {
     private AccountCharacterService accountCharacterService;
     @Autowired
     private EntryService entryService;
-    private Binder<EntryPojo> entryPojoBinder = new Binder<>();
-    private EntryPojo entryPojo = new EntryPojo();
+    private final Binder<EntryPojo> entryPojoBinder = new Binder<>();
+    private final EntryPojo entryPojo = new EntryPojo();
     private PaginatedGrid<EntryPojo> layout;
     private Long id;
     private TrackLayout parent;
-    private GeneralUtils utils;
+    private final GeneralUtils utils;
 
     private Statistics statistics;
 
@@ -54,7 +53,7 @@ public class EntryFormDialog extends Dialog {
     }
 
     @Autowired
-    public void setStatistics(Statistics statistics){
+    public void setStatistics(Statistics statistics) {
         this.statistics = statistics;
     }
 
@@ -66,7 +65,7 @@ public class EntryFormDialog extends Dialog {
         entryPojoBinder.readBean(entryPojo);
 
 
-        Long id =  utils.getCurrentlyLoggedUserId();
+        Long id = GeneralUtils.getCurrentlyLoggedUserId();
 
         VerticalLayout mainDialogBoxLayout = createMainDialogLayout();
 
@@ -100,7 +99,7 @@ public class EntryFormDialog extends Dialog {
         mainDialogBoxLayout.setFlexGrow(1, buttonLayout);
 
         this.addOpenedChangeListener(event -> {
-            if(event.isOpened()){
+            if (event.isOpened()) {
                 System.out.println("called");
                 accountCharactersComboBox.setItems(accountCharacterService.findAllByAccountId(id));
             }

@@ -23,7 +23,7 @@ class AccountCharacterTest {
         entry2.setId(1L);
         entry3.setId(2L);
 
-        accountCharacter.addNewEntry(entry1,entry2,entry3);
+        accountCharacter.addNewEntry(entry1, entry2, entry3);
         testEntry = entry1;
     }
 
@@ -55,7 +55,7 @@ class AccountCharacterTest {
         //when
         boolean removed = accountCharacter.removeEntry(testEntry);
         //then
-        assertEquals(size-1, accountCharacter.getAmountOfEntries());
+        assertEquals(size - 1, accountCharacter.getAmountOfEntries());
         assertTrue(removed);
     }
 

@@ -1,9 +1,6 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
-import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.dependency.StyleSheet;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -16,9 +13,9 @@ import com.vaadin.flow.router.Route;
 public class Contact extends FlexLayout {
 
 
-    private VerticalLayout mainLayout;
+    private final VerticalLayout mainLayout;
 
-    public Contact(){
+    public Contact() {
 
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
@@ -28,16 +25,16 @@ public class Contact extends FlexLayout {
         wrapperForBorder.setWidth("auto");
         wrapperForBorder.setClassName("border-wrap");
         add(wrapperForBorder);
-        
+
         mainLayout = new VerticalLayout();
         mainLayout.setAlignItems(Alignment.CENTER);
         mainLayout.getStyle().set("padding", "3.5em");
-        mainLayout.getStyle().set("background","#252422");
+        mainLayout.getStyle().set("background", "#252422");
         wrapperForBorder.add(mainLayout);
-        
-        createInfoBox("E-mail: ","placeholder");
+
+        createInfoBox("E-mail: ", "placeholder");
         createInfoBox("Phone Number: ", "placeholder");
-        createInfoBox("Second Phone Number: ","placeholder");
+        createInfoBox("Second Phone Number: ", "placeholder");
     }
 
     private void createInfoBox(String s, String labelValue) {

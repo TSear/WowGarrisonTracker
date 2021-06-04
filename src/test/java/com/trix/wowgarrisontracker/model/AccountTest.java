@@ -30,7 +30,7 @@ public class AccountTest {
 
     }
 
-    public Entry entryCreator(Integer garrisonResources, Integer warPaint, AccountCharacter accountCharacter){
+    public Entry entryCreator(Integer garrisonResources, Integer warPaint, AccountCharacter accountCharacter) {
 
         Entry entry = new Entry();
         entry.setWarPaint(warPaint);
@@ -40,24 +40,24 @@ public class AccountTest {
     }
 
     @Test
-    public void getTotalGarrisonResources_CorrectAmount(){
-       //given
+    public void getTotalGarrisonResources_CorrectAmount() {
+        //given
 
-       //when
+        //when
         Long garrisonResources = testingAccount.getTotalGarrisonResources();
-       //then
-        assertEquals(300, (long)garrisonResources);
+        //then
+        assertEquals(300, (long) garrisonResources);
     }
 
     @Test
-    public void getTotalWarPaint_CorrectAmount(){
+    public void getTotalWarPaint_CorrectAmount() {
         //given
 
         //when
         Long warPaint = testingAccount.getTotalWarPaint();
 
         //then
-        assertEquals(300,(long)warPaint);
+        assertEquals(300, (long) warPaint);
 
     }
 

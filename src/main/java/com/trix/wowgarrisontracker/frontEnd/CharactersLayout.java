@@ -7,7 +7,6 @@ import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -32,7 +31,7 @@ public class CharactersLayout extends VerticalLayout {
     @Autowired
     private GeneralUtils utils;
     private Long id;
-    private Dialog confirmDelete;
+    private final Dialog confirmDelete;
 
     public CharactersLayout() {
         confirmDelete = new Dialog();
@@ -43,7 +42,7 @@ public class CharactersLayout extends VerticalLayout {
         setHeightFull();
         setClassName("content-background");
 
-        id = utils.getCurrentlyLoggedUserId();
+        id = GeneralUtils.getCurrentlyLoggedUserId();
 
         dialog.setId(id);
 

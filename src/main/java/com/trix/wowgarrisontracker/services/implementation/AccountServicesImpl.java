@@ -5,7 +5,6 @@ import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
 import com.trix.wowgarrisontracker.exceptions.AccountNotFoundException;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.LoginRequest;
-import com.trix.wowgarrisontracker.model.Options;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.pojos.RegisterModel;
 import com.trix.wowgarrisontracker.pojos.RegisterPojo;
@@ -23,11 +22,11 @@ import java.util.Optional;
 
 public class AccountServicesImpl implements AccountService {
 
-    private AccountRepository accountRepository;
-    private AccountToAccountPojo accountToAccountPojo;
-    private PasswordEncoder passwordEncoder;
-    private AccountPojoToAccount accountPojoToAccount;
-    private OptionsService optionsService;
+    private final AccountRepository accountRepository;
+    private final AccountToAccountPojo accountToAccountPojo;
+    private final PasswordEncoder passwordEncoder;
+    private final AccountPojoToAccount accountPojoToAccount;
+    private final OptionsService optionsService;
 
     public AccountServicesImpl(AccountRepository accountRepository, AccountToAccountPojo accountToAccountPojo, PasswordEncoder passwordEncoder, AccountPojoToAccount accountPojoToAccount, OptionsService optionsService) {
         this.accountRepository = accountRepository;
@@ -123,14 +122,12 @@ public class AccountServicesImpl implements AccountService {
     @Override
     public boolean areCredentialsTaken(RegisterModel registerModel) {
         Account account = this.findUserByUsername(registerModel.getLogin());
-        if (account != null)
-            return true;
-        return false;
+        return account != null;
     }
 
 
     @Override
-    public Account findById(Long id){
+    public Account findById(Long id) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         return optionalAccount.orElse(null);
     }

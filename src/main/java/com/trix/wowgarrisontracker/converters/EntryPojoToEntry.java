@@ -10,22 +10,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class EntryPojoToEntry implements Converter<EntryPojo, Entry> {
 
-	@Autowired
-	private AccountCharacterRepository accountCharacterRepository;
+    @Autowired
+    private AccountCharacterRepository accountCharacterRepository;
 
 
-	@Override
-	public Entry convert(EntryPojo source) {
-		Entry entry = new Entry();
-		if(source.getAccountCharacter() != null)
-			entry.setAccountCharacter(source.getAccountCharacter());
-		else
-			entry.setAccountCharacter(accountCharacterRepository.findById(source.getAccountCharacterId()).get());
-		entry.setEntryDate(source.getEntryDate());
-		entry.setGarrisonResources(source.getGarrisonResources());
-		entry.setId(source.getId());
-		entry.setWarPaint(source.getWarPaint());
-		return entry;
-	}
+    @Override
+    public Entry convert(EntryPojo source) {
+        Entry entry = new Entry();
+        if (source.getAccountCharacter() != null)
+            entry.setAccountCharacter(source.getAccountCharacter());
+        else
+            entry.setAccountCharacter(accountCharacterRepository.findById(source.getAccountCharacterId()).get());
+        entry.setEntryDate(source.getEntryDate());
+        entry.setGarrisonResources(source.getGarrisonResources());
+        entry.setId(source.getId());
+        entry.setWarPaint(source.getWarPaint());
+        return entry;
+    }
 
 }

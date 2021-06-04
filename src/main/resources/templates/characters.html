@@ -34,12 +34,12 @@
             </th>
         </tr>
         <tr th:each="character : ${accountCharacters}" th:object="${character}">
-            <td th:text="*{characterName}" class="text-center p-3" style="font-weight: bold;"></td>
-            <td th:text="*{warPaint}" class="text-center p-3"></td>
-            <td th:text="*{garrisonResources}" class="text-center p-3"></td>
+            <td class="text-center p-3" style="font-weight: bold;" th:text="*{characterName}"></td>
+            <td class="text-center p-3" th:text="*{warPaint}"></td>
+            <td class="text-center p-3" th:text="*{garrisonResources}"></td>
             <td class="">
-                <a  type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#confirmationBox"
-                        th:href="@{'/character/delete/' + *{id}}"><i class="fas fa-trash"></i></a>
+                <a class="btn btn-outline-primary" data-target="#confirmationBox" data-toggle="modal" th:href="@{'/character/delete/' + *{id}}"
+                   type="button"><i class="fas fa-trash"></i></a>
             </td>
         </tr>
     </table>

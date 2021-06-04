@@ -6,9 +6,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.UIScope;
 
 @UIScope
-public class AddButton extends Button  {
+public class AddButton extends Button {
 
-    public AddButton(HorizontalLayout layout, String text, Dialog dialog){
+    public AddButton(HorizontalLayout layout, String text, Dialog dialog) {
 
         setWidthFull();
         setText(text);

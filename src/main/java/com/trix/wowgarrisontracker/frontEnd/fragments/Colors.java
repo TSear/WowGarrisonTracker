@@ -7,13 +7,13 @@ public enum Colors {
     SECONDARY_BACKGROUND_COLOR("#403D39"),
     PRIMARY_FONT_COLOR("#CCC5B9");
 
-    private String color;
+    private final String color;
 
     Colors(String color) {
         this.color = color;
     }
 
-    public String getColor(){
+    public String getColor() {
         return this.color;
     }
 }

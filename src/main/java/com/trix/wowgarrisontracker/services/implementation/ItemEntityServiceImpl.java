@@ -1,30 +1,29 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.trix.wowgarrisontracker.model.ItemEntity;
 import com.trix.wowgarrisontracker.repository.ItemEntityRepository;
 import com.trix.wowgarrisontracker.services.interfaces.ItemEntityService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ItemEntityServiceImpl implements ItemEntityService {
 
-	private ItemEntityRepository repository;
+    private final ItemEntityRepository repository;
 
-	public ItemEntityServiceImpl(ItemEntityRepository repository) {
-		this.repository = repository;
-	}
+    public ItemEntityServiceImpl(ItemEntityRepository repository) {
+        this.repository = repository;
+    }
 
-	@Override
-	public boolean save(ItemEntity itemEntity) {
-		return repository.save(itemEntity)!=null;
-	}
+    @Override
+    public boolean save(ItemEntity itemEntity) {
+        return repository.save(itemEntity) != null;
+    }
 
-	@Override
-	public List<ItemEntity> findAllItemEntities() {
-		return repository.findAll();
-	}
+    @Override
+    public List<ItemEntity> findAllItemEntities() {
+        return repository.findAll();
+    }
 
 }

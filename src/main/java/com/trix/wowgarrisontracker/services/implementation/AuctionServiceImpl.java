@@ -1,7 +1,6 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.model.AuctionEntity;
-import com.trix.wowgarrisontracker.model.Auctions;
 import com.trix.wowgarrisontracker.model.ItemEntity;
 import com.trix.wowgarrisontracker.pojos.AuctionPojo;
 import com.trix.wowgarrisontracker.pojos.AuctionPojoWrapper;
@@ -20,10 +19,10 @@ import java.util.Optional;
 @Service
 public class AuctionServiceImpl implements AuctionService {
 
-    private ItemEntityRepository itemRepository;
-    private AuctionEntityRepository repository;
-    private BlizzardRequestUtils blizzardRequestUtils;
-    private ItemEntityService itemEntityService;
+    private final ItemEntityRepository itemRepository;
+    private final AuctionEntityRepository repository;
+    private final BlizzardRequestUtils blizzardRequestUtils;
+    private final ItemEntityService itemEntityService;
 
 
     public AuctionServiceImpl(ItemEntityRepository itemRepository, AuctionEntityRepository repository,

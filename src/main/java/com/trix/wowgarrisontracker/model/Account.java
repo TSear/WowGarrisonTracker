@@ -41,19 +41,19 @@ public class Account {
         options = new Options(this);
     }
 
-    public int getAmountOfEntries(){
+    public int getAmountOfEntries() {
         return this.accountCharacters.stream()
                 .map(AccountCharacter::getAmountOfEntries)
                 .reduce(0, Integer::sum);
     }
 
-    public Long getTotalGarrisonResources(){
+    public Long getTotalGarrisonResources() {
         return this.accountCharacters.stream()
                 .map(AccountCharacter::getTotalGarrisonResorces)
                 .reduce(0L, Long::sum);
     }
 
-    public Long getTotalWarPaint(){
+    public Long getTotalWarPaint() {
         return this.accountCharacters.stream()
                 .map(AccountCharacter::getTotalWarPaint)
                 .reduce(0L, Long::sum);

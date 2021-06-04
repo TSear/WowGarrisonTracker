@@ -16,11 +16,11 @@ import javax.persistence.Table;
 @Entity
 public class AuctionEntity {
 
-	@Id
-	private Long id;
-	private Long itemId;
-	private Long unitPrice;
-	private Long quantity;
-	
+    @Id
+    private Long id;
+    private Long itemId;
+    private Long unitPrice;
+    private Long quantity;
+
 
 }

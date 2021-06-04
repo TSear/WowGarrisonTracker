@@ -23,7 +23,7 @@ public class AccountCharacter {
     private Account account;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "accountCharacter", cascade = CascadeType.ALL)
-    private Set<Entry> entries;
+    private final Set<Entry> entries;
 
     public AccountCharacter() {
         this.totalCharacterGarrisonResources = 0L;
@@ -39,20 +39,20 @@ public class AccountCharacter {
         }
     }
 
-    public void addResources(Entry entry){
-       totalCharacterGarrisonResources += entry.getGarrisonResources();
-       totalCharacterWarPaint += entry.getWarPaint();
+    public void addResources(Entry entry) {
+        totalCharacterGarrisonResources += entry.getGarrisonResources();
+        totalCharacterWarPaint += entry.getWarPaint();
     }
 
-    public void removeResources(Entry entry){
-        if(entries.contains(entry)){
+    public void removeResources(Entry entry) {
+        if (entries.contains(entry)) {
             totalCharacterGarrisonResources -= entry.getGarrisonResources();
             totalCharacterWarPaint -= entry.getWarPaint();
         }
     }
 
-    public boolean removeEntry(Entry entry){
-        if(containsEntry(entry)){
+    public boolean removeEntry(Entry entry) {
+        if (containsEntry(entry)) {
             totalCharacterGarrisonResources -= entry.getGarrisonResources();
             totalCharacterWarPaint -= entry.getWarPaint();
             entries.remove(entry);
@@ -61,11 +61,11 @@ public class AccountCharacter {
         return false;
     }
 
-    public boolean containsEntry(Entry entry){
+    public boolean containsEntry(Entry entry) {
         return entries.contains(entry);
     }
 
-    public int getAmountOfEntries(){
+    public int getAmountOfEntries() {
         return entries.size();
     }
 
@@ -78,39 +78,39 @@ public class AccountCharacter {
         return (long) (entries.stream().map(Entry::getWarPaint).reduce(0, Integer::sum));
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public Long getTotalGarrisonResorces() {
+        return this.totalCharacterGarrisonResources;
     }
 
-    public void setCharacterName(String characterName) {
-        this.characterName = characterName;
+    public Long getTotalWarPaint() {
+        return this.totalCharacterWarPaint;
+    }
+
+    public Long getId() {
+        return this.id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getTotalGarrisonResorces(){
-        return this.totalCharacterGarrisonResources;
-    }
-
-    public Long getTotalWarPaint(){
-        return this.totalCharacterWarPaint;
-    }
-
-    public Long getId(){
-        return this.id;
-    }
-
-    public String getCharacterName(){
+    public String getCharacterName() {
         return this.characterName;
     }
 
-    public Collection<Entry> getEntries(){
+    public void setCharacterName(String characterName) {
+        this.characterName = characterName;
+    }
+
+    public Collection<Entry> getEntries() {
         return this.entries;
     }
 
-    public Account getAccount(){
+    public Account getAccount() {
         return this.account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

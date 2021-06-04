@@ -4,14 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.trix.wowgarrisontracker.deserializers.AuctionHouseResponseDeserializer;
 import com.trix.wowgarrisontracker.enums.Regions;
 import com.trix.wowgarrisontracker.model.AuctionEntity;
-import com.trix.wowgarrisontracker.model.Auctions;
 import com.trix.wowgarrisontracker.model.Server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,16 +31,32 @@ import java.util.stream.Collectors;
 @Component
 public class BlizzardRequestUtils {
 
+    private static String TOKEN;
+    private static LocalDateTime EXPIRATION_TIME;
+    private final Logger logger = LogManager.getLogger("blizzard.request.utils");
     @Value("${client.id}")
     private String client_id;
-
     @Value("${client.secret}")
     private String client_secret;
 
-    private static String TOKEN;
-    private static LocalDateTime EXPIRATION_TIME;
+    public static String getTokenKey() {
+        return BlizzardRequestUtils.TOKEN.substring(7);
+    }
 
-    private final Logger logger = LogManager.getLogger("blizzard.request.utils");
+    public static boolean isTokenValid(LocalDateTime expiration) {
+
+        if (TOKEN == null || !TOKEN.startsWith("bearer"))
+            return false;
+
+        if (expiration == null)
+            return false;
+
+        return LocalDateTime.now().isBefore(expiration);
+    }
+
+    public static LocalDateTime getExpirationTime() {
+        return EXPIRATION_TIME;
+    }
 
     @PostConstruct
     private void init() {
@@ -163,21 +177,6 @@ public class BlizzardRequestUtils {
         }
     }
 
-    public static String getTokenKey() {
-        return BlizzardRequestUtils.TOKEN.substring(7);
-    }
-
-    public static boolean isTokenValid(LocalDateTime expiration) {
-
-        if (TOKEN == null || !TOKEN.startsWith("bearer"))
-            return false;
-
-        if (expiration == null)
-            return false;
-
-        return LocalDateTime.now().isBefore(expiration);
-    }
-
     public void setClient_id(String client_id) {
         this.client_id = client_id;
     }
@@ -188,9 +187,5 @@ public class BlizzardRequestUtils {
 
     public String getToken() {
         return TOKEN;
-    }
-
-    public static LocalDateTime getExpirationTime() {
-        return EXPIRATION_TIME;
     }
 }

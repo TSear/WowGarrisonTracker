@@ -20,9 +20,9 @@ import org.springframework.stereotype.Component;
 public class LoginPage extends FlexLayout implements BeforeEnterObserver {
 
 
-    private LoginForm loginForm = new LoginForm();
-    private BlizzardRequestUtils requestUtils;
-    private VerticalLayout verticalLayout = new VerticalLayout();
+    private final LoginForm loginForm = new LoginForm();
+    private final BlizzardRequestUtils requestUtils;
+    private final VerticalLayout verticalLayout = new VerticalLayout();
 
     public LoginPage() {
         this.requestUtils = new BlizzardRequestUtils();

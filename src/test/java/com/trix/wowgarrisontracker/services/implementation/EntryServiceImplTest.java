@@ -10,16 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EntryServiceImplTest {
@@ -72,9 +67,8 @@ class EntryServiceImplTest {
         character3.setId(1l);
         character3.setCharacterName("character3");
 
-        listOfAccountCharacters.addAll(Arrays.asList(character1,character2,character3));
+        listOfAccountCharacters.addAll(Arrays.asList(character1, character2, character3));
     }
-
 
 
     @Test

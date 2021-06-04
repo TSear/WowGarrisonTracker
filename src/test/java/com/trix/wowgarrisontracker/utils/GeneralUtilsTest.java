@@ -4,7 +4,6 @@ import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
 import com.trix.wowgarrisontracker.model.Options;
 import com.trix.wowgarrisontracker.model.Server;
-import com.trix.wowgarrisontracker.pojos.OptionsDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +39,7 @@ class GeneralUtilsTest {
         options.setServer(server);
 
         this.customUserDetails = new CustomUserDetails(account);
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(customUserDetails,customUserDetails.getPassword(),new ArrayList<>()));
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(customUserDetails, customUserDetails.getPassword(), new ArrayList<>()));
 
     }
 

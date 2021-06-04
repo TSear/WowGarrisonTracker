@@ -61,7 +61,7 @@ public class TrackLayout extends VerticalLayout {
         configureDataProvider();
         configureTrackLayout(entryFormDialog);
 
-        id = utils.getCurrentlyLoggedUserId();
+        id = GeneralUtils.getCurrentlyLoggedUserId();
 
         gridLayout = createGridLayout();
 

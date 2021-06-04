@@ -26,7 +26,7 @@ public class CharacterFormDialog extends Dialog {
 
     @Autowired
     private AccountCharacterService characterService;
-    private Binder<AccountCharacterPojo> binder = new Binder<>();
+    private final Binder<AccountCharacterPojo> binder = new Binder<>();
     private AccountCharacterPojo accountCharacterPojo = new AccountCharacterPojo();
     private Long id;
     private Grid<AccountCharacterPojo> grid;
@@ -41,7 +41,7 @@ public class CharacterFormDialog extends Dialog {
         accountCharacterPojo.setAccountId(id);
 
         VerticalLayout mainLayout = new VerticalLayout();
-        mainLayout.getStyle().set("background","#252422");
+        mainLayout.getStyle().set("background", "#252422");
 
         FormLayout formLayout = new FormLayout();
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP));

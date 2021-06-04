@@ -6,31 +6,33 @@
 
 <body class="d-flex flex-column">
 
-    <div th:replace="fragments/menuBar.html :: menuBar(active=2)"></div>
+<div th:replace="fragments/menuBar.html :: menuBar(active=2)"></div>
 
-    <div class="container-fluid flex-grow-1">
-
-
-
-        <form th:object="${characterPojo}" th:action="@{'/characters/validate'}" method="post" class="align-middle my-5 p-5 container-fluid loginForm col-6 offset-3">
-
-            <h2 class="text-center fs-1">Add new Character</h2>
+<div class="container-fluid flex-grow-1">
 
 
-            <input type="text" placeholder="Character name" name="characterName" class="text-center font-large mt-5 form-control  " th:classappend="${#fields.hasErrors('characterName')} ? is-invalid : ''">
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('characterName')}">
-                <ul class="p-0 error-list">
-                    <li class=" mx-2 text-center" th:each="err : ${#fields.errors('characterName')}" th:text="${err}"></li>
-                </ul>
-            </div>
-            <button type="submit" class="btn btn-secondary offset-4 col-4 mt-4 text-center">Submit</button>
+    <form class="align-middle my-5 p-5 container-fluid loginForm col-6 offset-3" method="post" th:action="@{'/characters/validate'}"
+          th:object="${characterPojo}">
 
-        </form>
-    </div>
+        <h2 class="text-center fs-1">Add new Character</h2>
 
 
-    <div th:replace="fragments/footer.html :: footer"></div>
-    <div th:replace="fragments/header.html :: scripts"></div>
+        <input class="text-center font-large mt-5 form-control  " name="characterName" placeholder="Character name"
+               th:classappend="${#fields.hasErrors('characterName')} ? is-invalid : ''"
+               type="text">
+        <div class="invalid-feedback" th:if="${#fields.hasErrors('characterName')}">
+            <ul class="p-0 error-list">
+                <li class=" mx-2 text-center" th:each="err : ${#fields.errors('characterName')}" th:text="${err}"></li>
+            </ul>
+        </div>
+        <button class="btn btn-secondary offset-4 col-4 mt-4 text-center" type="submit">Submit</button>
+
+    </form>
+</div>
+
+
+<div th:replace="fragments/footer.html :: footer"></div>
+<div th:replace="fragments/header.html :: scripts"></div>
 
 </body>
 

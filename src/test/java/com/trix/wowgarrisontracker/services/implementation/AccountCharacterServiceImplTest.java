@@ -19,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,7 +62,7 @@ class AccountCharacterServiceImplTest {
         character3.setAccount(account);
         character3.setCharacterName("test3");
         accountCharacters.addAll(Arrays.asList(character1, character2, character3));
-        account.getAccountCharacters().addAll(new HashSet<>(Arrays.asList(character1,character2,character3)));
+        account.getAccountCharacters().addAll(new HashSet<>(Arrays.asList(character1, character2, character3)));
     }
 
 
@@ -106,13 +105,13 @@ class AccountCharacterServiceImplTest {
         when(accountCharacterRepository.findById(thirdId)).thenReturn(Optional.empty());
 
         //then
-        assertTrue(accountCharacterService.findById(firstId)!=null);
-        assertTrue(accountCharacterService.findById(secondId)!=null);
-        assertFalse(accountCharacterService.findById(thirdId)!=null);
+        assertTrue(accountCharacterService.findById(firstId) != null);
+        assertTrue(accountCharacterService.findById(secondId) != null);
+        assertFalse(accountCharacterService.findById(thirdId) != null);
     }
 
     @Test
-    void addNewEntry(){
+    void addNewEntry() {
         //given
         Entry testing = new Entry();
         testing.setWarPaint(100);

@@ -1,11 +1,10 @@
 package com.trix.wowgarrisontracker.services.interfaces;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface EntryService {
 

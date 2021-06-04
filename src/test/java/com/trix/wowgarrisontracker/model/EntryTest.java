@@ -2,8 +2,6 @@ package com.trix.wowgarrisontracker.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,6 +26,7 @@ class EntryTest {
         assertNotEquals(100, entry.getGarrisonResources());
         assertTrue(entry.getGarrisonResources() < 0);
     }
+
     @Test
     void changeWarPaintToNegative() {
         //when

@@ -13,7 +13,7 @@ public class CustomUserDetails implements UserDetails {
     private Account account;
 
     public CustomUserDetails() {
-    	
+
     }
 
     public CustomUserDetails(Account account) {
@@ -56,18 +56,17 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-    public Long getId(){
+    public Long getId() {
         return this.account.getId();
     }
 
-    public Options getOptions(){
+    public Options getOptions() {
         return this.account.getOptions();
     }
 
-    public Account getAccount(){
+    public Account getAccount() {
         return this.account;
     }
-
 
 
 }

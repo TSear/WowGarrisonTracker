@@ -6,14 +6,13 @@ import com.trix.wowgarrisontracker.services.interfaces.ServerService;
 import com.trix.wowgarrisontracker.utils.BlizzardRequestUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
 public class ServerServiceImpl implements ServerService {
 
-    private ServerRepository repository;
-    private BlizzardRequestUtils blizzardRequestUtils;
+    private final ServerRepository repository;
+    private final BlizzardRequestUtils blizzardRequestUtils;
 
     public ServerServiceImpl(ServerRepository repository) {
         this.repository = repository;
@@ -27,7 +26,7 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public void save(Server server) {
-       repository.save(server);
+        repository.save(server);
     }
 
     @Override

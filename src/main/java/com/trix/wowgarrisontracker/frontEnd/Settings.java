@@ -42,11 +42,11 @@ public class Settings extends VerticalLayout {
 
     private final FormLayout formLayout;
     private final Binder<OptionsDTO> optionsDTOBinder;
-    private List<Server> serverList;
     private final OptionsDTO optionsDTO;
+    private final Notification savedNotification;
+    private List<Server> serverList;
     private OptionsService optionsService;
     private OptionsDTOToOptions optionsDTOToOptions;
-    private final Notification savedNotification;
 
     public Settings() {
         OptionsToOptionsDTO optionsToOptionsDTO = new OptionsToOptionsDTO();

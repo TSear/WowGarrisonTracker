@@ -1,20 +1,12 @@
 package com.trix.wowgarrisontracker.model;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Objects;
 
 @ToString
 @Getter
@@ -23,11 +15,11 @@ import lombok.ToString;
 @Entity
 public class Entry {
 
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//
+    //
 //    private Long accountCharacterId;
 //
     //@DateTimeFormat
@@ -41,10 +33,10 @@ public class Entry {
     private int warPaint;
 
     @ManyToOne
-	@JoinColumn(name = "accountCharacterId", referencedColumnName = "id")
+    @JoinColumn(name = "accountCharacterId", referencedColumnName = "id")
     private AccountCharacter accountCharacter;
-   
-    public Entry(){
+
+    public Entry() {
         this.entryDate = LocalDate.now();
         this.garrisonResources = 0;
         this.warPaint = 0;

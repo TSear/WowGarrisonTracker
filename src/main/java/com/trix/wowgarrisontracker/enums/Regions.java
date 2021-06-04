@@ -2,7 +2,7 @@ package com.trix.wowgarrisontracker.enums;
 
 public enum Regions {
 
-    ALL("All"),EU("EU"),US("US");
+    ALL("All"), EU("EU"), US("US");
 
     String value;
 
@@ -10,7 +10,7 @@ public enum Regions {
         this.value = text;
     }
 
-    public String getValue(){
-       return this.value;
+    public String getValue() {
+        return this.value;
     }
 }

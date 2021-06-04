@@ -1,13 +1,13 @@
 package com.trix.wowgarrisontracker.services.interfaces;
 
-import java.util.List;
-
 import com.trix.wowgarrisontracker.model.ItemEntity;
 
-public interface ItemEntityService{
+import java.util.List;
 
-	boolean save(ItemEntity itemEntity);
-	
-	List<ItemEntity> findAllItemEntities();
-	
+public interface ItemEntityService {
+
+    boolean save(ItemEntity itemEntity);
+
+    List<ItemEntity> findAllItemEntities();
+
 }

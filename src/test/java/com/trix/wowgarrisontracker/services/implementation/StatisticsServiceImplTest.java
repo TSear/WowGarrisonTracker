@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class StatisticsServiceImplTest {
@@ -57,7 +57,7 @@ class StatisticsServiceImplTest {
         entry4.setGarrisonResources(400);
         entry4.setWarPaint(400);
 
-        accountCharacter1.addNewEntry(entry4,entry3);
+        accountCharacter1.addNewEntry(entry4, entry3);
 
         account.setAccountCharacters(new HashSet<AccountCharacter>(Arrays.asList(accountCharacter, accountCharacter1)));
 

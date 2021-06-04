@@ -1,12 +1,10 @@
 package com.trix.wowgarrisontracker.pojos;
 
+import lombok.Data;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class AccountPojo {
@@ -15,14 +13,14 @@ public class AccountPojo {
     private String login;
     private String password;
     private Set<AccountCharacterPojo> accountCharacters;
- 	private Long garrisonResources;
-	private Long warPaint;
-	private Long amountOfEntries;
-	private Long days;
-	private double averageGRPerDay;
-	private double averageWPPerDay;
-	
-    public AccountPojo(){
+    private Long garrisonResources;
+    private Long warPaint;
+    private Long amountOfEntries;
+    private Long days;
+    private double averageGRPerDay;
+    private double averageWPPerDay;
+
+    public AccountPojo() {
         id = 1l;
         login = "";
         password = "";
