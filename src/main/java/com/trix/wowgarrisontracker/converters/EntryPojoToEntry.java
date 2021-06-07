@@ -13,6 +13,9 @@ public class EntryPojoToEntry implements Converter<EntryPojo, Entry> {
     @Autowired
     private AccountCharacterRepository accountCharacterRepository;
 
+    public EntryPojoToEntry(AccountCharacterRepository accountCharacterRepository) {
+        this.accountCharacterRepository = accountCharacterRepository;
+    }
 
     @Override
     public Entry convert(EntryPojo source) {

@@ -28,7 +28,7 @@ public interface EntryRepository extends JpaRepository<Entry, Long> {
     List<Entry> findAllEntriesByAccountId(Long accountId, Pageable pageable);
 
     @Query("SELECT count(entries.id) FROM Account acc JOIN acc.accountCharacters accChars JOIN accChars.entries entries WHERE acc.id = :accountId")
-    int getAmountOfEntries(Long accountId);
+    int countEntriesByAccountCharacterId(Long accountId);
 
 
 }

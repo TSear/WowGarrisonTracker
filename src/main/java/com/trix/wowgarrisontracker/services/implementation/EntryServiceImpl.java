@@ -5,12 +5,12 @@ import com.trix.wowgarrisontracker.converters.EntryToEntryPojo;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import com.trix.wowgarrisontracker.repository.EntryRepository;
-import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,15 +20,12 @@ public class EntryServiceImpl implements EntryService {
 
     private final EntryRepository entryRepository;
     private final EntryPojoToEntry entryPojoToEntry;
-    private final AccountCharacterService accountCharacterService;
     private final EntryToEntryPojo entryToEntryPojo;
 
     public EntryServiceImpl(EntryRepository entryRepository, EntryPojoToEntry entryPojoToEntry,
-                            AccountCharacterService accountCharacterService,
                             EntryToEntryPojo entryToEntryPojo) {
         this.entryRepository = entryRepository;
         this.entryPojoToEntry = entryPojoToEntry;
-        this.accountCharacterService = accountCharacterService;
         this.entryToEntryPojo = entryToEntryPojo;
     }
 
@@ -37,12 +34,26 @@ public class EntryServiceImpl implements EntryService {
         return entryRepository.findAllByAccountCharacterId(accountCharacterId);
     }
 
+    @Override
+    public boolean saveAll(Collection<Entry> entries) {
+        List<Entry> saved = entryRepository.saveAll(entries);
+        return saved.size()==entries.size();
+    }
+
 
     @Override
-    public void save(EntryPojo entryPojo) {
+    public EntryPojo save(EntryPojo entryPojo) {
         Entry entryConverted = entryPojoToEntry.convert(entryPojo);
-        accountCharacterService.addNewEntryToAccountCharacter(entryConverted);
-        entryRepository.save(entryConverted);
+        if(save(entryConverted) != null)
+            return entryPojo;
+        return null;
+    }
+
+    @Override
+    public Entry save(Entry entry) {
+        if (entry != null)
+            return entryRepository.save(entry);
+        return null;
     }
 
     @Override
@@ -55,14 +66,12 @@ public class EntryServiceImpl implements EntryService {
 
     @Override
     public void delete(Long id) {
-        Entry entry = this.findById(id);
-        accountCharacterService.removeEntryFromAccountCharacter(entry);
         entryRepository.deleteById(id);
     }
 
 
     @Override
-    public Entry findById(Long id) {
+    public Entry findById(Long id) throws RuntimeException{
         Optional<Entry> optionalEntry = entryRepository.findById(id);
 
         if (optionalEntry.isEmpty())
@@ -87,7 +96,12 @@ public class EntryServiceImpl implements EntryService {
 
     @Override
     public int getAmountOfEntries(Long accountId) {
-        return entryRepository.getAmountOfEntries(accountId);
+        return entryRepository.countEntriesByAccountCharacterId(accountId);
+    }
+
+    @Override
+    public Long count() {
+        return entryRepository.count();
     }
 
 

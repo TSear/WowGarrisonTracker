@@ -15,9 +15,9 @@ class AccountCharacterTest {
     void setUp() {
         accountCharacter = new AccountCharacter();
 
-        Entry entry1 = TestUtils.entryGenerator(200, 300, accountCharacter);
-        Entry entry2 = TestUtils.entryGenerator(200, 300, accountCharacter);
-        Entry entry3 = TestUtils.entryGenerator(200, 300, accountCharacter);
+        Entry entry1 = TestUtils.generateEntryWithCharacter(200, 300, accountCharacter);
+        Entry entry2 = TestUtils.generateEntryWithCharacter(200, 300, accountCharacter);
+        Entry entry3 = TestUtils.generateEntryWithCharacter(200, 300, accountCharacter);
 
         entry1.setId(0L);
         entry2.setId(1L);

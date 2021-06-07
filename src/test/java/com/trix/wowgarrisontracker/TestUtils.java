@@ -7,13 +7,23 @@ public class TestUtils {
 
     public static long id = 1;
 
-    public static Entry entryGenerator(int garrisonResources, int warPaint, AccountCharacter accountCharacter) {
+    public static Entry generateEntryWithCharacter(int garrisonResources, int warPaint, AccountCharacter accountCharacter) {
+        Entry entry = generateEntry(garrisonResources,warPaint);
+        entry.setAccountCharacter(accountCharacter);
+        accountCharacter.addNewEntry(entry);
+        return entry;
+    }
+
+    public static Entry generateEntryNoCharacter(int garrisonResources, int warPaint){
+       Entry entry = generateEntry(garrisonResources,warPaint);
+       entry.setAccountCharacter(null);
+       return entry;
+    }
+
+    private static Entry generateEntry(int garrisonResources, int warPaint){
         Entry entry = new Entry();
         entry.setWarPaint(warPaint);
         entry.setGarrisonResources(garrisonResources);
-        entry.setAccountCharacter(accountCharacter);
-//        entry.setId(id++);
-        accountCharacter.addNewEntry(entry);
         return entry;
     }
 }
