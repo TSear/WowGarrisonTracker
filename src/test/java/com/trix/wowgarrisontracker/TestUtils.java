@@ -1,5 +1,6 @@
 package com.trix.wowgarrisontracker;
 
+import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.Entry;
 
@@ -25,5 +26,13 @@ public class TestUtils {
         entry.setWarPaint(warPaint);
         entry.setGarrisonResources(garrisonResources);
         return entry;
+    }
+
+    public static AccountCharacter createAccountCharacter(String characterName, Long id, Account account){
+        AccountCharacter accountCharacter = new AccountCharacter();
+        accountCharacter.setId(id);
+        accountCharacter.setCharacterName(characterName);
+        accountCharacter.setAccount(account);
+        return accountCharacter;
     }
 }

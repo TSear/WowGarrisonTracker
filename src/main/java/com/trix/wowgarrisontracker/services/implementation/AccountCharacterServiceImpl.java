@@ -40,24 +40,28 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     }
 
     @Override
-    public void addNewEntryToAccountCharacter(Entry entry) {
+    public boolean addNewEntryToAccountCharacter(Entry entry) {
         if (entry != null && entry.getAccountCharacter() != null) {
             AccountCharacter accountCharacter = entry.getAccountCharacter();
             accountCharacter.addResources(entry);
             accountCharacterRepository.save(accountCharacter);
             entryService.save(entry);
+            return true;
         }
-
+        return false;
     }
 
     @Override
-    public void removeEntryFromAccountCharacter(Entry entry) {
+    public boolean removeEntryFromAccountCharacter(Entry entry) {
         if (entry != null && entry.getAccountCharacter() != null) {
             AccountCharacter accountCharacter = entry.getAccountCharacter();
             accountCharacter.removeResources(entry);
+            accountCharacter.getEntries().remove(entry);
             accountCharacterRepository.save(accountCharacter);
             entryService.delete(entry.getId());
+            return true;
         }
+        return false;
     }
 
 
@@ -79,20 +83,32 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     }
 
     @Override
-    public void save(AccountCharacterPojo characterPojo) {
+    public boolean save(AccountCharacterPojo characterPojo) {
 
-        AccountCharacter accountCharacter = accountCharacterPojoToAccountCharacter.convert(characterPojo);
-        accountCharacterRepository.save(accountCharacter);
+        if (characterPojo != null) {
+            AccountCharacter accountCharacter = accountCharacterPojoToAccountCharacter.convert(characterPojo);
+            return save(accountCharacter);
+        }
+        return false;
 
     }
 
     @Override
+    public boolean save(AccountCharacter accountCharacter) {
+       if(accountCharacter != null) {
+           accountCharacterRepository.save(accountCharacter);
+           return true;
+       }
+       return  false;
+    }
+
+
+    @Override
     public List<AccountCharacterPojo> getListOfAccountCharactersConvertedToPojo(Long accountId) {
-        List<AccountCharacterPojo> accountCharacterPojoList = this.listOfAccountCharacters(accountId)
+        return this.listOfAccountCharacters(accountId)
                 .stream()
                 .map(accountCharacterToAccountCharacterPojo::convert)
                 .collect(Collectors.toList());
-        return accountCharacterPojoList;
     }
 
     @Override

@@ -10,16 +10,18 @@ import java.util.List;
 
 public interface AccountCharacterService {
 
-    void addNewEntryToAccountCharacter(Entry entry);
+    boolean addNewEntryToAccountCharacter(Entry entry);
 
-    void removeEntryFromAccountCharacter(Entry entry);
+    boolean removeEntryFromAccountCharacter(Entry entry);
 
     List<AccountCharacter> listOfAccountCharacters(Long accountId);
 
 
     boolean isNameTaken(Long accountId, String name);
 
-    void save(AccountCharacterPojo characterPojo);
+    boolean save(AccountCharacterPojo characterPojo);
+
+    boolean save(AccountCharacter accountCharacter);
 
     AccountCharacter findById(Long id);
 
