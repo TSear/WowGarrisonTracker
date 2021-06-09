@@ -153,7 +153,7 @@ public class EntryFormDialog extends Dialog {
         confirmButton.addClickListener(event -> {
             try {
                 entryPojoBinder.writeBean(entryPojo);
-                entryService.save(entryPojo);
+                accountCharacterService.addNewEntryToAccountCharacter(entryPojo);
                 dialog.close();
                 entryPojo.clean();
                 entryPojoBinder.readBean(entryPojo);

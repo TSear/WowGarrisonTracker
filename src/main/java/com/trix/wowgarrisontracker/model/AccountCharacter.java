@@ -22,7 +22,7 @@ public class AccountCharacter {
     @JoinColumn(name = "accountId", referencedColumnName = "id")
     private Account account;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "accountCharacter", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "accountCharacter", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private final Set<Entry> entries;
 
     public AccountCharacter() {
@@ -78,7 +78,7 @@ public class AccountCharacter {
         return (long) (entries.stream().map(Entry::getWarPaint).reduce(0, Integer::sum));
     }
 
-    public Long getTotalGarrisonResorces() {
+    public Long getTotalGarrisonResources() {
         return this.totalCharacterGarrisonResources;
     }
 

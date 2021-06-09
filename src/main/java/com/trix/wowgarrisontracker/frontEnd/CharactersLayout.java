@@ -30,8 +30,11 @@ public class CharactersLayout extends VerticalLayout {
     private AccountCharacterService accountCharacterService;
     @Autowired
     private GeneralUtils utils;
+    @Autowired
+    private Statistics statistics;
     private Long id;
     private final Dialog confirmDelete;
+    private Grid<AccountCharacterPojo> accountCharacterPojoGrid;
 
     public CharactersLayout() {
         confirmDelete = new Dialog();
@@ -46,7 +49,7 @@ public class CharactersLayout extends VerticalLayout {
 
         dialog.setId(id);
 
-        Grid<AccountCharacterPojo> accountCharacterPojoGrid = createGridLayout();
+        accountCharacterPojoGrid = createGridLayout();
         setFlexGrow(1, accountCharacterPojoGrid);
 
         this.add(accountCharacterPojoGrid);
@@ -70,11 +73,6 @@ public class CharactersLayout extends VerticalLayout {
 
         cancelButton.addClassName("secondary-button");
 
-        confirmButton.addClickListener(event -> {
-            accountCharacterPojoGrid.getSelectedItems().forEach(accountCharacterPojo -> accountCharacterService.delete(accountCharacterPojo.getId()));
-            accountCharacterPojoGrid.setItems(accountCharacterService.getListOfAccountCharactersConvertedToPojo(id));
-            confirmDelete.close();
-        });
 
         cancelButton.addClickListener(event -> confirmDelete.close());
 
@@ -99,10 +97,10 @@ public class CharactersLayout extends VerticalLayout {
         deleteEntryButton.setIcon(VaadinIcon.TRASH.create());
         deleteEntryButton.setIconAfterText(true);
         deleteEntryButton.addClickListener(event -> {
-            if (grid.getSelectedItems().size() > 0) {
-                confirmDelete.open();
-            }
-
+            accountCharacterPojoGrid.getSelectedItems().forEach(accountCharacterPojo -> accountCharacterService.delete(accountCharacterPojo.getId()));
+            accountCharacterPojoGrid.setItems(accountCharacterService.getListOfAccountCharactersConvertedToPojo(id));
+            confirmDelete.close();
+            statistics.update();
         });
         return deleteEntryButton;
     }

@@ -3,6 +3,7 @@ package com.trix.wowgarrisontracker.services.interfaces;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
+import com.trix.wowgarrisontracker.pojos.EntryPojo;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -10,7 +11,11 @@ import java.util.List;
 
 public interface AccountCharacterService {
 
+    boolean addNewEntryToAccountCharacter(EntryPojo entryPojo);
+
     boolean addNewEntryToAccountCharacter(Entry entry);
+
+    boolean removeEntryFromAccountCharacter(EntryPojo entryPojo);
 
     boolean removeEntryFromAccountCharacter(Entry entry);
 

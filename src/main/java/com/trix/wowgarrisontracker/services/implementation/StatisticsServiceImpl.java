@@ -1,7 +1,7 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.model.Account;
-import com.trix.wowgarrisontracker.pojos.Statistics;
+import com.trix.wowgarrisontracker.pojos.StatisticsPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.StatisticsService;
 import org.springframework.stereotype.Service;
@@ -51,9 +51,9 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public Statistics getAllStatistics(Long accountId) {
+    public StatisticsPojo getAllStatistics(Long accountId) {
         Account account = accountService.findById(accountId);
-        Statistics statistics = new Statistics();
+        StatisticsPojo statistics = new StatisticsPojo();
 
         statistics.setAmountOfEntries(account.getAmountOfEntries());
         statistics.setDays(1);

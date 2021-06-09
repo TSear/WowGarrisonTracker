@@ -1,6 +1,6 @@
 package com.trix.wowgarrisontracker.services.interfaces;
 
-import com.trix.wowgarrisontracker.pojos.Statistics;
+import com.trix.wowgarrisontracker.pojos.StatisticsPojo;
 
 public interface StatisticsService {
 
@@ -16,6 +16,6 @@ public interface StatisticsService {
 
     int getAmountOfDays(Long accountId);
 
-    Statistics getAllStatistics(Long accountId);
+    StatisticsPojo getAllStatistics(Long accountId);
 
 }

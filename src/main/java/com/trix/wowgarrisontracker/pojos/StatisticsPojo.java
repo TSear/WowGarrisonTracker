@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Statistics {
+public class StatisticsPojo {
 
     private int amountOfEntries;
     private int days;

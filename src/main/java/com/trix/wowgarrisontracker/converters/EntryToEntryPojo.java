@@ -16,7 +16,7 @@ public class EntryToEntryPojo implements Converter<Entry, EntryPojo> {
         entryPojo.setId(source.getId());
         entryPojo.setWarPaint(source.getWarPaint());
         entryPojo.setCharacterName(source.getAccountCharacter().getCharacterName());
-
+        entryPojo.setAccountCharacterId(source.getAccountCharacter().getId());
         return entryPojo;
     }
 

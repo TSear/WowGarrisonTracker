@@ -96,7 +96,7 @@ class AccountCharacterServiceImplTest {
         boolean result = accountCharacterService.addNewEntryToAccountCharacter(entry);
 
         //then
-        assertEquals(accountCharacter.getTotalGarrisonResorces(), entry.getGarrisonResources());
+        assertEquals(accountCharacter.getTotalGarrisonResources(), entry.getGarrisonResources());
         assertEquals(accountCharacter.getTotalWarPaint(), entry.getWarPaint());
         assertTrue(result);
     }
@@ -112,7 +112,7 @@ class AccountCharacterServiceImplTest {
         boolean result = accountCharacterService.addNewEntryToAccountCharacter(entry);
 
         //then
-        assertNotEquals(entry.getGarrisonResources(), accountCharacter.getTotalGarrisonResorces());
+        assertNotEquals(entry.getGarrisonResources(), accountCharacter.getTotalGarrisonResources());
         assertNotEquals(entry.getWarPaint(), accountCharacter.getWarPaint());
         assertFalse(result);
 
@@ -129,7 +129,7 @@ class AccountCharacterServiceImplTest {
 
         //then
         assertNotEquals(1, accountCharacter.getAmountOfEntries());
-        assertEquals(0, accountCharacter.getTotalGarrisonResorces());
+        assertEquals(0, accountCharacter.getTotalGarrisonResources());
         assertEquals(0, accountCharacter.getTotalWarPaint());
         assertFalse(result);
     }
@@ -149,7 +149,7 @@ class AccountCharacterServiceImplTest {
         assertEquals(1, accountCharacter.getAmountOfEntries());
         boolean result = accountCharacterService.removeEntryFromAccountCharacter(entry);
         assertEquals(0, accountCharacter.getAmountOfEntries());
-        assertEquals(0, accountCharacter.getTotalGarrisonResorces());
+        assertEquals(0, accountCharacter.getTotalGarrisonResources());
         assertEquals(0, accountCharacter.getTotalWarPaint());
         assertTrue(result);
     }

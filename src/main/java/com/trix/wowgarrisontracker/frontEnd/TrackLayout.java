@@ -3,6 +3,7 @@ package com.trix.wowgarrisontracker.frontEnd;
 import com.trix.wowgarrisontracker.frontEnd.fragments.AddButton;
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.pojos.EntryPojo;
+import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.button.Button;
@@ -41,11 +42,15 @@ public class TrackLayout extends VerticalLayout {
     @Autowired
     private EntryService entryService;
     @Autowired
+    private AccountCharacterService accountCharacterService;
+    @Autowired
     private GeneralUtils utils;
     @Autowired
     private MainLayout mainLayout;
     @Autowired
     private EntryFormDialog entryFormDialog;
+    @Autowired
+    private Statistics statistics;
     private Long id;
     private PaginatedGrid<EntryPojo> gridLayout;
     private DataProvider<EntryPojo, Void> dataProvider;
@@ -74,10 +79,7 @@ public class TrackLayout extends VerticalLayout {
         new AddButton(buttonLayout, "Add New Entry", entryFormDialog);
 
         Button deleteEntryButton = createDeleteButton(gridLayout);
-        deleteEntryButton.addClickListener(event -> {
-            gridLayout.getSelectedItems().forEach(entryPojo -> entryService.delete(entryPojo.getId()));
-            dataProvider.refreshAll();
-        });
+
         buttonLayout.add(deleteEntryButton);
 
         entryFormDialog.setView(this);
@@ -108,7 +110,8 @@ public class TrackLayout extends VerticalLayout {
         deleteEntryButton.setIconAfterText(true);
         deleteEntryButton.addClickListener(event -> {
             if (grid.getSelectedItems().size() > 0) {
-                grid.getSelectedItems().forEach(item -> entryService.delete(item.getId()));
+                grid.getSelectedItems().forEach(item -> accountCharacterService.removeEntryFromAccountCharacter(item));
+                statistics.update();
                 dataProvider.refreshAll();
             }
 

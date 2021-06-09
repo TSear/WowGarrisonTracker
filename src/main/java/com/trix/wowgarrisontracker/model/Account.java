@@ -30,7 +30,7 @@ public class Account {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.REMOVE)
     private Set<AccountCharacter> accountCharacters;
 
     private Long amountOfEntries;
@@ -50,7 +50,7 @@ public class Account {
 
     public Long getTotalGarrisonResources() {
         return this.accountCharacters.stream()
-                .map(AccountCharacter::getTotalGarrisonResorces)
+                .map(AccountCharacter::getTotalGarrisonResources)
                 .reduce(0L, Long::sum);
     }
 

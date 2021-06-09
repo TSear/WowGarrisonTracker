@@ -2,6 +2,7 @@ package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.model.Account;
+import com.trix.wowgarrisontracker.pojos.StatisticsPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.services.interfaces.StatisticsService;
@@ -47,6 +48,12 @@ public class Statistics extends FlexLayout implements BeforeEnterObserver {
 
 
     public Statistics() {
+        totalResourcesLabel = new Label();
+        totalWarPaintLabel = new Label();
+        averageResourcesPDLabel = new Label();
+        averageWarPaintPDLabel = new Label();
+        amountOfEntriesLabel = new Label();
+        amountOfDaysLabel = new Label();
     }
 
     @Autowired
@@ -65,33 +72,44 @@ public class Statistics extends FlexLayout implements BeforeEnterObserver {
 
         updateAccount();
 
-        Long days = (long) entryService.getAmountOfDays(id);
+        updateLabels();
 
-        Div totalResources = createStatisticDiv("Total Garrison Resources", account.getTotalGarrisonResources() + "");
-        Div totalWarPaint = createStatisticDiv("Total War Paint", account.getTotalWarPaint() + "");
-        Div averageWarPaintPD = createStatisticDiv("Average War Paint Per Day", account.getTotalWarPaint() / Math.max(days, 1) + "");
-        Div averageGarrisonResourcesPD = createStatisticDiv("Average Garrison Resources", account.getTotalGarrisonResources() / Math.max(days, 1) + "");
-        Div amountOfEntries = createStatisticDiv("Entries", account.getAmountOfEntries() + "");
-        Div amountOfDays = createStatisticDiv("Days", days + "");
+        Div totalResources = createStatisticDiv("Total Garrison Resources", totalResourcesLabel);
+        Div totalWarPaint = createStatisticDiv("Total War Paint", totalWarPaintLabel);
+        Div averageWarPaintPD = createStatisticDiv("Average War Paint Per Day", averageWarPaintPDLabel);
+        Div averageGarrisonResourcesPD = createStatisticDiv("Average Garrison Resources", averageResourcesPDLabel);
+        Div amountOfEntries = createStatisticDiv("Entries", amountOfEntriesLabel);
+        Div amountOfDays = createStatisticDiv("Days",  amountOfDaysLabel);
 
         add(totalResources, totalWarPaint, averageGarrisonResourcesPD, averageWarPaintPD, amountOfEntries, amountOfDays);
     }
 
-    private Div createStatisticDiv(String label, String value) {
+    private void updateLabels() {
+        StatisticsPojo statistics = statisticsService.getAllStatistics(id);
+        totalResourcesLabel.setText(statistics.getTotalGarrisonResources() + "");
+        totalWarPaintLabel.setText(statistics.getTotalWarPaint() +"");
+        averageWarPaintPDLabel.setText(statistics.getAverageDailyWarPaint()+"");
+        averageResourcesPDLabel.setText(statistics.getAverageDailyGarrisonResources()+"");
+        amountOfEntriesLabel.setText(statistics.getAmountOfEntries() + "");
+        amountOfDaysLabel.setText(statistics.getDays() + "");
+
+    }
+
+    private Div createStatisticDiv(String label, Label valueLabel) {
         Div tmp = new Div();
         tmp.setClassName("statistic-div");
+
         VerticalLayout verticalLayout = new VerticalLayout();
         tmp.add(verticalLayout);
 
         Label divDescription = new Label(label);
-        Label divValue = new Label(value);
 
         divDescription.setClassName("statistic-description");
-        divValue.setClassName("statistic-value");
-        verticalLayout.add(divDescription, divValue);
+        valueLabel.setClassName("statistic-value");
+        verticalLayout.add(divDescription, valueLabel);
 
         divDescription.setWidthFull();
-        divValue.setWidthFull();
+        valueLabel.setWidthFull();
 
         return tmp;
     }
@@ -101,11 +119,11 @@ public class Statistics extends FlexLayout implements BeforeEnterObserver {
     }
 
     public void update() {
-        UI.getCurrent().getPage().reload();
+        updateLabels();
     }
 
     private void updateAccount() {
-        Long id = GeneralUtils.getCurrentlyLoggedUserId();
+        id = GeneralUtils.getCurrentlyLoggedUserId();
         account = accountService.findById(id);
 
     }
