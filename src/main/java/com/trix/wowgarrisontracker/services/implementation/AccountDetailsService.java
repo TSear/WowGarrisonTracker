@@ -2,31 +2,29 @@ package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
-import com.trix.wowgarrisontracker.repository.AccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class AccountDetailsService implements UserDetailsService {
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private final AccountService accountService;
 
+    public AccountDetailsService(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<Account> optionalAccount = accountRepository.findByLogin(username);
+        Account account = accountService.findAccountByLogin(username);
 
-        if (optionalAccount == null || optionalAccount.isEmpty()) {
+        if (account == null) {
             throw new UsernameNotFoundException("User was not found");
         }
-        Account account = optionalAccount.get();
         return new CustomUserDetails(account);
     }
 

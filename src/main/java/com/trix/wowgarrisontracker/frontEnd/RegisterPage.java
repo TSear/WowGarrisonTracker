@@ -66,7 +66,7 @@ public class RegisterPage extends VerticalLayout {
         loginField.setLabel("Login");
         pojoBinder.forField(loginField)
                 .withValidator(new StringLengthValidator("Login must be between 4 - 30 characters", 4, 30))
-                .withValidator(s -> accountService.findUserByUsername(s) == null, "Login taken")
+                .withValidator(s -> accountService.findAccountByLogin(s) == null, "Login taken")
                 .bind(RegisterPojo::getLogin, RegisterPojo::setLogin);
 
         TextField emailField = new TextField();

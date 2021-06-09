@@ -2,7 +2,8 @@ package com.trix.wowgarrisontracker.config;
 
 import com.trix.wowgarrisontracker.services.implementation.AccountDetailsService;
 import com.trix.wowgarrisontracker.utils.SecurityUtils;
-import org.springframework.context.annotation.Bean;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,9 +11,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@NoArgsConstructor
 @Profile("vaadin")
 @Configuration
 @EnableWebSecurity
@@ -23,21 +24,28 @@ public class VaadinSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_URL = "/login";
     private static final String LOGOUT_SUCCESS_URL = "/login";
 
-    private final AccountDetailsService accountDetailsService;
+    private AccountDetailsService accountDetailsService;
+    private PasswordEncoder passwordEncoder;
 
-    public VaadinSecurityConfig(AccountDetailsService accountDetailsService) {
+    @Autowired
+    public void setAccountDetailsService(AccountDetailsService accountDetailsService) {
         this.accountDetailsService = accountDetailsService;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         super.configure(auth);
         auth.userDetailsService(accountDetailsService)
-                .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder);
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web){
         web.ignoring().antMatchers(
                 "/VAADIN/**",
                 "/favicon.ico",
@@ -70,10 +78,7 @@ public class VaadinSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 
 
 }
