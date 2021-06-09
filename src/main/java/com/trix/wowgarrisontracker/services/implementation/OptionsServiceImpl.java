@@ -16,17 +16,12 @@ public class OptionsServiceImpl implements OptionsService {
     private final AccountService accountService;
     private final OptionsRepository optionsRepository;
 
-    public OptionsServiceImpl(@Lazy AccountService accountService,
+    public OptionsServiceImpl(AccountService accountService,
                               OptionsRepository optionsRepository) {
         this.optionsRepository = optionsRepository;
         this.accountService = accountService;
     }
 
-    @Override
-    public boolean updateOptions(Options options) {
-        Options optionsReturned = optionsRepository.save(options);
-        return true;
-    }
 
     @Override
     public boolean updateOptions(Options options, Long accountId) throws AccountNotFoundException {
@@ -38,11 +33,15 @@ public class OptionsServiceImpl implements OptionsService {
 
         options.setAccount(account);
 
-        return updateOptions(options);
+        return save(options);
     }
 
     @Override
-    public void save(Options options) {
-        optionsRepository.save(options);
+    public boolean save(Options options) {
+        if(options != null && options.getAccount() != null) {
+            optionsRepository.save(options);
+            return true;
+        }
+        return false;
     }
 }

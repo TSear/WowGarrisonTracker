@@ -18,7 +18,11 @@ public class ItemEntityServiceImpl implements ItemEntityService {
 
     @Override
     public boolean save(ItemEntity itemEntity) {
-        return repository.save(itemEntity) != null;
+        if(itemEntity!=null){
+            repository.save(itemEntity);
+            return true;
+        }
+        return false;
     }
 
     @Override

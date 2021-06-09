@@ -12,11 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +34,7 @@ class OptionsServiceImplTest {
     OptionsServiceImpl optionsService;
 
     Options options;
+
     Account account;
 
     @BeforeEach
@@ -42,64 +42,47 @@ class OptionsServiceImplTest {
         options = new Options();
         account = new Account();
         account.setId(1L);
+        options.setAccount(account);
     }
 
     @Test
-    void updateOptions_updatedSuccessfully() {
-
+    void updateOptions_success() {
         //given
-        options.setAccount(account);
-
         //when
-        when(repository.save(options)).thenReturn(options);
-
-        //then
-        assertTrue(optionsService.updateOptions(options));
-    }
-//
-//    @Test
-//    void updateOptions_updateFailed() {
-//
-//        //given
-//        options.setAccount(account);
-//
-//        //when
-//
-//        //then
-//        assertFalse(optionsService.updateOptions(options));
-//    }
-
-    @Test()
-    void changeAccountAndUpdate_Successful() {
-        //given
-
-        //when
-        when(repository.save(options)).thenReturn(options);
-        when(accountService.findById(Mockito.anyLong())).thenReturn(account);
-        options.setAccount(account);
+        when(accountService.findById(anyLong())).thenReturn(account);
 
         //then
         try {
-            assertTrue(optionsService.updateOptions(options, 1L));
-        } catch (Exception e) {
-
-        }
-    }
-
-    @Test()
-    void changeAccountAndUpdate_Fail() {
-        //given
-
-        //when
-        when(accountService.findById(Mockito.anyLong())).thenReturn(null);
-
-        //then
-        try {
-            optionsService.updateOptions(options, 1L);
-            fail("Exception was not thrown");
+            assertTrue(optionsService.updateOptions(options, account.getId()));
         } catch (AccountNotFoundException e) {
+            fail();
         }
+    }
 
+    @Test
+    void updateOptions_fail() {
+        //given
+        //when
+        when(accountService.findById(anyLong())).thenReturn(null);
+
+        //then
+        assertThrows(AccountNotFoundException.class, () -> optionsService.updateOptions(options, 1L));
+    }
+
+    @Test
+    void save_success() {
+        //given
+        //when
+        //then
+        assertTrue(optionsService.save(options));
+    }
+
+    @Test
+    void save_fail() {
+        //given
+        //when
+        //then
+        assertFalse(optionsService.save(null));
     }
 }
 
