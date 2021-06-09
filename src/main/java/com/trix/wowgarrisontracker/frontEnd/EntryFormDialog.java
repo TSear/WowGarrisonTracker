@@ -1,10 +1,9 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
+import com.trix.wowgarrisontracker.frontEnd.interfaces.Refreshable;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
-import com.trix.wowgarrisontracker.pojos.EntryPojo;
+import com.trix.wowgarrisontracker.pojos.Entry;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
-import com.trix.wowgarrisontracker.services.interfaces.EntryService;
-import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -16,62 +15,47 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.IntegerRangeValidator;
-import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.vaadin.klaudeta.PaginatedGrid;
 
-import javax.annotation.PostConstruct;
-import java.util.List;
 import java.util.Objects;
 
 
-@Component
-@UIScope
 public class EntryFormDialog extends Dialog {
 
     private final static String REQUIRED = "Please fill this field";
     private final static String NUMBER_RANGE_ERROR_MESSAGE = "You must pass number between 0-10000";
-    @Autowired
-    private AccountCharacterService accountCharacterService;
-    @Autowired
-    private EntryService entryService;
-    private final Binder<EntryPojo> entryPojoBinder = new Binder<>();
-    private final EntryPojo entryPojo = new EntryPojo();
-    private PaginatedGrid<EntryPojo> layout;
+    private final static int MAX_TEXT_FIELD_VALUE = 10000;
+    private final static int START_VALUE = 0;
+    private final static int VALUE_STEP = 1;
+    private final static int MIN_TEXT_FIELD_VALUE = 0;
+
+    private final AccountCharacterService accountCharacterService;
+    private final Binder<Entry> entryPojoBinder = new Binder<>();
+    private final Entry entryPojo = new Entry();
+    private final Statistics statistics;
+    private final Refreshable parent;
+
     private Long id;
-    private TrackLayout parent;
-    private final GeneralUtils utils;
-
-    private Statistics statistics;
 
 
-    public EntryFormDialog() {
-        this.utils = new GeneralUtils();
-        this.entryService = entryService;
+    public EntryFormDialog(AccountCharacterService accountCharacterService,
+                           Long id,
+                           Refreshable parent,
+                           Statistics statistics) {
         this.accountCharacterService = accountCharacterService;
-    }
-
-    @Autowired
-    public void setStatistics(Statistics statistics) {
+        this.id = id;
+        this.parent = parent;
         this.statistics = statistics;
+        generateDialogBox();
     }
 
-    @PostConstruct
     private void generateDialogBox() {
-        this.configureDialog();
 
+        this.configureDialogFrame();
 
-        entryPojoBinder.readBean(entryPojo);
-
-
-        Long id = GeneralUtils.getCurrentlyLoggedUserId();
 
         VerticalLayout mainDialogBoxLayout = createMainDialogLayout();
 
         FormLayout entryFormLayout = createEntryFormLayout();
-
-        List<AccountCharacter> accountCharacterList = accountCharacterService.findAllByAccountId(id);
 
         ComboBox<AccountCharacter> accountCharactersComboBox = createAccountCharacterPojoComboBox();
 
@@ -79,92 +63,115 @@ public class EntryFormDialog extends Dialog {
 
         IntegerField warPaintIntegerField = createWarPaintIntegerField();
 
-        entryFormLayout.add(accountCharactersComboBox);
-        entryFormLayout.add(garrisonResourcesIntegerField);
-        entryFormLayout.add(warPaintIntegerField);
-
-        mainDialogBoxLayout.add(entryFormLayout);
-
         HorizontalLayout buttonLayout = createButtonLayout();
 
-        Button confirmButton = createCreateEntryButton(this, "Create Entry");
+        Button confirmButton = createAddEntryButton();
         buttonLayout.setFlexGrow(1, confirmButton);
 
-        Button cancelButton = createCancelButton(this, "Cancel");
+        Button cancelButton = createCancelButton();
 
-        buttonLayout.add(confirmButton, cancelButton);
-        mainDialogBoxLayout.add(buttonLayout);
-
-        this.add(mainDialogBoxLayout);
         mainDialogBoxLayout.setFlexGrow(1, buttonLayout);
 
+        //TODO need to replace this with something more appropriate
         this.addOpenedChangeListener(event -> {
             if (event.isOpened()) {
-                System.out.println("called");
                 accountCharactersComboBox.setItems(accountCharacterService.findAllByAccountId(id));
             }
         });
 
+        entryPojoBinder.readBean(entryPojo);
+
+        entryFormLayout.add(accountCharactersComboBox);
+        entryFormLayout.add(garrisonResourcesIntegerField);
+        entryFormLayout.add(warPaintIntegerField);
+
+        buttonLayout.add(confirmButton, cancelButton);
+
+        mainDialogBoxLayout.add(entryFormLayout);
+        mainDialogBoxLayout.add(buttonLayout);
+
+        add(mainDialogBoxLayout);
+
     }
 
     private IntegerField createWarPaintIntegerField() {
-        IntegerField warPaint = new IntegerField("War Paint");
-        warPaint.setValue(0);
-        warPaint.setMax(5000);
-        warPaint.setMin(0);
-        warPaint.setStep(1);
-        warPaint.setHasControls(true);
+
+        IntegerField warPaint = createBaseIntegerField("War Paint");
+
         entryPojoBinder.forField(warPaint)
-                .withValidator(new IntegerRangeValidator(NUMBER_RANGE_ERROR_MESSAGE, 0, 10000))
-                .withValidator(value -> value != null, REQUIRED)
-                .bind(EntryPojo::getWarPaint, EntryPojo::setWarPaint);
+                .withValidator(new IntegerRangeValidator(NUMBER_RANGE_ERROR_MESSAGE,
+                        MIN_TEXT_FIELD_VALUE,
+                        MAX_TEXT_FIELD_VALUE))
+                .withValidator(Objects::nonNull, REQUIRED)
+                .bind(Entry::getWarPaint, Entry::setWarPaint);
         return warPaint;
     }
 
     private IntegerField createGarrisonResourcesIntegerField() {
-        IntegerField garrisonResources = new IntegerField("Garrison Resources");
-        garrisonResources.setValue(0);
-        garrisonResources.setMin(0);
-        garrisonResources.setMax(10000);
-        garrisonResources.setStep(1);
-        garrisonResources.setHasControls(true);
+
+        IntegerField garrisonResources = createBaseIntegerField("Garrison Resources");
 
         entryPojoBinder.forField(garrisonResources)
                 .withValidator(new IntegerRangeValidator(NUMBER_RANGE_ERROR_MESSAGE,
-                        0,
-                        10000))
-                .withValidator(integer -> integer != null, REQUIRED)
-                .bind(EntryPojo::getGarrisonResources, EntryPojo::setGarrisonResources);
+                        MIN_TEXT_FIELD_VALUE,
+                        MAX_TEXT_FIELD_VALUE))
+                .withValidator(Objects::nonNull, REQUIRED)
+                .bind(Entry::getGarrisonResources, Entry::setGarrisonResources);
 
         return garrisonResources;
     }
 
-    private Button createCancelButton(Dialog dialog, String cancel) {
-        Button cancelButton = new Button(cancel);
+    private IntegerField createBaseIntegerField(String labelText) {
+
+        IntegerField integerField = new IntegerField(labelText);
+        integerField.setValue(START_VALUE);
+        integerField.setMin(MIN_TEXT_FIELD_VALUE);
+        integerField.setMax(MAX_TEXT_FIELD_VALUE);
+        integerField.setStep(VALUE_STEP);
+        integerField.setHasControls(true);
+
+        return integerField;
+    }
+
+    private Button createCancelButton() {
+        Button cancelButton = new Button("Cancel");
         cancelButton.addClassName("secondary-button");
-        cancelButton.addClickListener(event -> {
-            dialog.close();
-        });
+        cancelButton.addClickListener(event -> this.close());
         return cancelButton;
     }
 
-    private Button createCreateEntryButton(Dialog dialog, String s) {
-        Button confirmButton = new Button(s);
-        confirmButton.addClickListener(event -> {
-            try {
-                entryPojoBinder.writeBean(entryPojo);
-                accountCharacterService.addNewEntryToAccountCharacter(entryPojo);
-                dialog.close();
-                entryPojo.clean();
-                entryPojoBinder.readBean(entryPojo);
-                statistics.update();
-
-            } catch (ValidationException e) {
-                System.out.println(e.getMessage());
-            }
-        });
+    private Button createAddEntryButton() {
+        Button confirmButton = new Button("Create Entry");
+        confirmButton.addClickListener(event -> addEntryEventHandler());
         return confirmButton;
     }
+
+    private void addEntryEventHandler() {
+        try {
+            entryPojoBinder.writeBean(entryPojo);
+            createEntryAndCleanDialog();
+        } catch (ValidationException e) {
+            //TODO this is temporary. Need to replace with something more appropriate
+            System.out.println("Validation error");
+        }
+    }
+
+    private void createEntryAndCleanDialog() {
+
+        accountCharacterService.addNewEntryToAccountCharacter(entryPojo);
+        entryPojo.clean();
+        entryPojoBinder.readBean(entryPojo);
+
+        refreshOtherPages();
+        this.close();
+
+    }
+
+    private void refreshOtherPages() {
+        parent.refresh();
+        statistics.update();
+    }
+
 
     private HorizontalLayout createButtonLayout() {
         HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -173,19 +180,19 @@ public class EntryFormDialog extends Dialog {
     }
 
     private ComboBox<AccountCharacter> createAccountCharacterPojoComboBox() {
+
         ComboBox<AccountCharacter> accountCharacters = new ComboBox<>();
 
         accountCharacters.setItemLabelGenerator(AccountCharacter::getCharacterName);
-        accountCharacters.setLabel("Account Character");
+        accountCharacters.setLabel("Character Name");
         accountCharacters.setAllowCustomValue(false);
-        accountCharacters.addAttachListener(event -> {
-            accountCharacters.setRequired(true);
-            accountCharacters.setRequiredIndicatorVisible(true);
-        });
+        accountCharacters.setRequired(true);
+        accountCharacters.setRequiredIndicatorVisible(true);
         accountCharacters.setPlaceholder("Chose Character");
+
         entryPojoBinder.forField(accountCharacters)
                 .withValidator(Objects::nonNull, REQUIRED)
-                .bind(EntryPojo::getAccountCharacter,
+                .bind(Entry::getAccountCharacter,
                         (entryPojo1, accountCharacter) -> entryPojo1.setAccountCharacterId(accountCharacter.getId()));
 
         return accountCharacters;
@@ -207,22 +214,11 @@ public class EntryFormDialog extends Dialog {
         return mainDialogBoxLayout;
     }
 
-    private void configureDialog() {
+    private void configureDialogFrame() {
         this.setCloseOnEsc(true);
         this.setDraggable(true);
-        this.setCloseOnOutsideClick(false);
+        this.setCloseOnOutsideClick(true);
 
     }
 
-    public void setView(TrackLayout tmp) {
-        this.parent = tmp;
-    }
-
-    public void setGrid(PaginatedGrid<EntryPojo> layout) {
-        this.layout = layout;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

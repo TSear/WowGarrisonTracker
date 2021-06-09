@@ -1,14 +1,13 @@
 package com.trix.wowgarrisontracker.converters;
 
-import com.trix.wowgarrisontracker.model.Entry;
-import com.trix.wowgarrisontracker.pojos.EntryPojo;
+import com.trix.wowgarrisontracker.pojos.Entry;
 import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EntryPojoToEntry implements Converter<EntryPojo, Entry> {
+public class EntryPojoToEntry implements Converter<Entry, com.trix.wowgarrisontracker.model.Entry> {
 
     @Autowired
     private AccountCharacterRepository accountCharacterRepository;
@@ -18,8 +17,8 @@ public class EntryPojoToEntry implements Converter<EntryPojo, Entry> {
     }
 
     @Override
-    public Entry convert(EntryPojo source) {
-        Entry entry = new Entry();
+    public com.trix.wowgarrisontracker.model.Entry convert(Entry source) {
+        com.trix.wowgarrisontracker.model.Entry entry = new com.trix.wowgarrisontracker.model.Entry();
         if (source.getAccountCharacter() != null)
             entry.setAccountCharacter(source.getAccountCharacter());
         else

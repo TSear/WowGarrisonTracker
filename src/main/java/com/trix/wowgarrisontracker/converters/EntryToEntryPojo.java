@@ -1,16 +1,15 @@
 package com.trix.wowgarrisontracker.converters;
 
-import com.trix.wowgarrisontracker.model.Entry;
-import com.trix.wowgarrisontracker.pojos.EntryPojo;
+import com.trix.wowgarrisontracker.pojos.Entry;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EntryToEntryPojo implements Converter<Entry, EntryPojo> {
+public class EntryToEntryPojo implements Converter<com.trix.wowgarrisontracker.model.Entry, Entry> {
 
     @Override
-    public EntryPojo convert(Entry source) {
-        EntryPojo entryPojo = new EntryPojo();
+    public Entry convert(com.trix.wowgarrisontracker.model.Entry source) {
+        Entry entryPojo = new Entry();
         entryPojo.setEntryDate(source.getEntryDate());
         entryPojo.setGarrisonResources(source.getGarrisonResources());
         entryPojo.setId(source.getId());

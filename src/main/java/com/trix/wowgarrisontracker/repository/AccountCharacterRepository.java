@@ -1,7 +1,9 @@
 package com.trix.wowgarrisontracker.repository;
 
 import com.trix.wowgarrisontracker.model.AccountCharacter;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,4 +16,10 @@ public interface AccountCharacterRepository extends JpaRepository<AccountCharact
 
     Optional<AccountCharacter> findAccountCharacterByCharacterName(String name);
 
+
+    @Query("SELECT accountCharacters FROM AccountCharacter accountCharacters where accountCharacters.account.id = :id")
+    List<AccountCharacter> findAllAccountCharactersByAccountPaged(Long id, Pageable pageable);
+
+    @Query("SELECT count(accountCharacters.id) FROM AccountCharacter accountCharacters  WHERE accountCharacters.account.id = :id")
+    int countAccountCharacterByAccountId(Long id);
 }

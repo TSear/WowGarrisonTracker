@@ -4,6 +4,7 @@ import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
 import com.trix.wowgarrisontracker.model.Options;
 import com.trix.wowgarrisontracker.model.Server;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 @ExtendWith(MockitoExtension.class)
 class GeneralUtilsTest {
@@ -57,4 +59,5 @@ class GeneralUtilsTest {
         assertEquals(options.isReceiveEmailNotifications(), converted.isReceiveEmailNotifications());
         assertEquals(options.getAccount().getId(), converted.getAccount().getId());
     }
+
 }

@@ -1,17 +1,21 @@
 package com.trix.wowgarrisontracker;
 
-import com.trix.wowgarrisontracker.model.Account;
-import com.trix.wowgarrisontracker.model.ItemEntity;
-import com.trix.wowgarrisontracker.model.Server;
+import com.mysql.cj.util.TestUtils;
+import com.trix.wowgarrisontracker.model.*;
 import com.trix.wowgarrisontracker.repository.*;
+import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
 import com.trix.wowgarrisontracker.services.interfaces.ServerService;
 import com.trix.wowgarrisontracker.utils.BlizzardRequestUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.w3c.dom.ranges.Range;
 
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class BootData implements CommandLineRunner {
@@ -25,12 +29,14 @@ public class BootData implements CommandLineRunner {
     private final BlizzardRequestUtils blizzardRequestUtils;
     private final ServerService serverService;
     private final PasswordEncoder passwordEncoder;
+    private final AccountCharacterService accountCharacterService;
 
     public BootData(AccountRepository accountRepository, AccountCharacterRepository accountCharacterRepository,
                     EntryRepository entryRepository, ItemEntityRepository itemEntityRepository,
                     AuctionEntityRepository auctionEntityRepository, AuctionService auctionService,
                     ServerService serverService, PasswordEncoder passwordEncoder,
-                    BlizzardRequestUtils blizzardRequestUtils) {
+                    BlizzardRequestUtils blizzardRequestUtils,
+                    AccountCharacterService accountCharacterService) {
         this.accountRepository = accountRepository;
         this.accountCharacterRepository = accountCharacterRepository;
         this.entryRepository = entryRepository;
@@ -40,6 +46,7 @@ public class BootData implements CommandLineRunner {
         this.blizzardRequestUtils = blizzardRequestUtils;
         this.serverService = serverService;
         this.passwordEncoder = passwordEncoder;
+        this.accountCharacterService = accountCharacterService;
     }
 
     @Override
@@ -65,6 +72,19 @@ public class BootData implements CommandLineRunner {
         account1.setLogin("login1");
         account1.setPassword(passwordEncoder.encode("password1"));
         accountRepository.save(account1);
+
+        List<AccountCharacter> characters = IntStream.range(0,30).mapToObj(i -> {
+            AccountCharacter accountCharacter = new AccountCharacter();
+            accountCharacter.setAccount(account1);
+            accountCharacter.setId((long)i);
+            accountCharacter.setCharacterName("Character: " + i);
+            return accountCharacter;
+        }).map(accountCharacterRepository::save).collect(Collectors.toList());
+
+        characters.forEach(accCharacter -> IntStream.range(0,5)
+                .mapToObj(i -> generateEntryWithCharacter((int)(Math.random()*100), (int)(Math.random()*100), accCharacter))
+                .forEach(accountCharacterService::addNewEntryToAccountCharacter));
+
 //
 //        AccountCharacter accountCharacter = new AccountCharacter();
 //        accountCharacter.setCharacterName("Calienda");
@@ -95,4 +115,17 @@ public class BootData implements CommandLineRunner {
 //
     }
 
+    public static Entry generateEntryWithCharacter(int garrisonResources, int warPaint, AccountCharacter accountCharacter) {
+        Entry entry = generateEntry(garrisonResources,warPaint);
+        entry.setAccountCharacter(accountCharacter);
+        accountCharacter.addNewEntry(entry);
+        return entry;
+    }
+
+    private static Entry generateEntry(int garrisonResources, int warPaint){
+        Entry entry = new Entry();
+        entry.setWarPaint(warPaint);
+        entry.setGarrisonResources(garrisonResources);
+        return entry;
+    }
 }

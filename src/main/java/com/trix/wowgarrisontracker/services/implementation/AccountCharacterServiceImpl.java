@@ -4,15 +4,17 @@ import com.trix.wowgarrisontracker.converters.AccountCharacterPojoToAccountChara
 import com.trix.wowgarrisontracker.converters.AccountCharacterToAccountCharacterPojo;
 import com.trix.wowgarrisontracker.converters.EntryPojoToEntry;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
-import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
-import com.trix.wowgarrisontracker.pojos.EntryPojo;
+import com.trix.wowgarrisontracker.pojos.Entry;
 import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
+import com.vaadin.flow.component.page.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,13 +47,13 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     }
 
     @Override
-    public boolean addNewEntryToAccountCharacter(EntryPojo entryPojo) {
-        Entry entry = entryPojoToEntry.convert(entryPojo);
+    public boolean addNewEntryToAccountCharacter(Entry entryPojo) {
+        com.trix.wowgarrisontracker.model.Entry entry = entryPojoToEntry.convert(entryPojo);
         return this.addNewEntryToAccountCharacter(entry);
     }
 
     @Override
-    public boolean addNewEntryToAccountCharacter(Entry entry) {
+    public boolean addNewEntryToAccountCharacter(com.trix.wowgarrisontracker.model.Entry entry) {
         if (entry != null && entry.getAccountCharacter() != null) {
             AccountCharacter accountCharacter = entry.getAccountCharacter();
             accountCharacter.addResources(entry);
@@ -63,13 +65,13 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     }
 
     @Override
-    public boolean removeEntryFromAccountCharacter(EntryPojo entryPojo) {
-        Entry entry = entryPojoToEntry.convert(entryPojo);
+    public boolean removeEntryFromAccountCharacter(Entry entryPojo) {
+        com.trix.wowgarrisontracker.model.Entry entry = entryPojoToEntry.convert(entryPojo);
         return removeEntryFromAccountCharacter(entry);
     }
 
     @Override
-    public boolean removeEntryFromAccountCharacter(Entry entry) {
+    public boolean removeEntryFromAccountCharacter(com.trix.wowgarrisontracker.model.Entry entry) {
         if (entry != null && entry.getAccountCharacter() != null) {
             AccountCharacter accountCharacter = entry.getAccountCharacter();
             accountCharacter.removeResources(entry);
@@ -140,5 +142,23 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     @Override
     public void delete(Long id) {
         accountCharacterRepository.deleteById(id);
+    }
+
+
+
+    @Override
+    public List<AccountCharacterPojo> getAllAccountCharactersPagedPojo(Long id, int offset, int l) {
+        List<AccountCharacter> accountCharacters = getAllAccountCharacterPaged(id, PageRequest.of(offset, l));
+        return accountCharacters.stream().map(accountCharacterToAccountCharacterPojo::convert).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AccountCharacter> getAllAccountCharacterPaged(Long id, Pageable pageable) {
+        return accountCharacterRepository.findAllAccountCharactersByAccountPaged(id,pageable);
+    }
+
+    @Override
+    public int countAllAccountCharactersByAccountId(Long id) {
+        return accountCharacterRepository.countAccountCharacterByAccountId(id);
     }
 }

@@ -2,6 +2,7 @@ package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.frontEnd.fragments.AddButton;
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
+import com.trix.wowgarrisontracker.frontEnd.interfaces.Refreshable;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
@@ -12,97 +13,127 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.vaadin.klaudeta.PaginatedGrid;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Profile("vaadin")
 @UIScope
 @Route(value = "characters", layout = MainLayout.class)
-public class CharactersLayout extends VerticalLayout {
+public class CharactersLayout extends VerticalLayout implements Refreshable {
 
-    @Autowired
-    private CharacterFormDialog dialog;
-    @Autowired
-    private AccountCharacterService accountCharacterService;
-    @Autowired
-    private GeneralUtils utils;
-    @Autowired
-    private Statistics statistics;
-    private Long id;
+    private static final int PAGE_SIZE = 18;
+    private final AccountCharacterService accountCharacterService;
+    private final Statistics statistics;
     private final Dialog confirmDelete;
-    private Grid<AccountCharacterPojo> accountCharacterPojoGrid;
 
-    public CharactersLayout() {
+    private CharacterFormDialog dialog;
+    private Long id;
+    private PaginatedGrid<AccountCharacterPojo> dataGridLayout;
+    private DataProvider<AccountCharacterPojo, Void> dataProvider;
+
+
+    public CharactersLayout(AccountCharacterService accountCharacterService, Statistics statistics) {
+        this.accountCharacterService = accountCharacterService;
+        this.statistics = statistics;
+        this.id = GeneralUtils.getCurrentlyLoggedUserId();
         confirmDelete = new Dialog();
     }
 
     @PostConstruct
     private void init() {
-        setHeightFull();
-        setClassName("content-background");
 
-        id = GeneralUtils.getCurrentlyLoggedUserId();
+        configureDataProvider();
+        configureFrame();
 
-        dialog.setId(id);
+        dialog = new CharacterFormDialog(accountCharacterService, id, this);
 
-        accountCharacterPojoGrid = createGridLayout();
-        setFlexGrow(1, accountCharacterPojoGrid);
+        dataGridLayout = createGridLayout();
 
-        this.add(accountCharacterPojoGrid);
+        HorizontalLayout gridButtonLayout = new HorizontalLayout();
+        gridButtonLayout.setWidthFull();
 
-        dialog.setGrid(accountCharacterPojoGrid);
+        AddButton addNewCharacterButton = new AddButton("Create New Character", dialog);
+        gridButtonLayout.setFlexGrow(1, addNewCharacterButton);
 
-        HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.setWidthFull();
+        Button deleteCharacterButton = createDeleteButton(dataGridLayout);
 
-        new AddButton(buttonLayout, "Create New Character", dialog);
-
-        Button deleteCharacterButton = createDeleteButton(accountCharacterPojoGrid);
-        deleteCharacterButton.addClassName("secondary-button");
-        buttonLayout.add(deleteCharacterButton);
-
-        Text dialogMessage = new Text("Are you sure you want to delete character");
-
-        HorizontalLayout dialogButtonLayout = new HorizontalLayout();
-        Button confirmButton = new Button("Confirm");
-        Button cancelButton = new Button("Cancel");
-
-        cancelButton.addClassName("secondary-button");
+        createDeleteConfirmDialog();
 
 
-        cancelButton.addClickListener(event -> confirmDelete.close());
+        gridButtonLayout.add(addNewCharacterButton);
+        gridButtonLayout.add(deleteCharacterButton);
 
-        dialogButtonLayout.add(confirmButton, cancelButton);
-        confirmDelete.add(dialogMessage, dialogButtonLayout);
-
-        add(buttonLayout);
+        add(dataGridLayout);
+        add(gridButtonLayout);
+        add(confirmDelete);
     }
 
-    private Grid<AccountCharacterPojo> createGridLayout() {
-        Grid<AccountCharacterPojo> tmp = new Grid<>();
-        tmp.setItems(accountCharacterService.getListOfAccountCharactersConvertedToPojo(id));
+    private void createDeleteConfirmDialog() {
+        HorizontalLayout dialogButtonLayout = new HorizontalLayout();
+        Button dialogConfigButton = new Button("Confirm");
+        Button dialogCancelButton = createDialogCancelButton();
+
+        dialogButtonLayout.add(dialogConfigButton, dialogCancelButton);
+        confirmDelete.add(new Text("Are you sure you want to delete character"), dialogButtonLayout);
+    }
+
+    private Button createDialogCancelButton() {
+        Button dialogCancelButton = new Button("Cancel");
+
+        dialogCancelButton.addClassName("secondary-button");
+        dialogCancelButton.addClickListener(event -> confirmDelete.close());
+        return dialogCancelButton;
+    }
+
+    private void configureFrame() {
+        setHeightFull();
+        setClassName("content-background");
+    }
+
+    private void configureDataProvider() {
+
+        dataProvider = DataProvider.fromCallbacks(
+                query -> {
+                    long offset = dataGridLayout == null || dataGridLayout.getPage() < 1 ? 0L : dataGridLayout.getPage() - 1;
+                    List<AccountCharacterPojo> data = accountCharacterService.getAllAccountCharactersPagedPojo(id, (int) offset, PAGE_SIZE);
+                    return data.stream();
+                }, query -> accountCharacterService.countAllAccountCharactersByAccountId(id));
+    }
+
+    private PaginatedGrid<AccountCharacterPojo> createGridLayout() {
+        PaginatedGrid<AccountCharacterPojo> tmp = new PaginatedGrid<>();
+        setFlexGrow(1, tmp);
         tmp.addColumn(AccountCharacterPojo::getCharacterName).setHeader("Character Name");
         tmp.addColumn(AccountCharacterPojo::getGarrisonResources).setHeader("Garrison Resources");
         tmp.addColumn(AccountCharacterPojo::getWarPaint).setHeader("War paint");
         tmp.setWidth("100%");
+        tmp.setDataProvider(dataProvider);
+        tmp.setPageSize(PAGE_SIZE);
         return tmp;
     }
 
     private Button createDeleteButton(Grid<AccountCharacterPojo> grid) {
         Button deleteEntryButton = new Button();
+        deleteEntryButton.addClassName("secondary-button");
         deleteEntryButton.setIcon(VaadinIcon.TRASH.create());
         deleteEntryButton.setIconAfterText(true);
         deleteEntryButton.addClickListener(event -> {
-            accountCharacterPojoGrid.getSelectedItems().forEach(accountCharacterPojo -> accountCharacterService.delete(accountCharacterPojo.getId()));
-            accountCharacterPojoGrid.setItems(accountCharacterService.getListOfAccountCharactersConvertedToPojo(id));
+            dataGridLayout.getSelectedItems().forEach(accountCharacterPojo -> accountCharacterService.delete(accountCharacterPojo.getId()));
+            dataGridLayout.setItems(accountCharacterService.getListOfAccountCharactersConvertedToPojo(id));
             confirmDelete.close();
             statistics.update();
         });
         return deleteEntryButton;
     }
 
+    @Override
+    public void refresh() {
+        dataProvider.refreshAll();
+    }
 }

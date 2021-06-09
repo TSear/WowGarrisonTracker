@@ -8,16 +8,13 @@ import com.vaadin.flow.spring.annotation.UIScope;
 @UIScope
 public class AddButton extends Button {
 
-    public AddButton(HorizontalLayout layout, String text, Dialog dialog) {
+    public AddButton(String text, Dialog dialog) {
 
         setWidthFull();
         setText(text);
         addClickListener(event -> dialog.open());
 
         setClassName("add-button");
-
-        layout.add(this);
-        layout.setFlexGrow(1, this);
     }
 
 }

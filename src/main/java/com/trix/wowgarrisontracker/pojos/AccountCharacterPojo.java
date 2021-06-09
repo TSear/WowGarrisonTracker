@@ -20,7 +20,7 @@ public class AccountCharacterPojo {
     private Long accountId;
     private Long garrisonResources;
     private Long warPaint;
-    private Set<EntryPojo> entries;
+    private Set<Entry> entries;
 
     public AccountCharacterPojo() {
         this.characterName = "";

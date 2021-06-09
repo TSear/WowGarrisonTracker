@@ -2,7 +2,7 @@ package com.trix.wowgarrisontracker.converters;
 
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
-import com.trix.wowgarrisontracker.pojos.EntryPojo;
+import com.trix.wowgarrisontracker.pojos.Entry;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +30,7 @@ public class AccountCharacterToAccountCharacterPojo implements Converter<Account
         accountCharacterPojo.setId(source.getId());
         accountCharacterPojo.setGarrisonResources(source.getGarrisonResources());
         accountCharacterPojo.setWarPaint(source.getWarPaint());
-        Set<EntryPojo> entryPojos = new HashSet<>();
+        Set<Entry> entryPojos = new HashSet<>();
         accountCharacterPojo.setEntries(entryPojos);
         return accountCharacterPojo;
     }

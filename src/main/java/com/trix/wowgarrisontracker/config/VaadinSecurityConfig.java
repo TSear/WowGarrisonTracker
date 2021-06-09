@@ -55,7 +55,8 @@ public class VaadinSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/frontend/**",
                 "/webjars/**",
                 "/frontend-es5/**",
-                "/frontend-es6/**");
+                "/frontend-es6/**",
+                "/h2**");
     }
 
     @Override

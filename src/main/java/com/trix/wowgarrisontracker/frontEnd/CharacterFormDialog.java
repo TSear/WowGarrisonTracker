@@ -1,11 +1,11 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
+import com.trix.wowgarrisontracker.frontEnd.interfaces.Refreshable;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -13,85 +13,108 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.StringLengthValidator;
-import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.List;
-
-@Component
-@UIScope
 public class CharacterFormDialog extends Dialog {
 
-    @Autowired
-    private AccountCharacterService characterService;
+    private final AccountCharacterService characterService;
     private final Binder<AccountCharacterPojo> binder = new Binder<>();
-    private AccountCharacterPojo accountCharacterPojo = new AccountCharacterPojo();
-    private Long id;
-    private Grid<AccountCharacterPojo> grid;
+    private final Long id;
+    private final Refreshable parentData;
 
-    public CharacterFormDialog() {
+    private AccountCharacterPojo accountCharacterPojo = new AccountCharacterPojo();
+
+    public CharacterFormDialog(AccountCharacterService characterService, Long id, Refreshable parentData) {
+        this.characterService = characterService;
+        this.id = id;
+        this.parentData = parentData;
+
+        init();
     }
 
-    @PostConstruct
+
     private void init() {
+
         configureDialog();
-        binder.readBean(accountCharacterPojo);
-        accountCharacterPojo.setAccountId(id);
 
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.getStyle().set("background", "#252422");
 
-        FormLayout formLayout = new FormLayout();
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP));
-        formLayout.setWidthFull();
-        mainLayout.add(formLayout);
+        FormLayout formLayout = createFormLayout();
 
-
-        HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.setWidthFull();
-        buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-
-        mainLayout.add(buttonLayout);
-        add(mainLayout);
-
+        HorizontalLayout buttonLayout = createButtonLayout();
 
         TextField characterNameField = createCharacterNameTextField();
-        formLayout.add(characterNameField);
-        characterNameField.setMaxLength(100);
 
+        Button createButton = createAddNewCharacterButton(buttonLayout);
+
+        Button cancelButton = createCancelButton();
+
+        binder.readBean(accountCharacterPojo);
+
+        buttonLayout.add(createButton, cancelButton);
+
+        mainLayout.add(formLayout);
+        mainLayout.add(buttonLayout);
+
+        formLayout.add(characterNameField);
+
+        add(mainLayout);
+    }
+
+    private Button createCancelButton() {
+        Button cancelButton = new Button("Cancel");
+        cancelButton.addClickListener(event -> this.close());
+        cancelButton.addClassName("secondary-button");
+        return cancelButton;
+    }
+
+    private Button createAddNewCharacterButton(HorizontalLayout horizontalLayout) {
         Button createButton = new Button("Create");
+        horizontalLayout.setFlexGrow(1, createButton);
 
         createButton.addClickListener(event -> {
             try {
                 binder.writeBean(accountCharacterPojo);
-                this.close();
-                accountCharacterPojo.setAccountId(id);
-                characterService.save(accountCharacterPojo);
-                accountCharacterPojo = new AccountCharacterPojo();
-                accountCharacterPojo.setAccountId(id);
-                binder.readBean(accountCharacterPojo);
-                List<AccountCharacterPojo> listOfAccountCharactersConvertedToPojo = characterService.getListOfAccountCharactersConvertedToPojo(id);
-                grid.setItems(listOfAccountCharactersConvertedToPojo);
+                saveAndCleanDialog();
 
             } catch (ValidationException e) {
+                //TODO add exception handling
                 System.out.println(e.getMessage());
             }
-
         });
+        return createButton;
+    }
 
-        Button cancelButton = new Button("Cancel");
-        cancelButton.addClickListener(event -> this.close());
-        cancelButton.addClassName("secondary-button");
-        buttonLayout.setFlexGrow(1, createButton);
-        buttonLayout.add(createButton, cancelButton);
+    private void saveAndCleanDialog() {
+        accountCharacterPojo.setAccountId(id);
 
+        //TODO need to handle saving in another way
+        characterService.save(accountCharacterPojo);
+
+        accountCharacterPojo = new AccountCharacterPojo();
+        binder.readBean(accountCharacterPojo);
+        parentData.refresh();
+        this.close();
+    }
+
+    private HorizontalLayout createButtonLayout() {
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.setWidthFull();
+        buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        return buttonLayout;
+    }
+
+    private FormLayout createFormLayout() {
+        FormLayout formLayout = new FormLayout();
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP));
+        formLayout.setWidthFull();
+        return formLayout;
     }
 
     private TextField createCharacterNameTextField() {
         TextField characterNameField = new TextField("Character Name");
         characterNameField.setPlaceholder("Hokmurzok");
+        characterNameField.setMaxLength(100);
         binder.forField(characterNameField)
                 .withValidator(validate ->
                         !characterService.isNameTaken(id, characterNameField.getValue()), "Name is taken")
@@ -103,15 +126,8 @@ public class CharacterFormDialog extends Dialog {
     private void configureDialog() {
         this.setCloseOnEsc(true);
         this.setDraggable(true);
-        this.setCloseOnOutsideClick(false);
+        this.setCloseOnOutsideClick(true);
 
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setGrid(Grid<AccountCharacterPojo> grid) {
-        this.grid = grid;
-    }
 }

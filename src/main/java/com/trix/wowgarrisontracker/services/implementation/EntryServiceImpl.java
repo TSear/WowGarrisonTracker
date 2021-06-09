@@ -2,8 +2,7 @@ package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.converters.EntryPojoToEntry;
 import com.trix.wowgarrisontracker.converters.EntryToEntryPojo;
-import com.trix.wowgarrisontracker.model.Entry;
-import com.trix.wowgarrisontracker.pojos.EntryPojo;
+import com.trix.wowgarrisontracker.pojos.Entry;
 import com.trix.wowgarrisontracker.repository.EntryRepository;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import org.springframework.data.domain.PageRequest;
@@ -30,27 +29,27 @@ public class EntryServiceImpl implements EntryService {
     }
 
     @Override
-    public List<Entry> findAllByAccountCharacterId(Long accountCharacterId) {
+    public List<com.trix.wowgarrisontracker.model.Entry> findAllByAccountCharacterId(Long accountCharacterId) {
         return entryRepository.findAllByAccountCharacterId(accountCharacterId);
     }
 
     @Override
-    public boolean saveAll(Collection<Entry> entries) {
-        List<Entry> saved = entryRepository.saveAll(entries);
+    public boolean saveAll(Collection<com.trix.wowgarrisontracker.model.Entry> entries) {
+        List<com.trix.wowgarrisontracker.model.Entry> saved = entryRepository.saveAll(entries);
         return saved.size()==entries.size();
     }
 
 
     @Override
-    public EntryPojo save(EntryPojo entryPojo) {
-        Entry entryConverted = entryPojoToEntry.convert(entryPojo);
+    public Entry save(Entry entryPojo) {
+        com.trix.wowgarrisontracker.model.Entry entryConverted = entryPojoToEntry.convert(entryPojo);
         if(save(entryConverted) != null)
             return entryPojo;
         return null;
     }
 
     @Override
-    public Entry save(Entry entry) {
+    public com.trix.wowgarrisontracker.model.Entry save(com.trix.wowgarrisontracker.model.Entry entry) {
         if (entry != null)
             return entryRepository.save(entry);
         return null;
@@ -71,8 +70,8 @@ public class EntryServiceImpl implements EntryService {
 
 
     @Override
-    public Entry findById(Long id) throws RuntimeException{
-        Optional<Entry> optionalEntry = entryRepository.findById(id);
+    public com.trix.wowgarrisontracker.model.Entry findById(Long id) throws RuntimeException{
+        Optional<com.trix.wowgarrisontracker.model.Entry> optionalEntry = entryRepository.findById(id);
 
         if (optionalEntry.isEmpty())
             throw new RuntimeException("Entity with id: " + id + "was not found");
@@ -82,13 +81,13 @@ public class EntryServiceImpl implements EntryService {
     }
 
     @Override
-    public List<Entry> getAllAccountEntriesPaged(Long accountId, Pageable pageable) {
+    public List<com.trix.wowgarrisontracker.model.Entry> getAllAccountEntriesPaged(Long accountId, Pageable pageable) {
         return entryRepository.findAllEntriesByAccountId(accountId, pageable);
     }
 
     @Override
-    public List<EntryPojo> getAllAccountEntriesPagedPojo(Long id, Long offset, Long limit) {
-        List<Entry> entries = this.getAllAccountEntriesPaged(id, PageRequest.of(offset.intValue(), limit.intValue()));
+    public List<Entry> getAllAccountEntriesPagedPojo(Long id, Long offset, Long limit) {
+        List<com.trix.wowgarrisontracker.model.Entry> entries = this.getAllAccountEntriesPaged(id, PageRequest.of(offset.intValue(), limit.intValue()));
 
         return entries.stream().map(entryToEntryPojo::convert).collect(Collectors.toList());
 
