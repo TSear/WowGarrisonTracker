@@ -9,7 +9,6 @@ import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -33,7 +32,7 @@ public class CharactersLayout extends VerticalLayout implements Refreshable {
     private final Dialog confirmDelete;
 
     private CharacterFormDialog dialog;
-    private Long id;
+    private final Long id;
     private PaginatedGrid<AccountCharacterPojo> dataGridLayout;
     private DataProvider<AccountCharacterPojo, Void> dataProvider;
 
@@ -61,7 +60,7 @@ public class CharactersLayout extends VerticalLayout implements Refreshable {
         AddButton addNewCharacterButton = new AddButton("Create New Character", dialog);
         gridButtonLayout.setFlexGrow(1, addNewCharacterButton);
 
-        Button deleteCharacterButton = createDeleteButton(dataGridLayout);
+        Button deleteCharacterButton = createDeleteButton();
 
         createDeleteConfirmDialog();
 
@@ -118,7 +117,7 @@ public class CharactersLayout extends VerticalLayout implements Refreshable {
         return tmp;
     }
 
-    private Button createDeleteButton(Grid<AccountCharacterPojo> grid) {
+    private Button createDeleteButton() {
         Button deleteEntryButton = new Button();
         deleteEntryButton.addClassName("secondary-button");
         deleteEntryButton.setIcon(VaadinIcon.TRASH.create());
@@ -127,7 +126,7 @@ public class CharactersLayout extends VerticalLayout implements Refreshable {
             dataGridLayout.getSelectedItems().forEach(accountCharacterPojo -> accountCharacterService.delete(accountCharacterPojo.getId()));
             dataGridLayout.setItems(accountCharacterService.getListOfAccountCharactersConvertedToPojo(id));
             confirmDelete.close();
-            statistics.update();
+            statistics.refresh();
         });
         return deleteEntryButton;
     }

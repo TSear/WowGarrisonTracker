@@ -169,7 +169,7 @@ public class EntryFormDialog extends Dialog {
 
     private void refreshOtherPages() {
         parent.refresh();
-        statistics.update();
+        statistics.refresh();
     }
 
 

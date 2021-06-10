@@ -105,7 +105,7 @@ public class TrackLayout extends VerticalLayout implements Refreshable {
         deleteEntryButton.addClickListener(event -> {
             if (grid.getSelectedItems().size() > 0) {
                 grid.getSelectedItems().forEach(accountCharacterService::removeEntryFromAccountCharacter);
-                statistics.update();
+                statistics.refresh();
                 dataProvider.refreshAll();
             }
 

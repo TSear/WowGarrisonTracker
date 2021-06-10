@@ -1,5 +1,6 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
+import com.trix.wowgarrisontracker.enums.Regions;
 import com.trix.wowgarrisontracker.model.Server;
 import com.trix.wowgarrisontracker.pojos.RegisterPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
@@ -47,38 +48,91 @@ public class RegisterPage extends VerticalLayout {
     @PostConstruct
     private void init() {
 
-        setSizeFull();
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        setClassName("background");
-        servers.sort(Comparator.comparing(Server::getName));
+        configureFrameSortData();
 
-        H2 registerHeader = new H2("Create Account");
-        registerHeader.getStyle().set("text-align", "center");
+        FormLayout formLayout = configureFormLayout();
 
-        FormLayout formLayout = new FormLayout();
-        formLayout.setClassName("register-form");
-        formLayout.addClassName("box-shadow");
-        formLayout.getStyle().set("margin", "auto");
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
-        formLayout.setWidth("35%");
+        HorizontalLayout buttonsLayout = configureButtonLayout();
 
-        TextField loginField = new TextField();
-        loginField.setLabel("Login");
-        pojoBinder.forField(loginField)
-                .withValidator(new StringLengthValidator("Login must be between 4 - 30 characters", 4, 30))
-                .withValidator(s -> accountService.findAccountByLogin(s) == null, "Login taken")
-                .bind(RegisterPojo::getLogin, RegisterPojo::setLogin);
+        add(formLayout);
 
-        TextField emailField = new TextField();
-        emailField.setLabel("Email");
-        pojoBinder.forField(emailField)
-                .withValidator(new EmailValidator("This is not valid email"))
-                .bind(RegisterPojo::getEmail, RegisterPojo::setEmail);
+        formLayout.add(buttonsLayout);
 
+    }
 
-        PasswordField passwordField = new PasswordField();
-        PasswordField repeatedPasswordField = new PasswordField();
+    private HorizontalLayout configureButtonLayout() {
 
+        HorizontalLayout buttonsLayout = new HorizontalLayout();
+        buttonsLayout.getStyle().set("margin-top", "1em");
+
+        Button submitButton = createSubmitButton();
+
+        Button cancelButton = createCancelButton();
+
+        buttonsLayout.add(submitButton, cancelButton);
+        buttonsLayout.setFlexGrow(1, submitButton);
+
+        return buttonsLayout;
+    }
+
+    private Button createCancelButton() {
+        Button cancelButton = new Button("Cancel");
+        cancelButton.addClassName("secondary-button");
+        cancelButton.addClickListener(event -> UI.getCurrent().navigate(LoginPage.class));
+        return cancelButton;
+    }
+
+    private Button createSubmitButton() {
+        Button submitButton = new Button("Submit");
+
+        submitButton.addClickListener(event -> {
+            RegisterPojo pojo = new RegisterPojo();
+            try {
+                pojoBinder.writeBean(pojo);
+                accountService.createAccount(pojo);
+                UI.getCurrent().navigate(LoginPage.class);
+            } catch (ValidationException e) {
+                //TODO add exception handling
+                System.out.println(e.getMessage());
+            }
+
+        });
+        return submitButton;
+    }
+
+    private ComboBox<Server> createServerComboBox() {
+        ComboBox<Server> server = new ComboBox<>();
+        server.setLabel("Pick Server");
+        server.setItemLabelGenerator(Server::toString);
+        server.setItems(servers);
+        pojoBinder.forField(server)
+                .withValidator(Objects::nonNull, "Pick server")
+                .bind(RegisterPojo::getServer, RegisterPojo::setServer);
+        return server;
+    }
+
+    private ComboBox<Regions> createRegionComboBox(ComboBox<Server> server) {
+        ComboBox<Regions> region = new ComboBox<>();
+        region.setLabel("Pick Region");
+        region.setItems(Regions.values());
+        region.setValue(Regions.values()[0]);
+        region.setItemLabelGenerator(Regions::getValue);
+        region.setAllowCustomValue(false);
+
+        region.addValueChangeListener(event -> {
+
+            if (region.getValue().getValue().equalsIgnoreCase("All"))
+                server.setItems(servers);
+            else
+                server.setItems(servers.stream()
+                        .filter(server1 -> event.getValue().getValue().equalsIgnoreCase(server1.getRegion()))
+                        .collect(Collectors.toList()));
+        });
+
+        return region;
+    }
+
+    private void configurePasswordFields(PasswordField passwordField, PasswordField repeatedPasswordField) {
         passwordField.addValueChangeListener(event -> checkIfValid(passwordField, repeatedPasswordField));
 
         repeatedPasswordField.setLabel("Repeat Password");
@@ -89,63 +143,70 @@ public class RegisterPage extends VerticalLayout {
                 .withValidator(new StringLengthValidator("Password must be between 8-30 characters", 8, 30))
                 .withValidator(s -> s.equals(repeatedPasswordField.getValue()), "Passwords do not match")
                 .bind(RegisterPojo::getPassword, RegisterPojo::setPassword);
+    }
 
+    private TextField createEmailField() {
+        TextField emailField = new TextField();
+        emailField.setLabel("Email");
+        pojoBinder.forField(emailField)
+                .withValidator(new EmailValidator("This is not valid email"))
+                .bind(RegisterPojo::getEmail, RegisterPojo::setEmail);
+        return emailField;
+    }
 
-        ComboBox<String> region = new ComboBox<>();
-        region.setLabel("Pick Region");
-        region.setItems(Arrays.asList("All", "EU", "US"));
-        region.setValue("EU");
-        region.setAllowCustomValue(false);
+    private TextField createLoginField() {
+        TextField loginField = new TextField();
+        loginField.setLabel("Login");
+        pojoBinder.forField(loginField)
+                .withValidator(new StringLengthValidator("Login must be between 4 - 30 characters", 4, 30))
+                .withValidator(s -> accountService.findAccountByLogin(s) == null, "Login taken")
+                .bind(RegisterPojo::getLogin, RegisterPojo::setLogin);
+        return loginField;
+    }
 
+    private FormLayout configureFormLayout() {
 
-        ComboBox<Server> server = new ComboBox<>();
-        server.setLabel("Pick Server");
-        server.setItemLabelGenerator(Server::toString);
-        server.setItems(servers.stream().filter(server1 -> server1.getRegion().equalsIgnoreCase("eu")).collect(Collectors.toList()));
-        pojoBinder.forField(server)
-                .withValidator(Objects::nonNull, "Pick server")
-                .bind(RegisterPojo::getServer, RegisterPojo::setServer);
+        FormLayout formLayout = createFormLayout();
 
-        region.addValueChangeListener(event -> {
+        H2 registerHeader = createH2();
 
-            if (region.getValue().equalsIgnoreCase("All"))
-                server.setItems(servers);
-            else
-                server.setItems(servers.stream()
-                        .filter(server1 -> event.getValue().toLowerCase().equals(server1.getRegion())).collect(Collectors.toList()));
-        });
+        TextField loginField = createLoginField();
+        TextField emailField = createEmailField();
 
+        PasswordField passwordField = new PasswordField();
+        PasswordField repeatedPasswordField = new PasswordField();
+        configurePasswordFields(passwordField, repeatedPasswordField);
+
+        ComboBox<Server> server = createServerComboBox();
+        ComboBox<Regions> region = createRegionComboBox(server);
 
         formLayout.add(registerHeader, loginField, emailField, passwordField, passwordField, repeatedPasswordField, region, server);
 
-        HorizontalLayout buttonsLayout = new HorizontalLayout();
-        buttonsLayout.getStyle().set("margin-top", "1em");
-
-        Button submitButton = new Button("Submit");
-
-        submitButton.addClickListener(event -> {
-            RegisterPojo pojo = new RegisterPojo();
-            try {
-                pojoBinder.writeBean(pojo);
-                accountService.createAccount(pojo);
-                UI.getCurrent().navigate(LoginPage.class);
-            } catch (ValidationException e) {
-                System.out.println(e.getMessage());
-            }
-
-        });
-
-        Button cancelButton = new Button("Cancel");
-        cancelButton.addClassName("secondary-button");
-        cancelButton.addClickListener(event -> UI.getCurrent().navigate(LoginPage.class));
-
-        buttonsLayout.add(submitButton, cancelButton);
-        buttonsLayout.setFlexGrow(1, submitButton);
-
-        formLayout.add(buttonsLayout);
+        return formLayout;
+    }
 
 
-        add(formLayout);
+    private FormLayout createFormLayout() {
+        FormLayout formLayout = new FormLayout();
+        formLayout.setClassName("register-form");
+        formLayout.addClassName("box-shadow");
+        formLayout.getStyle().set("margin", "auto");
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
+        formLayout.setWidth("35%");
+        return formLayout;
+    }
+
+    private H2 createH2() {
+        H2 registerHeader = new H2("Create Account");
+        registerHeader.getStyle().set("text-align", "center");
+        return registerHeader;
+    }
+
+    private void configureFrameSortData() {
+        setSizeFull();
+        setJustifyContentMode(JustifyContentMode.CENTER);
+        setClassName("background");
+        servers.sort(Comparator.comparing(Server::getName));
     }
 
     private void checkIfValid(PasswordField password, PasswordField repeated) {

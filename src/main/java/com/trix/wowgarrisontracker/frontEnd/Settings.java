@@ -24,7 +24,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -44,11 +43,15 @@ public class Settings extends VerticalLayout {
     private final Binder<OptionsDTO> optionsDTOBinder;
     private final OptionsDTO optionsDTO;
     private final Notification savedNotification;
-    private List<Server> serverList;
-    private OptionsService optionsService;
-    private OptionsDTOToOptions optionsDTOToOptions;
+    private final OptionsService optionsService;
+    private final List<Server> serverList;
+    private final OptionsDTOToOptions optionsDTOToOptions;
+    private Map<String, List<Server>> groupedServers;
 
-    public Settings() {
+public Settings(OptionsService optionsService, ServerService serverService, OptionsDTOToOptions optionsDTOToOptions) {
+        this.optionsService = optionsService;
+        this.optionsDTOToOptions = optionsDTOToOptions;
+        serverList = serverService.getServers();
         OptionsToOptionsDTO optionsToOptionsDTO = new OptionsToOptionsDTO();
         this.formLayout = new FormLayout();
         this.optionsDTOBinder = new Binder<>();
@@ -56,79 +59,26 @@ public class Settings extends VerticalLayout {
         this.savedNotification = new Notification("Options were saved", 2000);
     }
 
-    @Autowired
-    public void setServers(ServerService serverService) {
-        serverList = serverService.getServers();
-    }
-
-    @Autowired
-    public void setOptionsService(OptionsService optionsService) {
-        this.optionsService = optionsService;
-    }
-
-    @Autowired
-    public void setOptionsDTOToOptions(OptionsDTOToOptions optionsDTOToOptions) {
-        this.optionsDTOToOptions = optionsDTOToOptions;
-    }
-
     @PostConstruct
     private void init() {
 
-        this.setSizeFull();
-        this.setClassName("background");
+        configureFrame();
 
-        List<String> regions = Arrays.stream(Regions.values()).map(Regions::getValue).collect(Collectors.toList());
-        Map<String, List<Server>> groupedServers = serverList.stream().collect(Collectors.groupingBy(Server::getRegion));
+        groupedServers = serverList.stream().collect(Collectors.groupingBy(Server::getRegion));
 
-
-        formLayout.setClassName("settings-layout");
-        formLayout.setResponsiveSteps(
-                new ResponsiveStep("0", 1));
+        configureFormLayout();
 
         H2 titleLabel = new H2("Settings");
-        ComboBox<String> regionComboBox = new ComboBox<>();
-        ComboBox<Server> serverNameComboBox = new ComboBox<>();
-        Checkbox sendEmailNotificationsCheckBox = new Checkbox();
-        Button submitFormButton = new Button("Submit");
-
-        serverNameComboBox.setWidthFull();
-
         titleLabel.setClassName("page-label");
 
-        regionComboBox.setItems(regions);
-        regionComboBox.setValue(regions.stream()
-                .filter(s -> s.equalsIgnoreCase(optionsDTO.getServer().getRegion())).findFirst().orElse("All"));
-        regionComboBox.setAllowCustomValue(false);
-        regionComboBox.addValueChangeListener(event -> {
-            if (regionComboBox.getValue().equalsIgnoreCase("all"))
-                serverNameComboBox.setItems(serverList);
-            else
-                serverNameComboBox.setItems(groupedServers.get(regionComboBox.getValue().toLowerCase()));
-        });
+        ComboBox<Server> serverNameComboBox = configureServerNameComboBox();
 
+        ComboBox<Regions> regionComboBox = configureRegionComboBox(serverNameComboBox);
 
-        serverNameComboBox.setItems(serverList);
-        serverNameComboBox.setItemLabelGenerator(Server::toString);
-        serverNameComboBox.setAllowCustomValue(false);
+        Checkbox sendEmailNotificationsCheckBox = configureEmailNotificationsCheckBox();
 
+        Button submitFormButton = configureSubmitFormButton();
 
-        submitFormButton.setClassName("margin-top-big");
-        submitFormButton.addClickListener(event -> {
-            try {
-                optionsDTOBinder.writeBean(optionsDTO);
-                Options optionsTmp = optionsDTOToOptions.convert(optionsDTO);
-                optionsService.save(optionsTmp);
-                CustomUserDetails tmp = GeneralUtils.getCustomUserPrincipal();
-                tmp.getAccount().setOptions(optionsDTOToOptions.convert(optionsDTO));
-                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(tmp, null, new ArrayList<>()));
-                savedNotification.open();
-            } catch (ValidationException e) {
-                System.out.println(e.getMessage());
-            }
-        });
-
-        optionsDTOBinder.forField(serverNameComboBox).bind(OptionsDTO::getServer, OptionsDTO::setServer);
-        optionsDTOBinder.forField(sendEmailNotificationsCheckBox).bind(OptionsDTO::isReceiveEmailNotifications, OptionsDTO::setReceiveEmailNotifications);
         optionsDTOBinder.readBean(optionsDTO);
 
         formLayout.addFormItem(regionComboBox, "Region");
@@ -138,5 +88,71 @@ public class Settings extends VerticalLayout {
 
         add(titleLabel, formLayout);
 
+    }
+
+    private Button configureSubmitFormButton() {
+        Button submitFormButton = new Button("Submit");
+
+        submitFormButton.setClassName("margin-top-big");
+        submitFormButton.addClickListener(event -> {
+            try {
+                optionsDTOBinder.writeBean(optionsDTO);
+                Options optionsTmp = optionsDTOToOptions.convert(optionsDTO);
+                optionsService.save(optionsTmp);
+                //TODO for now this is refreshing logged user options without logging out. Will need to find better way
+                CustomUserDetails tmp = GeneralUtils.getCustomUserPrincipal();
+                tmp.getAccount().setOptions(optionsDTOToOptions.convert(optionsDTO));
+                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(tmp, null, new ArrayList<>()));
+                savedNotification.open();
+            } catch (ValidationException e) {
+                System.out.println(e.getMessage());
+            }
+        });
+        return submitFormButton;
+    }
+
+    private Checkbox configureEmailNotificationsCheckBox() {
+        Checkbox sendEmailNotificationsCheckBox = new Checkbox();
+        optionsDTOBinder.forField(sendEmailNotificationsCheckBox).bind(OptionsDTO::isReceiveEmailNotifications, OptionsDTO::setReceiveEmailNotifications);
+        return sendEmailNotificationsCheckBox;
+    }
+
+    private ComboBox<Server> configureServerNameComboBox() {
+        ComboBox<Server> serverNameComboBox = new ComboBox<>();
+        serverNameComboBox.setWidthFull();
+        serverNameComboBox.setItems(serverList);
+        serverNameComboBox.setItemLabelGenerator(Server::toString);
+        serverNameComboBox.setAllowCustomValue(false);
+        optionsDTOBinder.forField(serverNameComboBox).bind(OptionsDTO::getServer, OptionsDTO::setServer);
+        return serverNameComboBox;
+    }
+
+    private ComboBox<Regions> configureRegionComboBox(ComboBox<Server> serverNameComboBox) {
+        ComboBox<Regions> regionComboBox = new ComboBox<>();
+        regionComboBox.setItems(Regions.values());
+        regionComboBox.setValue(Arrays.stream(Regions.values())
+                .filter(regions1 -> regions1.getValue().equalsIgnoreCase(optionsDTO.getServer().getRegion()))
+                .findFirst().orElse(Regions.values()[0]));
+        regionComboBox.setAllowCustomValue(false);
+        regionComboBox.addValueChangeListener(event -> {
+            if (regionComboBox.getValue().getValue().equalsIgnoreCase("all")) {
+                serverNameComboBox.setItems(serverList);
+            }
+            else {
+                serverNameComboBox.setItems(groupedServers.get(regionComboBox.getValue().getValue().toLowerCase()));
+            }
+        });
+        return regionComboBox;
+    }
+
+    private void configureFormLayout() {
+        formLayout.setClassName("settings-layout");
+        formLayout.setResponsiveSteps(
+                new ResponsiveStep("0", 1));
+    }
+
+    private void configureFrame() {
+        this.setSizeFull();
+        this.setClassName("background");
     }
 }

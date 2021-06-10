@@ -1,22 +1,16 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
-import com.trix.wowgarrisontracker.model.Account;
+import com.trix.wowgarrisontracker.frontEnd.interfaces.Refreshable;
 import com.trix.wowgarrisontracker.pojos.StatisticsPojo;
-import com.trix.wowgarrisontracker.services.interfaces.AccountService;
-import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.services.interfaces.StatisticsService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -24,53 +18,37 @@ import javax.annotation.PostConstruct;
 @Component
 @UIScope
 @Route(value = "statistics", layout = MainLayout.class)
-public class Statistics extends FlexLayout implements BeforeEnterObserver {
+public class Statistics extends FlexLayout implements Refreshable {
 
 
-    @Autowired
-    private AccountService accountService;
-    @Autowired
-    private EntryService entryService;
-    @Autowired
-    private GeneralUtils utils;
+    private final StatisticsService statisticsService;
 
-    private StatisticsService statisticsService;
-
-    private Account account;
     private Long id;
 
-    private Label totalResourcesLabel;
-    private Label totalWarPaintLabel;
-    private Label averageWarPaintPDLabel;
-    private Label averageResourcesPDLabel;
-    private Label amountOfEntriesLabel;
-    private Label amountOfDaysLabel;
+    private final Label totalResourcesLabel;
+    private final Label totalWarPaintLabel;
+    private final Label averageWarPaintPDLabel;
+    private final Label averageResourcesPDLabel;
+    private final Label amountOfEntriesLabel;
+    private final Label amountOfDaysLabel;
 
 
-    public Statistics() {
+    public Statistics(StatisticsService statisticsService) {
         totalResourcesLabel = new Label();
         totalWarPaintLabel = new Label();
         averageResourcesPDLabel = new Label();
         averageWarPaintPDLabel = new Label();
         amountOfEntriesLabel = new Label();
         amountOfDaysLabel = new Label();
-    }
-
-    @Autowired
-    public void setStatisticsService(StatisticsService statisticsService) {
         this.statisticsService = statisticsService;
     }
 
     @PostConstruct
     private void init() {
 
-        setSizeFull();
-        setFlexWrap(FlexWrap.WRAP);
-        setClassName("statistics-container");
-        getStyle().set("padding", "15px");
-        getStyle().set("box-sizing", "border-box");
+        configureFrame();
 
-        updateAccount();
+        id = GeneralUtils.getCurrentlyLoggedUserId();
 
         updateLabels();
 
@@ -79,17 +57,25 @@ public class Statistics extends FlexLayout implements BeforeEnterObserver {
         Div averageWarPaintPD = createStatisticDiv("Average War Paint Per Day", averageWarPaintPDLabel);
         Div averageGarrisonResourcesPD = createStatisticDiv("Average Garrison Resources", averageResourcesPDLabel);
         Div amountOfEntries = createStatisticDiv("Entries", amountOfEntriesLabel);
-        Div amountOfDays = createStatisticDiv("Days",  amountOfDaysLabel);
+        Div amountOfDays = createStatisticDiv("Days", amountOfDaysLabel);
 
         add(totalResources, totalWarPaint, averageGarrisonResourcesPD, averageWarPaintPD, amountOfEntries, amountOfDays);
+    }
+
+    private void configureFrame() {
+        setSizeFull();
+        setFlexWrap(FlexWrap.WRAP);
+        setClassName("statistics-container");
+        getStyle().set("padding", "15px");
+        getStyle().set("box-sizing", "border-box");
     }
 
     private void updateLabels() {
         StatisticsPojo statistics = statisticsService.getAllStatistics(id);
         totalResourcesLabel.setText(statistics.getTotalGarrisonResources() + "");
-        totalWarPaintLabel.setText(statistics.getTotalWarPaint() +"");
-        averageWarPaintPDLabel.setText(statistics.getAverageDailyWarPaint()+"");
-        averageResourcesPDLabel.setText(statistics.getAverageDailyGarrisonResources()+"");
+        totalWarPaintLabel.setText(statistics.getTotalWarPaint() + "");
+        averageWarPaintPDLabel.setText(statistics.getAverageDailyWarPaint() + "");
+        averageResourcesPDLabel.setText(statistics.getAverageDailyGarrisonResources() + "");
         amountOfEntriesLabel.setText(statistics.getAmountOfEntries() + "");
         amountOfDaysLabel.setText(statistics.getDays() + "");
 
@@ -115,16 +101,7 @@ public class Statistics extends FlexLayout implements BeforeEnterObserver {
     }
 
     @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-    }
-
-    public void update() {
+    public void refresh() {
         updateLabels();
-    }
-
-    private void updateAccount() {
-        id = GeneralUtils.getCurrentlyLoggedUserId();
-        account = accountService.findById(id);
-
     }
 }
