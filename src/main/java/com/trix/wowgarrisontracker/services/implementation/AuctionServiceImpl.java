@@ -7,7 +7,7 @@ import com.trix.wowgarrisontracker.pojos.AuctionPojoWrapper;
 import com.trix.wowgarrisontracker.repository.AuctionEntityRepository;
 import com.trix.wowgarrisontracker.repository.ItemEntityRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
-import com.trix.wowgarrisontracker.services.interfaces.ItemEntityService;
+import com.trix.wowgarrisontracker.services.interfaces.ItemsService;
 import com.trix.wowgarrisontracker.utils.BlizzardRequestUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,11 +22,11 @@ public class AuctionServiceImpl implements AuctionService {
     private final ItemEntityRepository itemRepository;
     private final AuctionEntityRepository repository;
     private final BlizzardRequestUtils blizzardRequestUtils;
-    private final ItemEntityService itemEntityService;
+    private final ItemsService itemEntityService;
 
 
     public AuctionServiceImpl(ItemEntityRepository itemRepository, AuctionEntityRepository repository,
-                              ItemEntityService itemEntityService, BlizzardRequestUtils blizzardRequestUtils) {
+                              ItemsService itemEntityService, BlizzardRequestUtils blizzardRequestUtils) {
         this.itemRepository = itemRepository;
         this.repository = repository;
         this.blizzardRequestUtils = blizzardRequestUtils;

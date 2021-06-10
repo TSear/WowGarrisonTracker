@@ -4,7 +4,6 @@ import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
 import com.trix.wowgarrisontracker.model.Options;
 import com.trix.wowgarrisontracker.model.Server;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +11,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -60,4 +62,20 @@ class GeneralUtilsTest {
         assertEquals(options.getAccount().getId(), converted.getAccount().getId());
     }
 
+    @Test
+    void testing() {
+        //given
+
+        //whenname
+        try {
+            Process process = Runtime.getRuntime().exec("curl -X GET https://eu.api.blizzard.com/data/wow/connected-realm/index?namespace=dynamic-eu&locale=en_US&access_token=USm808xw33IvfBAzL9IQxC9ffanEZnihB3");
+            List<String> test = new BufferedReader(new InputStreamReader(process.getInputStream())).lines().collect(Collectors.toList());
+            System.out.println();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        //then
+    }
 }

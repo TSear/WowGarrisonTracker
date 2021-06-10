@@ -14,7 +14,7 @@ public class AddButton extends Button {
         setText(text);
         addClickListener(event -> dialog.open());
 
-        setClassName("add-button");
+        setClassName("addWS-button");
     }
 
 }

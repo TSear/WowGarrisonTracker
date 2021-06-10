@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 
-//To run this test you need to add client.id and client.secret to environmental variables
+//To run this test you need to addWS client.id and client.secret to environmental variables
 
 @ExtendWith(MockitoExtension.class)
 public class BlizzardRequestUtilsTest {

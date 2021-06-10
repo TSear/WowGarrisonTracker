@@ -1,5 +1,6 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
+import com.trix.wowgarrisontracker.blizzarapi.BlizzardApiRequests;
 import com.trix.wowgarrisontracker.model.Server;
 import com.trix.wowgarrisontracker.repository.ServerRepository;
 import com.trix.wowgarrisontracker.services.interfaces.ServerService;
@@ -12,11 +13,11 @@ import java.util.List;
 public class ServerServiceImpl implements ServerService {
 
     private final ServerRepository repository;
-    private final BlizzardRequestUtils blizzardRequestUtils;
+    private final BlizzardApiRequests blizzardApiRequests;
 
-    public ServerServiceImpl(ServerRepository repository) {
+    public ServerServiceImpl(ServerRepository repository, BlizzardApiRequests blizzardApiRequests) {
         this.repository = repository;
-        this.blizzardRequestUtils = new BlizzardRequestUtils();
+        this.blizzardApiRequests = blizzardApiRequests;
     }
 
     @Override
@@ -36,7 +37,7 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public void updateServers() {
-        List<Server> servers = blizzardRequestUtils.getListOfServers();
+        List<Server> servers = blizzardApiRequests.getListOfServers();
         deleteAll();
         servers.forEach(this::save);
     }

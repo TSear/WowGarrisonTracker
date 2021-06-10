@@ -92,7 +92,7 @@ public class RegisterPage extends VerticalLayout {
                 accountService.createAccount(pojo);
                 UI.getCurrent().navigate(LoginPage.class);
             } catch (ValidationException e) {
-                //TODO add exception handling
+                //TODO addWS exception handling
                 System.out.println(e.getMessage());
             }
 

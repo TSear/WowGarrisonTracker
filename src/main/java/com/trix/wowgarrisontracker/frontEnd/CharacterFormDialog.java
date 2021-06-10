@@ -78,7 +78,7 @@ public class CharacterFormDialog extends Dialog {
                 saveAndCleanDialog();
 
             } catch (ValidationException e) {
-                //TODO add exception handling
+                //TODO addWS exception handling
                 System.out.println(e.getMessage());
             }
         });

@@ -58,8 +58,9 @@ public class BootData implements CommandLineRunner {
 
     private void innit() {
 
-        List<Server> servers = blizzardRequestUtils.getListOfServers();
-        servers.forEach(serverService::save);
+//        List<Server> servers = blizzardRequestUtils.getListOfServers();
+//        servers.forEach(serverService::save);
+        serverService.updateServers();
         ItemEntity itemEntity = new ItemEntity();
         itemEntity.setId(109119L);
         itemEntity.setName("True Iron Ore");
