@@ -27,7 +27,7 @@ class BlizzardApiRequestsTest {
         //given
         String region = "EU";
 
-        String request = blizzardApiRequests.generateConnectedServerListRequest(BlizzardJWTToken.getToken(),"EU");
+        String request = blizzardApiRequests.generateConnectedServersListRequest(BlizzardJWTToken.getToken(), "EU");
 
         //when
         List<String> lines = new ArrayList<>();
@@ -39,14 +39,14 @@ class BlizzardApiRequestsTest {
         }
 
         //then
-        Assertions.assertNotEquals(0,lines.size());
+        Assertions.assertNotEquals(0, lines.size());
     }
 
     @Test
     void connectedRealmsTest() {
         //given
 
-        blizzardApiRequests.listOfConnectedRealms();
+        blizzardApiRequests.getListOfConnectedServers();
         //when
 
         //then

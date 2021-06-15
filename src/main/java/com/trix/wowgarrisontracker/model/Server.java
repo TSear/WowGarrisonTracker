@@ -5,11 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -33,6 +31,10 @@ public class Server {
     @OneToMany(mappedBy = "server")
     private List<Options> options;
 
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "connectedServerId", name = "connectedServerId")
+    private ConnectedServersModel connectedServersModel;
+
     public Server() {
         this.name = "";
         this.region = "";
@@ -43,6 +45,18 @@ public class Server {
         this.id = id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Server server = (Server) o;
+        return slug.equals(server.slug) && region.equals(server.region);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(slug, region);
+    }
 
     @Override
     public String toString() {

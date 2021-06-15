@@ -1,10 +1,10 @@
 package com.trix.wowgarrisontracker.blizzarapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trix.wowgarrisontracker.enums.Regions;
+import com.trix.wowgarrisontracker.model.ConnectedServersModel;
 import com.trix.wowgarrisontracker.model.Server;
 import com.trix.wowgarrisontracker.services.interfaces.ItemsService;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -44,43 +43,92 @@ public class BlizzardApiRequests {
     }
 
 
-    public List<Integer> listOfConnectedRealms() {
+    public List<ConnectedServersModel> getListOfConnectedServers() {
 
         ObjectMapper mapper = new ObjectMapper();
-
         String token = BlizzardJWTToken.getToken();
+        List<ConnectedServersModel> listOfConnectedSeverModels = new ArrayList<>();
 
-        List<String> regions = Arrays.stream(Regions.values())
-                .skip(1)
-                .map(Regions::getValue)
-                .collect(Collectors.toList());
+        //Skip first value because it is 'All'
+        for (int i = 1; i < Regions.values().length; i++) {
+            listOfConnectedSeverModels.addAll(getRegionConnectedRealms(token, Regions.values()[i], mapper));
+        }
 
-        List<Integer> listOfConnectedRealmsId = new ArrayList<>();
+        List<Server> servers = getListOfServers();
 
-        for (String region : regions) {
+        for (ConnectedServersModel connectedServerModel : listOfConnectedSeverModels) {
+            configureConnectedServer(token, connectedServerModel, mapper, servers);
+        }
 
-            String request = generateConnectedServerListRequest(token, region);
+        return listOfConnectedSeverModels;
+    }
 
-            String connectedRealmJasonData = executeApiRequest(request);
+    private void configureConnectedServer(String token,
+                                          ConnectedServersModel connectedServerModel,
+                                          ObjectMapper mapper,
+                                          List<Server> servers) {
 
-            JsonNode parent;
+        String request = generateRequestForConnectedServers(token, connectedServerModel);
+        String json = executeApiRequest(request);
+        List<String> serverNames = new ArrayList<>();
 
-            try {
-                parent = mapper.readTree(connectedRealmJasonData);
-                JsonNode realmsJson = parent.path("connected_realms");
-                ConnectedServerModel [] convertedLines = mapper.convertValue(realmsJson,ConnectedServerModel[].class);
-                listOfConnectedRealmsId.addAll(Arrays.stream(convertedLines)
-                        .map(ConnectedServerModel::extractId)
-                        .collect(Collectors.toList()));
+        try {
 
-                System.out.println();
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
+            JsonNode parent = mapper.readTree(json);
+            JsonNode realms = parent.get("realms");
+
+            for (JsonNode realm : realms) {
+                serverNames.add(realm.get("slug").textValue());
             }
+
+        } catch (JsonProcessingException e) {
+            //TODO exception handling
+            e.printStackTrace();
+        }
+
+        for (String serverName : serverNames) {
+
+            Server toSearchFor = new Server();
+            toSearchFor.setSlug(serverName);
+            toSearchFor.setRegion(connectedServerModel.getRegion().getValue());
+
+            int index = servers.indexOf(toSearchFor);
+            Server server1 = servers.get(index);
+            server1.setConnectedServersModel(connectedServerModel);
+            connectedServerModel.getServers().add(server1);
 
         }
 
+    }
+
+    private List<ConnectedServersModel> getRegionConnectedRealms(String token, Regions region, ObjectMapper mapper) {
+
+        String request = generateConnectedServersListRequest(token, region.getValue());
+
+        String connectedRealmJasonData = executeApiRequest(request);
+
+        JsonNode parent;
+
+        try {
+
+            parent = mapper.readTree(connectedRealmJasonData);
+            JsonNode realmsJson = parent.path("connected_realms");
+            ConnectedServersModel[] convertedLines = mapper.convertValue(realmsJson, ConnectedServersModel[].class);
+
+            for (ConnectedServersModel convertedLine : convertedLines) {
+                convertedLine.setRegion(region);
+                convertedLine.setId();
+            }
+
+            return Arrays.asList(convertedLines);
+
+        } catch (JsonProcessingException e) {
+            //TODO exception handling
+            e.printStackTrace();
+        }
+
         return new ArrayList<>();
+
     }
 
 
@@ -177,12 +225,25 @@ public class BlizzardApiRequests {
                 token;
     }
 
-    public String generateConnectedServerListRequest(String token, String region) {
+    public String generateConnectedServersListRequest(String token, String region) {
         return "curl " +
                 "-X GET https://" +
                 region.toLowerCase() +
                 ".api.blizzard.com/data/wow/connected-realm/index?namespace=dynamic-" +
                 region.toLowerCase() +
+                "&locale=en_US&access_token=" +
+                token;
+    }
+
+    public String generateRequestForConnectedServers(String token, ConnectedServersModel connectedServerModel) {
+        return "curl " +
+                "-X GET " +
+                "https://" +
+                connectedServerModel.getRegion().getValue().toLowerCase() +
+                ".api.blizzard.com/data/wow/connected-realm/" +
+                connectedServerModel.extractId() +
+                "?namespace=dynamic-" +
+                connectedServerModel.getRegion().getValue().toLowerCase() +
                 "&locale=en_US&access_token=" +
                 token;
     }
