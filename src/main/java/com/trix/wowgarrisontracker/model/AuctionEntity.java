@@ -21,6 +21,7 @@ public class AuctionEntity {
     private Long itemId;
     private Long unitPrice;
     private Long quantity;
+    private Integer connectedServerId;
 
 
 }

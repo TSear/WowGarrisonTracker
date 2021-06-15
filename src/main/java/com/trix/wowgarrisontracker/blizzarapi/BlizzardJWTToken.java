@@ -28,10 +28,8 @@ public class BlizzardJWTToken {
 
     private static LocalDateTime expirationTime;
 
-    @Value("${client.id}")
     private static String clientId;
 
-    @Value("${client.secret}")
     private static String clientSecret;
 
 

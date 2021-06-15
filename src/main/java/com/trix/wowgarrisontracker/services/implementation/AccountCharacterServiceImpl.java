@@ -57,8 +57,8 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
         if (entry != null && entry.getAccountCharacter() != null) {
             AccountCharacter accountCharacter = entry.getAccountCharacter();
             accountCharacter.addResources(entry);
-            accountCharacterRepository.save(accountCharacter);
             entryService.save(entry);
+            accountCharacterRepository.save(accountCharacter);
             return true;
         }
         return false;

@@ -27,7 +27,7 @@ public class ConnectedServersModel {
     @OneToMany(mappedBy = "connectedServersModel", cascade = CascadeType.ALL)
     private List<Server> servers;
 
-    @Transient
+    @Enumerated(EnumType.ORDINAL)
     private Regions region;
 
     public ConnectedServersModel() {

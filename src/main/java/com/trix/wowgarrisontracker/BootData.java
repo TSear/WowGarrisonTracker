@@ -12,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -58,7 +59,6 @@ public class BootData implements CommandLineRunner {
     public void run(String... args) throws Exception {
         this.innit();
         auctionService.updateAuctionHouse();
-
     }
 
     private void innit() {
@@ -67,6 +67,13 @@ public class BootData implements CommandLineRunner {
             List<ConnectedServersModel> connectedServersModels = blizzardApiRequests.getListOfConnectedServers();
             connectedServersService.saveAll(connectedServersModels);
         }
+//        Server server = new Server();
+//        server.setId(1);
+//        server.setRegion("EU");
+//        server.setSlug("test");
+//        server.setName("Test");
+
+//        serverService.save(server);
 
         if (itemEntityRepository.count() == 0) {
             ItemEntity itemEntity = new ItemEntity();
@@ -74,36 +81,43 @@ public class BootData implements CommandLineRunner {
             itemEntity.setName("True Iron Ore");
             itemEntityRepository.save(itemEntity);
         }
+//        auctionService.updateAuctionHouse();
 
+        Account account1 = new Account();
+        account1.setId(1L);
+        account1.setLogin("login1");
+        account1.setPassword(passwordEncoder.encode("password1"));
 
-        auctionService.updateAuctionHouse();
         if (accountRepository.count() == 0) {
-            Account account1 = new Account();
-            account1.setId(1L);
-            account1.setLogin("login1");
-            account1.setPassword(passwordEncoder.encode("password1"));
             accountRepository.save(account1);
-            if (accountCharacterService.findAllByAccountId(account1.getId()).size() == 0) {
-                List<AccountCharacter> characters = IntStream.range(0, 30).mapToObj(i -> {
-                    AccountCharacter accountCharacter = new AccountCharacter();
-                    accountCharacter.setAccount(account1);
-                    accountCharacter.setId((long) i);
-                    accountCharacter.setCharacterName("Character: " + i);
-                    return accountCharacter;
-                }).map(accountCharacterRepository::save).collect(Collectors.toList());
-                characters.forEach(accCharacter -> IntStream.range(0, 5)
-                        .mapToObj(i -> generateEntryWithCharacter((int) (Math.random() * 100), (int) (Math.random() * 100), accCharacter, (long) i))
-                        .forEach(accountCharacterService::addNewEntryToAccountCharacter));
-            }
+        }
+        List<AccountCharacter> characters = IntStream.range(0, 30).mapToObj(i -> {
+            AccountCharacter accountCharacter = new AccountCharacter();
+            accountCharacter.setAccount(account1);
+            accountCharacter.setId((long) i);
+            accountCharacter.setCharacterName("Character: " + i);
+            return accountCharacter;
+        }).collect(Collectors.toList());
+        if (accountCharacterRepository.count() == 0) {
+            accountCharacterRepository.saveAll(characters);
+        }
+
+        if (entryRepository.count() == 0) {
+            List<Entry> entries = new ArrayList<>();
+            accountCharacterService.findAllByAccountId(1L).forEach(accCharacter -> IntStream.range(1, 5)
+                    .mapToObj(i -> generateEntryWithCharacter((int) (Math.random() * 100), (int) (Math.random() * 100), accCharacter))
+                    .forEach(entries::add));
+
+            entryRepository.saveAll(entries);
         }
 
 
     }
 
-    public static Entry generateEntryWithCharacter(int garrisonResources, int warPaint, AccountCharacter accountCharacter, Long id) {
+    public static Entry generateEntryWithCharacter(int garrisonResources, int warPaint, AccountCharacter
+            accountCharacter) {
         Entry entry = generateEntry(garrisonResources, warPaint);
         entry.setAccountCharacter(accountCharacter);
-        entry.setId(id);
         accountCharacter.addNewEntry(entry);
         return entry;
     }

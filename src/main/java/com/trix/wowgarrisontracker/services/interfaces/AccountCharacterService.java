@@ -43,4 +43,5 @@ public interface AccountCharacterService {
     List<AccountCharacter> getAllAccountCharacterPaged(Long id, Pageable pageable);
 
     int countAllAccountCharactersByAccountId(Long id);
+
 }

@@ -1,6 +1,8 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
+import com.trix.wowgarrisontracker.blizzarapi.BlizzardApiRequests;
 import com.trix.wowgarrisontracker.model.AuctionEntity;
+import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.model.ItemEntity;
 import com.trix.wowgarrisontracker.pojos.AuctionPojo;
 import com.trix.wowgarrisontracker.pojos.AuctionPojoWrapper;
@@ -23,14 +25,17 @@ public class AuctionServiceImpl implements AuctionService {
     private final AuctionEntityRepository repository;
     private final BlizzardRequestUtils blizzardRequestUtils;
     private final ItemsService itemEntityService;
+    private final BlizzardApiRequests blizzardApiRequests;
 
 
     public AuctionServiceImpl(ItemEntityRepository itemRepository, AuctionEntityRepository repository,
-                              ItemsService itemEntityService, BlizzardRequestUtils blizzardRequestUtils) {
+                              ItemsService itemEntityService, BlizzardRequestUtils blizzardRequestUtils,
+                              BlizzardApiRequests blizzardApiRequests) {
         this.itemRepository = itemRepository;
         this.repository = repository;
         this.blizzardRequestUtils = blizzardRequestUtils;
         this.itemEntityService = itemEntityService;
+        this.blizzardApiRequests = blizzardApiRequests;
     }
 
 
@@ -70,10 +75,10 @@ public class AuctionServiceImpl implements AuctionService {
     public void updateAuctionHouse() {
 
         while (true) {
-            List<AuctionEntity> listOfAuctionHouseEntities = blizzardRequestUtils.getAuctionHouse();
-            List<ItemEntity> items = itemEntityService.findAllItemEntities();
+            List<AuctionEntity> auctionEntities = blizzardApiRequests.getAuctionHouse();
             this.removeAll();
-            listOfAuctionHouseEntities.stream().filter(x -> items.contains(new ItemEntity(x.getItemId()))).forEach(this::save);
+            repository.saveAll(auctionEntities);
+            System.out.println("Updated auctionHouse");
             try {
                 Thread.sleep(30 * 60 * 1000);
 //                Thread.sleep(1000*60);

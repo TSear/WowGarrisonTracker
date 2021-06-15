@@ -6,6 +6,7 @@ import com.trix.wowgarrisontracker.services.interfaces.ConnectedServersService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class ConnectedServersServiceImpl implements ConnectedServersService {
@@ -33,5 +34,10 @@ public class ConnectedServersServiceImpl implements ConnectedServersService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<ConnectedServersModel> findAll() {
+        return repository.findAll();
     }
 }

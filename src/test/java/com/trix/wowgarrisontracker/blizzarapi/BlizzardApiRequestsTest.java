@@ -1,5 +1,6 @@
 package com.trix.wowgarrisontracker.blizzarapi;
 
+import com.trix.wowgarrisontracker.model.AuctionEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +49,17 @@ class BlizzardApiRequestsTest {
 
         blizzardApiRequests.getListOfConnectedServers();
         //when
+
+        //then
+    }
+
+    @Test
+    void auctionHouse() {
+        //given
+
+        //when
+        List<AuctionEntity> entities = blizzardApiRequests.getAuctionHouse();
+        System.out.println();
 
         //then
     }
