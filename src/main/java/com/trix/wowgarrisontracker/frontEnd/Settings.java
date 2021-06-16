@@ -144,7 +144,7 @@ public Settings(OptionsService optionsService, ServerService serverService, Opti
                 serverNameComboBox.setItems(serverList);
             }
             else {
-                serverNameComboBox.setItems(groupedServers.get(regionComboBox.getValue().getValue().toLowerCase()));
+                serverNameComboBox.setItems(groupedServers.get(regionComboBox.getValue().getValue()));
             }
         });
         return regionComboBox;
