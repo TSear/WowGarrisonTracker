@@ -4,6 +4,7 @@ import com.trix.wowgarrisontracker.converters.OptionsDTOToOptions;
 import com.trix.wowgarrisontracker.converters.OptionsToOptionsDTO;
 import com.trix.wowgarrisontracker.enums.Regions;
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
+import com.trix.wowgarrisontracker.frontEnd.interfaces.Refreshable;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
 import com.trix.wowgarrisontracker.model.Options;
 import com.trix.wowgarrisontracker.model.Server;
@@ -46,9 +47,11 @@ public class Settings extends VerticalLayout {
     private final OptionsService optionsService;
     private final List<Server> serverList;
     private final OptionsDTOToOptions optionsDTOToOptions;
+    private final Refreshable auctionHouse;
     private Map<String, List<Server>> groupedServers;
 
-public Settings(OptionsService optionsService, ServerService serverService, OptionsDTOToOptions optionsDTOToOptions) {
+public Settings(OptionsService optionsService, ServerService serverService, OptionsDTOToOptions optionsDTOToOptions,
+                AuctionHouse auctionHouse) {
         this.optionsService = optionsService;
         this.optionsDTOToOptions = optionsDTOToOptions;
         serverList = serverService.getServers();
@@ -57,6 +60,7 @@ public Settings(OptionsService optionsService, ServerService serverService, Opti
         this.optionsDTOBinder = new Binder<>();
         this.optionsDTO = optionsToOptionsDTO.convert(GeneralUtils.getUserSettings());
         this.savedNotification = new Notification("Options were saved", 2000);
+        this.auctionHouse = auctionHouse;
     }
 
     @PostConstruct
@@ -104,6 +108,7 @@ public Settings(OptionsService optionsService, ServerService serverService, Opti
                 tmp.getAccount().setOptions(optionsDTOToOptions.convert(optionsDTO));
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(tmp, null, new ArrayList<>()));
                 savedNotification.open();
+                auctionHouse.refresh();
             } catch (ValidationException e) {
                 System.out.println(e.getMessage());
             }

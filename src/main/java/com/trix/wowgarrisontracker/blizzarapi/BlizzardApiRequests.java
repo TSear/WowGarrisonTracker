@@ -170,6 +170,7 @@ public class BlizzardApiRequests {
                 for (ItemEntity itemEntity : itemsToSearchFor) {
                     if (auctionHouseEntity.getItemId().equals(itemEntity.getId())) {
                         auctionHouseEntity.setConnectedServerId(connectedServersModel.getConnectedServerId());
+                        auctionHouseEntity.setItemEntity(itemEntity);
                         listOfParsedAuctionEntities.add(auctionHouseEntity);
                         break;
                     }

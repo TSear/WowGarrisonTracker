@@ -10,9 +10,11 @@ import java.util.Objects;
 public class AuctionPojo {
     private Long unitPrice;
     private Long quantity;
+    private Long itemId;
+    private String itemName;
 
     public String getPrice() {
-        String result = "";
+        String result;
         Long price = this.unitPrice;
 
         result = price % 100 + "c";

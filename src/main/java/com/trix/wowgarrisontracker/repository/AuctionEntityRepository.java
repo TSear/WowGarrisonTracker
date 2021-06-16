@@ -9,4 +9,6 @@ public interface AuctionEntityRepository extends JpaRepository<AuctionEntity, Lo
 
     List<AuctionEntity> findAuctionEntityByItemId(Long itemId);
 
+    List<AuctionEntity> findByConnectedServerId(Integer connectedServerId);
+
 }

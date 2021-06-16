@@ -1,6 +1,7 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.blizzarapi.BlizzardApiRequests;
+import com.trix.wowgarrisontracker.converters.AuctionToAuctionPojo;
 import com.trix.wowgarrisontracker.model.AuctionEntity;
 import com.trix.wowgarrisontracker.model.ItemEntity;
 import com.trix.wowgarrisontracker.pojos.AuctionPojo;
@@ -9,38 +10,40 @@ import com.trix.wowgarrisontracker.repository.AuctionEntityRepository;
 import com.trix.wowgarrisontracker.repository.ItemEntityRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
 import com.trix.wowgarrisontracker.services.interfaces.ItemsService;
-import com.trix.wowgarrisontracker.utils.BlizzardRequestUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AuctionServiceImpl implements AuctionService {
 
     private final ItemEntityRepository itemRepository;
     private final AuctionEntityRepository repository;
-    private final BlizzardRequestUtils blizzardRequestUtils;
     private final ItemsService itemEntityService;
     private final BlizzardApiRequests blizzardApiRequests;
+    private final AuctionToAuctionPojo auctionPojo;
 
 
     public AuctionServiceImpl(ItemEntityRepository itemRepository, AuctionEntityRepository repository,
-                              ItemsService itemEntityService, BlizzardRequestUtils blizzardRequestUtils,
+                              ItemsService itemEntityService,
                               BlizzardApiRequests blizzardApiRequests) {
         this.itemRepository = itemRepository;
         this.repository = repository;
-        this.blizzardRequestUtils = blizzardRequestUtils;
         this.itemEntityService = itemEntityService;
         this.blizzardApiRequests = blizzardApiRequests;
+        auctionPojo = new AuctionToAuctionPojo();
     }
 
 
     @Override
     public boolean save(AuctionEntity auctionEntity) {
-        return repository.save(auctionEntity) != null;
+        repository.save(auctionEntity);
+        return true;
     }
 
 
@@ -79,6 +82,7 @@ public class AuctionServiceImpl implements AuctionService {
             repository.saveAll(auctionEntities);
             System.out.println("Updated auctionHouse");
             try {
+                //TODO busy waiting!!! Need to find a way to change it
                 Thread.sleep(30 * 60 * 1000);
 //                Thread.sleep(1000*60);
                 System.out.println("Updating auction House");
@@ -114,4 +118,42 @@ public class AuctionServiceImpl implements AuctionService {
 
         return listOfAuctionPojos;
     }
+
+    @Override
+    public List<AuctionEntity> findByConnectedServerId(Integer connectedServerId) {
+
+        return repository.findByConnectedServerId(connectedServerId);
+
+    }
+
+    @Override
+    public List<AuctionPojoWrapper> findByConnectedServerIdPojo(Integer connectedServerId) {
+
+        List<AuctionPojo> collect = findByConnectedServerId(connectedServerId).stream().map(auctionPojo::convert).collect(Collectors.toList());
+        return flattenAuctions(collect);
+    }
+
+    private List<AuctionPojoWrapper> flattenAuctions(List<AuctionPojo> auctions) {
+
+        List<ItemEntity> items = itemEntityService.findAll();
+
+        Map<Long, List<AuctionPojo>> groupedByItemId = auctions.stream().collect(Collectors.groupingBy(AuctionPojo::getItemId));
+
+        return groupedByItemId.entrySet().stream()
+                .map(entry -> convertToWrapper(entry.getKey(), entry.getValue(), items))
+                .collect(Collectors.toList());
+    }
+
+    private AuctionPojoWrapper convertToWrapper(Long id, List<AuctionPojo> auctions, List<ItemEntity> items) {
+
+        AuctionPojoWrapper auctionPojoWrapper = new AuctionPojoWrapper(id, auctions);
+
+        if (auctions.size() > 0)
+            auctionPojoWrapper.setItemName(auctions.get(0).getItemName());
+
+        auctionPojoWrapper.flattenAuctions();
+        return auctionPojoWrapper;
+
+    }
+
 }
