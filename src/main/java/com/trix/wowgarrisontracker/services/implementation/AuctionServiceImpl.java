@@ -2,7 +2,6 @@ package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.blizzarapi.BlizzardApiRequests;
 import com.trix.wowgarrisontracker.model.AuctionEntity;
-import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.model.ItemEntity;
 import com.trix.wowgarrisontracker.pojos.AuctionPojo;
 import com.trix.wowgarrisontracker.pojos.AuctionPojoWrapper;
@@ -75,7 +74,7 @@ public class AuctionServiceImpl implements AuctionService {
     public void updateAuctionHouse() {
 
         while (true) {
-            List<AuctionEntity> auctionEntities = blizzardApiRequests.getAuctionHouse();
+            List<AuctionEntity> auctionEntities = blizzardApiRequests.getFilteredAuctions();
             this.removeAll();
             repository.saveAll(auctionEntities);
             System.out.println("Updated auctionHouse");
@@ -92,7 +91,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public List<AuctionPojoWrapper> findAllAuctions() {
-        List<ItemEntity> itemEntities = itemEntityService.findAllItemEntities();
+        List<ItemEntity> itemEntities = itemEntityService.findAll();
         List<AuctionPojoWrapper> listOfAuctionPojos = new ArrayList<>();
 
         for (ItemEntity tmp : itemEntities) {

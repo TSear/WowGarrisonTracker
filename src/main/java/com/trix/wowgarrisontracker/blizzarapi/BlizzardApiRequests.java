@@ -1,7 +1,6 @@
 package com.trix.wowgarrisontracker.blizzarapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -26,6 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.trix.wowgarrisontracker.blizzarapi.BlizzardJWTToken.getToken;
+
 @Component
 public class BlizzardApiRequests {
 
@@ -34,10 +35,20 @@ public class BlizzardApiRequests {
 
     private final ConnectedServersService connectedServersService;
 
+    private final ObjectMapper auctionsMapper;
+
 
     public BlizzardApiRequests(ItemsService itemsService, ConnectedServersService connectedServersService) {
         this.itemsService = itemsService;
         this.connectedServersService = connectedServersService;
+        auctionsMapper = new ObjectMapper();
+
+        SimpleModule module = new SimpleModule("AuctionHouseResponseDeserializer");
+        module.addDeserializer(AuctionEntity.class, new AuctionHouseResponseDeserializer());
+
+        auctionsMapper.registerModule(module);
+        auctionsMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
     }
 
     public String executeApiRequest(String curlRequest) {
@@ -57,7 +68,7 @@ public class BlizzardApiRequests {
     public List<ConnectedServersModel> getListOfConnectedServers() {
 
         ObjectMapper mapper = new ObjectMapper();
-        String token = BlizzardJWTToken.getToken();
+        String token = getToken();
         List<ConnectedServersModel> listOfConnectedSeverModels = new ArrayList<>();
 
         //Skip first value because it is 'All'
@@ -142,27 +153,18 @@ public class BlizzardApiRequests {
 
     }
 
+    public List<AuctionEntity> getFilteredAuctions() {
+        return getFilteredAuctions(connectedServersService.findAll());
+    }
 
-    public List<AuctionEntity> getAuctionHouse() {
+    public List<AuctionEntity> getFilteredAuctions(List<ConnectedServersModel> connectedServersModels) {
 
-        ObjectMapper auctionMapper = new ObjectMapper();
         List<AuctionEntity> listOfParsedAuctionEntities = new ArrayList<>();
-        List<ConnectedServersModel> connectedServersModels = connectedServersService.findAll();
-        String token = BlizzardJWTToken.getToken();
-        List<ItemEntity> itemsToSearchFor = itemsService.findAllItemEntities();
-
-        SimpleModule module = new SimpleModule("AuctionHouseResponseDeserializer",
-                new Version(1, 0, 0, null, null, null));
-        module.addDeserializer(AuctionEntity.class, new AuctionHouseResponseDeserializer());
-
-        auctionMapper.registerModule(module);
-        auctionMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        List<ItemEntity> itemsToSearchFor = itemsService.findAll();
 
         for (ConnectedServersModel connectedServersModel : connectedServersModels) {
 
-            List<AuctionEntity> auctionHouseEntities = getConnectedServerAuctionHouse(token, connectedServersModel, auctionMapper);
-            System.out.println("Working on server: " + connectedServersModel.getConnectedServerId() +
-                    "  Items :" + auctionHouseEntities.size());
+            List<AuctionEntity> auctionHouseEntities = getAuctions(connectedServersModel);
 
             for (AuctionEntity auctionHouseEntity : auctionHouseEntities) {
                 for (ItemEntity itemEntity : itemsToSearchFor) {
@@ -178,32 +180,36 @@ public class BlizzardApiRequests {
 
     }
 
-    public List<AuctionEntity> getConnectedServerAuctionHouse(String token,
-                                                              ConnectedServersModel connectedServersModel,
-                                                              ObjectMapper mapper) {
-        String request = generateAuctionHouseRequest(BlizzardJWTToken.getToken(), connectedServersModel);
+    public List<AuctionEntity> getAuctions(ConnectedServersModel connectedServersModel) {
+
+        String request = generateAuctionsRequest(getToken(), connectedServersModel);
         String jsonData = executeApiRequest(request);
+        List<AuctionEntity> auctionEntities = new ArrayList<>();
 
         try {
-            JsonNode jsonWithAllInformation = mapper.readTree(jsonData);
-
-            JsonNode jsonWithAuctions = jsonWithAllInformation.path("auctions");
-            return mapper.convertValue(jsonWithAuctions, new TypeReference<>() {
-            });
-
+            auctionEntities = parseAuctionsJson(jsonData);
         } catch (JsonProcessingException e) {
             //TODO exception handling
             e.printStackTrace();
-
         }
 
-        return new ArrayList<>();
+        return auctionEntities;
+    }
+
+
+    public List<AuctionEntity> parseAuctionsJson(String jsonData) throws JsonProcessingException {
+
+        JsonNode rootJsonNode = auctionsMapper.readTree(jsonData);
+        JsonNode auctionsJsonNode = rootJsonNode.path("auctions");
+        return auctionsMapper.convertValue(auctionsJsonNode, new TypeReference<>() {
+        });
+
     }
 
 
     public List<Server> getListOfServers() {
 
-        String token = BlizzardJWTToken.getToken();
+        String token = getToken();
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -250,7 +256,7 @@ public class BlizzardApiRequests {
 
     }
 
-    private String generateAuctionHouseRequest(String token, ConnectedServersModel connectedServersModel) {
+    private String generateAuctionsRequest(String token, ConnectedServersModel connectedServersModel) {
         return "curl -X GET " +
                 "https://" +
                 connectedServersModel.getRegion().getValue() +

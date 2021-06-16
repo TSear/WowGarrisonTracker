@@ -28,7 +28,7 @@ public class ItemsServiceImpl implements ItemsService {
     }
 
     @Override
-    public List<ItemEntity> findAllItemEntities() {
+    public List<ItemEntity> findAll() {
         return repository.findAll();
     }
 

@@ -10,6 +10,6 @@ public interface ItemsService {
 
     boolean save(ItemEntity itemEntity);
 
-    List<ItemEntity> findAllItemEntities();
+    List<ItemEntity> findAll();
 
 }

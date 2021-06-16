@@ -58,7 +58,7 @@ class BlizzardApiRequestsTest {
         //given
 
         //when
-        List<AuctionEntity> entities = blizzardApiRequests.getAuctionHouse();
+        List<AuctionEntity> entities = blizzardApiRequests.getFilteredAuctions();
         System.out.println();
 
         //then
