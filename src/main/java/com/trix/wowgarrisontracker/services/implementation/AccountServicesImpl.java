@@ -4,9 +4,15 @@ import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.pojos.RegisterPojo;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
+import net.bytebuddy.utility.RandomString;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 
 @Service
@@ -14,22 +20,29 @@ import java.util.Optional;
 public class AccountServicesImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+
     private final PasswordEncoder passwordEncoder;
 
-    public AccountServicesImpl(AccountRepository accountRepository,
-                               PasswordEncoder passwordEncoder) {
+    private final JavaMailSender mailSender;
+
+    public AccountServicesImpl(AccountRepository accountRepository, PasswordEncoder passwordEncoder, JavaMailSender mailSender) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
+        this.mailSender = mailSender;
     }
 
-
-    @Override
-    public boolean createAccount(RegisterPojo registerPojo) {
+    public boolean register(RegisterPojo registerPojo, String url) {
 
         if (registerPojo != null && !isLoginTaken(registerPojo.getLogin())) {
 
             Account account = createAccountFromRegisterPojo(registerPojo);
             accountRepository.save(account);
+
+            try {
+                verificationEmail(account,url);
+            } catch (MessagingException | UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
 
             return true;
 
@@ -38,12 +51,44 @@ public class AccountServicesImpl implements AccountService {
         return false;
     }
 
+    @Override
+    public void verificationEmail(Account user, String siteURL) throws MessagingException, UnsupportedEncodingException {
+        String toAddress = user.getEmail();
+        String fromAddress = "GarrisonTracker@gmail.com";
+        String senderName = "GarrisonTracker";
+        String subject = "Please verify your registration";
+        String content = "Dear [[name]],<br>"
+                + "Please click the link below to verify your registration:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Thank you,<br>"
+                + "Your company name.";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getLogin());
+        String verifyURL = siteURL + "/verify?code=" + user.getActivationCode();
+
+        content = content.replace("[[URL]]", verifyURL);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
+
     private Account createAccountFromRegisterPojo(RegisterPojo registerPojo) {
 
         Account account = new Account();
         account.getOptions().setServer(registerPojo.getServer());
         account.setPassword(passwordEncoder.encode(registerPojo.getPassword()));
         account.setLogin(registerPojo.getLogin());
+        account.setEnabled(false);
+        account.setEmail(registerPojo.getEmail());
+        account.setActivationCode(RandomString.make(64));
 
         return account;
     }
@@ -81,6 +126,7 @@ public class AccountServicesImpl implements AccountService {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         return optionalAccount.orElse(null);
     }
+
 
 
 }

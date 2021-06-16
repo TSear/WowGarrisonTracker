@@ -19,6 +19,8 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
 
@@ -89,7 +91,8 @@ public class RegisterPage extends VerticalLayout {
             RegisterPojo pojo = new RegisterPojo();
             try {
                 pojoBinder.writeBean(pojo);
-                accountService.createAccount(pojo);
+                String url = ((VaadinServletRequest) VaadinService.getCurrentRequest()).getHttpServletRequest().getRequestURL().toString();
+                accountService.register(pojo, url);
                 UI.getCurrent().navigate(LoginPage.class);
             } catch (ValidationException e) {
                 //TODO addWS exception handling

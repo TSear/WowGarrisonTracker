@@ -106,9 +106,7 @@ public class BootData implements CommandLineRunner {
             List<Entry> entries = new ArrayList<>();
             accountCharacterService.findAllByAccountId(1L).forEach(accCharacter -> IntStream.range(1, 5)
                     .mapToObj(i -> generateEntryWithCharacter((int) (Math.random() * 100), (int) (Math.random() * 100), accCharacter))
-                    .forEach(entries::add));
-
-            entryRepository.saveAll(entries);
+                    .forEach(accountCharacterService::addNewEntryToAccountCharacter));
         }
 
 

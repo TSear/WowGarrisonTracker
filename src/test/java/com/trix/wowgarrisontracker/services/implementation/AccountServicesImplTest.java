@@ -44,12 +44,14 @@ class AccountServicesImplTest {
 
     Account account;
 
+    String verificationUrl = "";
+
     @BeforeEach
     void setUp() {
 
         passwordEncoder = new BCryptPasswordEncoder();
 
-        accountServices = new AccountServicesImpl(accountRepository, passwordEncoder);
+        accountServices = new AccountServicesImpl(accountRepository, passwordEncoder,null);
 
         registerPojo = new RegisterPojo();
         registerPojo.setLogin("login1");
@@ -68,7 +70,7 @@ class AccountServicesImplTest {
         //when
         when(accountRepository.existsByLogin(anyString())).thenReturn(false);
         //then
-        assertTrue(accountServices.createAccount(registerPojo));
+        assertTrue(accountServices.register(registerPojo, verificationUrl));
     }
 
     @Test
@@ -77,8 +79,8 @@ class AccountServicesImplTest {
         //when
         when(accountRepository.existsByLogin(anyString())).thenReturn(true);
         //then
-        assertFalse(accountServices.createAccount(registerPojo));
-        assertFalse(accountServices.createAccount(null));
+        assertFalse(accountServices.register(registerPojo, verificationUrl));
+        assertFalse(accountServices.register(null, verificationUrl));
     }
 
     @Test
