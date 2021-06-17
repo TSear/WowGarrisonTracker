@@ -5,11 +5,9 @@ import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.model.Options;
 import com.trix.wowgarrisontracker.repository.OptionsRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,8 +19,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class OptionsServiceImplTest {
 
-    @Rule
-    ExpectedException expectedException = ExpectedException.none();
 
     @Mock
     OptionsRepository repository;

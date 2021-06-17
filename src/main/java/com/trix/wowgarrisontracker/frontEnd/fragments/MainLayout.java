@@ -47,8 +47,8 @@ public class MainLayout extends AppLayoutRouterLayout<LeftLayouts.LeftResponsive
                         .add(new NotificationButton<>(VaadinIcon.BELL, notifications))
                         .build())
                 .withAppMenu(LeftAppMenuBuilder.get()
-                        .add(new LeftNavigationItem("Track", VaadinIcon.HOME.create(), TrackLayout.class),
-                                new LeftNavigationItem("Characters", VaadinIcon.TABLE.create(), CharactersLayout.class),
+                        .add(new LeftNavigationItem("Track", VaadinIcon.LINES_LIST.create(), TrackLayout.class),
+                                new LeftNavigationItem("Characters", VaadinIcon.GROUP.create(), CharactersLayout.class),
                                 new LeftNavigationItem("Statistics", VaadinIcon.BAR_CHART, Statistics.class),
                                 new LeftNavigationItem("Auction House", VaadinIcon.MONEY_EXCHANGE, AuctionHouse.class),
                                 new LeftNavigationItem("About", VaadinIcon.INFO, View5.class),

@@ -6,14 +6,26 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 //@StyleSheet("./contact.css")
 //@CssImport(value = "./contact.css",themeFor = "vaadin-vertical-layout")
+@Component
 @Route(value = "contact", layout = MainLayout.class)
 public class Contact extends FlexLayout {
 
 
     private final VerticalLayout mainLayout;
+
+    @Value("${about.email}")
+    private String email;
+
+    @Value("${about.phonenumber}")
+    private String phonenumber;
 
     public Contact() {
 
@@ -32,9 +44,14 @@ public class Contact extends FlexLayout {
         mainLayout.getStyle().set("background", "#252422");
         wrapperForBorder.add(mainLayout);
 
-        createInfoBox("E-mail: ", "placeholder");
-        createInfoBox("Phone Number: ", "placeholder");
-        createInfoBox("Second Phone Number: ", "placeholder");
+
+//        createInfoBox("Second Phone Number: ", "placeholder");
+    }
+
+    @PostConstruct
+    private void init(){
+        createInfoBox("E-mail: ", email);
+        createInfoBox("Phone Number: ", phonenumber);
     }
 
     private void createInfoBox(String s, String labelValue) {

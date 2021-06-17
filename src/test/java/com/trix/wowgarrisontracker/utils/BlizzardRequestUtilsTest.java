@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 
@@ -150,7 +150,7 @@ public class BlizzardRequestUtilsTest {
             fail("Failed during generating token -> getAccessToken_successfully");
         }
         //then
-        assertTrue(blizzardRequestUtils.getToken() != null);
+        assertNotNull(blizzardRequestUtils.getToken());
         assertTrue(blizzardRequestUtils.getToken().startsWith("bearer "));
         assertTrue(blizzardRequestUtils.getToken().length() > 7);
 

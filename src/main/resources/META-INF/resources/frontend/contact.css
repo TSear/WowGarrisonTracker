@@ -10,6 +10,11 @@
     font-weight: bold;
 }
 
+.value{
+    font-style: italic;
+    font-size: 25px;
+}
+
 .info-box {
     margin: 1em 1em;
     background: #252422;
