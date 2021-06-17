@@ -39,7 +39,7 @@ public class AccountServicesImpl implements AccountService {
             accountRepository.save(account);
 
             try {
-                verificationEmail(account,url);
+                verificationEmail(account, url);
             } catch (MessagingException | UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -71,13 +71,28 @@ public class AccountServicesImpl implements AccountService {
         helper.setSubject(subject);
 
         content = content.replace("[[name]]", user.getLogin());
-        String verifyURL = siteURL + "/verify?code=" + user.getActivationCode();
+        String verifyURL = siteURL + "verify?code=" + user.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyURL);
 
         helper.setText(content, true);
 
         mailSender.send(message);
+    }
+
+    @Override
+    public boolean verify(String verificationCode) {
+        Optional<Account> optionalAccount = accountRepository.findByVerificationCode(verificationCode);
+
+        if (optionalAccount.isEmpty() || optionalAccount.get().isEnabled()) {
+            return false;
+        }else{
+            Account account = optionalAccount.get();
+            account.setVerificationCode(null);
+            account.setEnabled(true);
+            accountRepository.save(account);
+            return true;
+        }
     }
 
     private Account createAccountFromRegisterPojo(RegisterPojo registerPojo) {
@@ -88,7 +103,7 @@ public class AccountServicesImpl implements AccountService {
         account.setLogin(registerPojo.getLogin());
         account.setEnabled(false);
         account.setEmail(registerPojo.getEmail());
-        account.setActivationCode(RandomString.make(64));
+        account.setVerificationCode(RandomString.make(64));
 
         return account;
     }
@@ -109,7 +124,7 @@ public class AccountServicesImpl implements AccountService {
     }
 
     @Override
-    public Account attemptToLogIn(String login, String password){
+    public Account attemptToLogIn(String login, String password) {
 
         Account account = this.findAccountByLogin(login);
 
@@ -126,7 +141,6 @@ public class AccountServicesImpl implements AccountService {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         return optionalAccount.orElse(null);
     }
-
 
 
 }

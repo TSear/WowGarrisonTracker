@@ -87,6 +87,7 @@ public class BootData implements CommandLineRunner {
         account1.setId(1L);
         account1.setLogin("login1");
         account1.setPassword(passwordEncoder.encode("password1"));
+        account1.setEnabled(true);
 
         if (accountRepository.count() == 0) {
             accountRepository.save(account1);

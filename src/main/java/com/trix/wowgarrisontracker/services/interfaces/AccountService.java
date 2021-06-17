@@ -24,5 +24,7 @@ public interface AccountService {
 
     void verificationEmail(Account user, String siteUrl) throws MessagingException, UnsupportedEncodingException;
 
+    boolean verify(String verificationCode);
+
 
 }

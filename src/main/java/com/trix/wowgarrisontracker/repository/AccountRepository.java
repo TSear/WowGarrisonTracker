@@ -13,4 +13,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     boolean existsByLogin(String login);
 
+    Optional<Account> findByVerificationCode(String verificationCode);
+
 }

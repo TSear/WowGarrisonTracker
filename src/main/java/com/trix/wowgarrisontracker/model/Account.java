@@ -30,16 +30,18 @@ public class Account {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "email")
     private String email;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AccountCharacter> accountCharacters;
 
     private Long amountOfEntries;
 
     @Column(length = 64)
-    private String activationCode;
+    private String verificationCode;
 
+    @Column(name = "enabled")
     private boolean enabled;
 
 

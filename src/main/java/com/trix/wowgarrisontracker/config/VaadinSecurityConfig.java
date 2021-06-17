@@ -66,7 +66,7 @@ public class VaadinSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
-                .antMatchers("/register").permitAll()
+                .antMatchers("/register","/verify", "/").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
