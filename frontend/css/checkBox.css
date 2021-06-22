@@ -1,0 +1,9 @@
+[part="checkbox"],
+:host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="checkbox"] {
+    background-color: #CCC5B9;
+}
+
+:host([indeterminate]) [part="checkbox"],
+ :host([checked]) [part="checkbox"] {
+    background-color: #EB5E28;
+}

@@ -1,72 +1,62 @@
 package com.trix.wowgarrisontracker.frontEnd.fragments;
 
-import com.github.appreciated.app.layout.addons.notification.DefaultNotificationHolder;
-import com.github.appreciated.app.layout.addons.notification.component.NotificationButton;
-import com.github.appreciated.app.layout.component.appbar.AppBarBuilder;
-import com.github.appreciated.app.layout.component.applayout.LeftLayouts;
-import com.github.appreciated.app.layout.component.builder.AppLayoutBuilder;
-import com.github.appreciated.app.layout.component.menu.left.builder.LeftAppMenuBuilder;
-import com.github.appreciated.app.layout.component.menu.left.items.LeftClickableItem;
-import com.github.appreciated.app.layout.component.menu.left.items.LeftNavigationItem;
-import com.github.appreciated.app.layout.component.router.AppLayoutRouterLayout;
-import com.github.appreciated.app.layout.entity.DefaultBadgeHolder;
 import com.trix.wowgarrisontracker.frontEnd.*;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.page.Push;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 
-import static com.github.appreciated.app.layout.entity.Section.FOOTER;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-@Profile("vaadin")
-@CssImport("./modified-lumo.css")
-@Push
-@Component
+@CssImport(value = "/css/MainLayout.css", themeFor = "vaadin-app-layout")
+@CssImport(value = "/css/MainLayout.css")
 @UIScope
-public class MainLayout extends AppLayoutRouterLayout<LeftLayouts.LeftResponsive> {
+public class MainLayout extends AppLayout {
 
-    private final DefaultNotificationHolder notifications = new DefaultNotificationHolder();
-    private final DefaultBadgeHolder badge = new DefaultBadgeHolder(5);
 
     public MainLayout() {
 
-        notifications.addClickListener(notification -> {/* ... */});
+        H2 logoText = new H2("Garrison Tracker");
+        addToNavbar(new DrawerToggle(), logoText);
+        setDrawerOpened(true);
 
 
-        LeftNavigationItem menuEntry = new LeftNavigationItem("Menu", VaadinIcon.MENU.create(), View6.class);
+        generateTabs();
 
-        badge.bind(menuEntry.getBadge());
-
-        init(AppLayoutBuilder.get(LeftLayouts.LeftResponsive.class)
-                .withTitle("Garrison Tracker")
-                .withAppBar(AppBarBuilder.get()
-                        .add(new NotificationButton<>(VaadinIcon.BELL, notifications))
-                        .build())
-                .withAppMenu(LeftAppMenuBuilder.get()
-                        .add(new LeftNavigationItem("Track", VaadinIcon.LINES_LIST.create(), TrackLayout.class),
-                                new LeftNavigationItem("Characters", VaadinIcon.GROUP.create(), CharactersLayout.class),
-                                new LeftNavigationItem("Statistics", VaadinIcon.BAR_CHART, Statistics.class),
-                                new LeftNavigationItem("Auction House", VaadinIcon.MONEY_EXCHANGE, AuctionHouse.class),
-                                new LeftNavigationItem("About", VaadinIcon.INFO, View5.class),
-                                new LeftNavigationItem("Contact", VaadinIcon.PHONE, Contact.class))
-                        .addToSection(FOOTER,
-                                new Hr(),
-                                new LeftNavigationItem("Settings", VaadinIcon.COGS.create(), Settings.class),
-                                new LeftClickableItem("Log Out", VaadinIcon.SIGN_OUT.create(), clickEvent -> UI.getCurrent().getPage().setLocation("/logout")))
-                        .build())
-                .build());
-        this.getContent().setClassName("content-box");
     }
 
-    public DefaultNotificationHolder getNotifications() {
-        return notifications;
+    private void generateTabs() {
+
+        Tabs tabs = new Tabs();
+        tabs.setOrientation(Tabs.Orientation.VERTICAL);
+
+        List<Tab> listOfTabs = new ArrayList<>(Arrays.asList(
+                new Tab(VaadinIcon.LINES_LIST.create(), new RouterLink("Track", TrackLayout.class)),
+                new Tab(VaadinIcon.GROUP.create(), new RouterLink("Characters", CharactersLayout.class)),
+                new Tab(VaadinIcon.CHART.create(), new RouterLink("Statistics", Statistics.class)),
+                new Tab(VaadinIcon.MONEY.create(), new RouterLink("Auction House", AuctionHouse.class)),
+                new Tab(VaadinIcon.PHONE.create(), new RouterLink("Contact", Contact.class)),
+                new Tab(VaadinIcon.COGS.create(), new RouterLink("Settings", Settings.class)),
+                new Tab(VaadinIcon.EXIT.create(), new Anchor("logout", "Log Out")))
+        );
+
+        listOfTabs.forEach(tab -> {
+            tab.setClassName(LayoutVariables.DRAWER_TAB);
+            tabs.add(tab);
+        });
+
+        listOfTabs.get(listOfTabs.size()-1).addClassName(LayoutVariables.LOG_OUT);
+
+
+        addToDrawer(tabs);
     }
 
-    public DefaultBadgeHolder getBadge() {
-        return badge;
-    }
 }

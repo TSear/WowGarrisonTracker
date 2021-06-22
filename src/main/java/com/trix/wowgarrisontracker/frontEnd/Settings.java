@@ -25,6 +25,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -35,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@CssImport(value = "./settings.css", themeFor = "vaadin-form-layout")
+@CssImport(value = "/css/settings.css", themeFor = "vaadin-form-layout")
 @UIScope
 @Route(value = "settings", layout = MainLayout.class)
 public class Settings extends VerticalLayout {
@@ -159,5 +160,6 @@ public Settings(OptionsService optionsService, ServerService serverService, Opti
     private void configureFrame() {
         this.setSizeFull();
         this.setClassName("background");
+        addClassName(LayoutVariables.PRIMARY_BACKGROUND);
     }
 }

@@ -17,24 +17,24 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.context.annotation.Profile;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Profile("vaadin")
 @UIScope
-@CssImport(value = "./globalVariables.css")
-@CssImport(value = "./css/global.css")
-@CssImport(value = "./textField.css", themeFor = "vaadin-text-field")
-@CssImport(value = "./textField.css", themeFor = "vaadin-password-field")
-@CssImport(value = "./grid.css", themeFor = "vaadin-grid")
-@CssImport(value = "./login.css", themeFor = "vaadin-login-form-wrapper")
-@CssImport(value = "./dialogBox.css", themeFor = "vaadin-dialog-overlay")
-@CssImport(value = "./statistics.css")
-@CssImport(value = "./contact.css")
+@CssImport(value = "/css/globalVariables.css")
+@CssImport(value = "/css/global.css")
+@CssImport(value = "/css/textField.css", themeFor = "vaadin-text-field")
+@CssImport(value = "/css/textField.css", themeFor = "vaadin-password-field")
+@CssImport(value = "/css/grid.css", themeFor = "vaadin-grid")
+@CssImport(value = "/css/login.css", themeFor = "vaadin-login-form-wrapper")
+@CssImport(value = "/css/dialogBox.css", themeFor = "vaadin-dialog-overlay")
+@CssImport(value = "/css/statistics.css")
+@CssImport(value = "/css/contact.css")
 @RouteAlias(value = "", layout = MainLayout.class)
 @Route(value = "track", layout = MainLayout.class)
 public class TrackLayout extends VerticalLayout implements Refreshable {

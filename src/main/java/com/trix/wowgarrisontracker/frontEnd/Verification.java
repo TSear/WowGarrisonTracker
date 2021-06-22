@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
-@CssImport(value = "/verification.css")
+@CssImport(value = "/css/verification.css")
 @Component
 @UIScope
 @Route(value = "verify")

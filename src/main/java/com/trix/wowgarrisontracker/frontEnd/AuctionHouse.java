@@ -10,12 +10,12 @@ import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Header;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -65,6 +65,7 @@ public class AuctionHouse extends FlexLayout implements Refreshable {
         setAlignItems(Alignment.BASELINE);
         setJustifyContentMode(JustifyContentMode.CENTER);
         getStyle().set("overflow-y", "auto");
+        setClassName(LayoutVariables.PRIMARY_BACKGROUND);
     }
 
     private VerticalLayout createTableWrapper(String tableLabelText) {

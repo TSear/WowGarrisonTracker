@@ -15,10 +15,12 @@ html {
   --lumo-secondary-text-color: var(--font-primary-color);
   --_lumo-button-primary-background-color: #EB5E28;
   --lumo-contrast-90pct: rgba(235, 94, 40, 0.9);
+  --lumo-contrast-80pct: rgba(235, 94, 40, 0.8);
+  --lumo-contrast-70pct: rgba(235, 94, 40, 0.7);
   --lumo-error-color: #ba181b;
   --lumo-error-color-10pct: rgba(186, 24, 27, 0.1);
   --lumo-error-color-70pct: rgba(186, 24, 27, 0.7);
-  --lumo-primary-color: var(--font-primary-color);
+  --lumo-primary-color: var(--primary-contrast-color);
   --lumo-primary-color-10pct: rgba(235, 94, 40, 0.1);
   --lumo-base-color: var(--background-secondary-color);
   --lumo-font-size-s: 1em;
@@ -26,6 +28,11 @@ html {
   --lumo-contrast-30pct: rgba(204, 197, 185, 0.3);
   --_lumo-button-background-color: var(--primary-contrast-color);
   --lumo-shade-20pct: rgba(37, 36, 34, 0.2);
+  --lumo-shade-30pct: rgba(37, 36, 34, 0.3);
+  --lumo-shade-40pct: rgba(37, 36, 34, 0.4);
+  --lumo-shade-50pct: rgba(37, 36, 34, 0.5);
+  --lumo-shade-60pct: rgba(37, 36, 34, 0.6);
+  --lumo-shade-70pct: rgba(37, 36, 34, 0.7);
   --lumo-shade-80pct: rgba(37, 36, 34, 0.8);
   --lumo-contrast-60pct: rgba(204, 197, 185, 0.6);
   --lumo-contrast-10pct: rgba(204, 197, 185, 0.1);

@@ -9,11 +9,11 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 
-@Component
 @UIScope
 @Profile("vaadin")
 @Route(value = "login")
@@ -30,6 +30,7 @@ public class LoginPage extends FlexLayout implements BeforeEnterObserver {
         setJustifyContentMode(JustifyContentMode.CENTER);
         setAlignItems(Alignment.CENTER);
         addClassName("background");
+        addClassName(LayoutVariables.PRIMARY_BACKGROUND);
 
         verticalLayout.addClassName("box-shadow");
 

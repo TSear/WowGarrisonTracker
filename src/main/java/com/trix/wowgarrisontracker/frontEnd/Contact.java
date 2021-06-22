@@ -7,6 +7,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import javax.annotation.PostConstruct;
 
 //@StyleSheet("./contact.css")
 //@CssImport(value = "./contact.css",themeFor = "vaadin-vertical-layout")
-@Component
+@UIScope
 @Route(value = "contact", layout = MainLayout.class)
 public class Contact extends FlexLayout {
 
@@ -32,6 +33,7 @@ public class Contact extends FlexLayout {
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setAlignItems(Alignment.CENTER);
+        setClassName(LayoutVariables.PRIMARY_BACKGROUND);
 
         VerticalLayout wrapperForBorder = new VerticalLayout();
         wrapperForBorder.setWidth("auto");

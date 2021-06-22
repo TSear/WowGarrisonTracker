@@ -15,10 +15,13 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.IntegerRangeValidator;
+import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 
 import java.util.Objects;
 
 
+@UIScope
 public class EntryFormDialog extends Dialog {
 
     private final static String REQUIRED = "Please fill this field";

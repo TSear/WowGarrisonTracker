@@ -11,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -68,6 +69,7 @@ public class Statistics extends FlexLayout implements Refreshable {
         setClassName("statistics-container");
         getStyle().set("padding", "15px");
         getStyle().set("box-sizing", "border-box");
+        addClassName(LayoutVariables.PRIMARY_BACKGROUND);
     }
 
     private void updateLabels() {
