@@ -39,6 +39,7 @@ public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
+        http.requestCache().requestCache(new CustomRequestCache());
         setLoginView(http, LoginPage.class);
     }
 

@@ -1,5 +1,7 @@
 package com.trix.wowgarrisontracker.model;
 
+import com.trix.wowgarrisontracker.pojos.CardsOfOmen;
+import com.trix.wowgarrisontracker.pojos.Money;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -38,6 +40,10 @@ public class Account {
 
     private Long amountOfEntries;
 
+    private Long amountOfOpenedCards;
+
+    private Money totalGoldFromCards;
+
     @Column(length = 64)
     private String verificationCode;
 
@@ -67,6 +73,11 @@ public class Account {
         return this.accountCharacters.stream()
                 .map(AccountCharacter::getTotalWarPaint)
                 .reduce(0L, Long::sum);
+    }
+
+    public void addOpenedCards(CardsOfOmen cards){
+        this.amountOfOpenedCards += cards.getAmountOfCards();
+        totalGoldFromCards.addCopper(cards.getMoneyFromCards().getCopperValue());
     }
 
     @Override
