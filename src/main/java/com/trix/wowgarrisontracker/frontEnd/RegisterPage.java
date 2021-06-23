@@ -21,6 +21,7 @@ import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinServletRequest;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 
 @UIScope
 @Component
+@AnonymousAllowed
 @Route(value = "register")
 public class RegisterPage extends VerticalLayout {
 
@@ -209,6 +211,7 @@ public class RegisterPage extends VerticalLayout {
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setClassName("background");
+        setClassName(LayoutVariables.PRIMARY_BACKGROUND);
         servers.sort(Comparator.comparing(Server::getName));
     }
 

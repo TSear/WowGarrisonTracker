@@ -30,6 +30,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
 
 @CssImport(value = "/css/settings.css", themeFor = "vaadin-form-layout")
 @UIScope
+@PermitAll
 @Route(value = "settings", layout = MainLayout.class)
 public class Settings extends VerticalLayout {
 

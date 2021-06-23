@@ -20,10 +20,12 @@ import org.springframework.context.annotation.Profile;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
 import java.util.List;
 
 @Profile("vaadin")
 @UIScope
+@PermitAll
 @Route(value = "characters", layout = MainLayout.class)
 public class CharactersLayout extends VerticalLayout implements Refreshable {
 
@@ -93,7 +95,7 @@ public class CharactersLayout extends VerticalLayout implements Refreshable {
 
     private void configureFrame() {
         setHeightFull();
-        setClassName("content-background");
+        setClassName(LayoutVariables.PRIMARY_BACKGROUND);
     }
 
     private void configureDataProvider() {

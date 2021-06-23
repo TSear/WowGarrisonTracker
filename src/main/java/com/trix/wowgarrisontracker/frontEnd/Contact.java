@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
 
 //@StyleSheet("./contact.css")
 //@CssImport(value = "./contact.css",themeFor = "vaadin-vertical-layout")
 @UIScope
+@PermitAll
 @Route(value = "contact", layout = MainLayout.class)
 public class Contact extends FlexLayout {
 

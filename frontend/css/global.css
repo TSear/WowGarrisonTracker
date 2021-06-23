@@ -2,13 +2,15 @@
     background: #252422;
 }
 
+.primary-background{
+    background: var(--background-primary-color);
+    background-image: url('/img/bg.png');
+}
+
 .register-form *{
     width: 100%;
 }
 
-.register-form{
-    background: black;
-}
 
 .add-button {
     background-color: #eb5e28;
@@ -67,4 +69,31 @@ iron-overlay-backdrop {
 
 :host(.opened) {
     opacity: 0.8;
+}
+
+.contrast-button{
+    background: var(--primary-contrast-color);
+}
+
+.context-menu{
+    background: var(--background-primary-color);
+}
+
+.logout-button{
+    background-color: transparent !important;
+    background: none;
+    color: inherit !important;
+    font-size: inherit !important;
+    text-align: left;
+    padding: 0;
+    cursor: pointer;
+}
+
+.logout-button:hover::before{
+    opacity: 0;
+}
+
+.logout-button [part="label"]{
+    color: inherit;
+    font-size: inherit;
 }

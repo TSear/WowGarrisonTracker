@@ -15,9 +15,11 @@ import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
 
 @Component
 @UIScope
+@PermitAll
 @Route(value = "statistics", layout = MainLayout.class)
 public class Statistics extends FlexLayout implements Refreshable {
 

@@ -2,12 +2,14 @@ package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.utils.BlizzardRequestUtils;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.context.annotation.Profile;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 @UIScope
 @Profile("vaadin")
+@AnonymousAllowed
 @Route(value = "login")
 public class LoginPage extends FlexLayout implements BeforeEnterObserver {
 

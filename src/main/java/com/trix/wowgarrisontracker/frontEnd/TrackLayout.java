@@ -8,20 +8,24 @@ import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.UIScope;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.context.annotation.Profile;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
+import java.util.Collection;
 import java.util.List;
 
 @Profile("vaadin")
@@ -36,6 +40,7 @@ import java.util.List;
 @CssImport(value = "/css/statistics.css")
 @CssImport(value = "/css/contact.css")
 @RouteAlias(value = "", layout = MainLayout.class)
+@PermitAll
 @Route(value = "track", layout = MainLayout.class)
 public class TrackLayout extends VerticalLayout implements Refreshable {
 
@@ -74,7 +79,7 @@ public class TrackLayout extends VerticalLayout implements Refreshable {
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setWidthFull();
 
-        Button addButton = new AddButton("Add New Entry", entryFormDialog);
+        Button addButton = createAddEntryButton("Add New Entry", entryFormDialog);
         buttonLayout.setFlexGrow(1, addButton);
 
         Button deleteEntryButton = createDeleteButton(gridLayout);
@@ -82,9 +87,52 @@ public class TrackLayout extends VerticalLayout implements Refreshable {
         buttonLayout.add(addButton);
         buttonLayout.add(deleteEntryButton);
 
+        ContextMenu contextMenu = createContextMenu(gridLayout);
+
         add(gridLayout);
         add(buttonLayout);
         add(entryFormDialog);
+        add(contextMenu);
+    }
+
+    private Button createAddEntryButton(String text, EntryFormDialog entryFormDialog) {
+        Button button = new AddButton(text, entryFormDialog);
+        button.setClassName("contrast-button");
+        setWidthFull();
+        return button;
+    }
+
+    private ContextMenu createContextMenu(PaginatedGrid<Entry> gridLayout) {
+        ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setTarget(gridLayout);
+        contextMenu.setClassName("context-menu");
+
+        Button addEntryContextMenuButton = new AddButton("Create new entry", entryFormDialog);
+
+        Button deleteContextMenuButton = new Button("Delete selected entries");
+        deleteContextMenuButton.addClickListener(buttonClickEvent -> {
+            int selectedSize = gridLayout.getSelectedItems().size();
+            if (selectedSize == 0) {
+                Notification notification = new Notification("You need to select entry", 5000);
+                add(notification);
+                notification.open();
+            } else {
+                removeEntries(gridLayout.getSelectedItems());
+                contextMenu.close();
+            }
+        });
+
+        VerticalLayout verticalLayout = new VerticalLayout(addEntryContextMenuButton, deleteContextMenuButton);
+        verticalLayout.setAlignItems(Alignment.STRETCH);
+        contextMenu.add(verticalLayout);
+
+        return contextMenu;
+    }
+
+    private void removeEntries(Collection<Entry> entries) {
+        entries.forEach(accountCharacterService::removeEntryFromAccountCharacter);
+        statistics.refresh();
+        dataProvider.refreshAll();
     }
 
     private void configureDataProvider() {
@@ -104,9 +152,7 @@ public class TrackLayout extends VerticalLayout implements Refreshable {
         deleteEntryButton.setIconAfterText(true);
         deleteEntryButton.addClickListener(event -> {
             if (grid.getSelectedItems().size() > 0) {
-                grid.getSelectedItems().forEach(accountCharacterService::removeEntryFromAccountCharacter);
-                statistics.refresh();
-                dataProvider.refreshAll();
+                removeEntries(grid.getSelectedItems());
             }
 
         });
@@ -115,8 +161,9 @@ public class TrackLayout extends VerticalLayout implements Refreshable {
 
     private void configureMainLayout() {
         this.setHeightFull();
-        this.setPadding(true);
-        this.setClassName("content-background");
+        this.getStyle().set("padding-bottom","0");
+        this.setClassName(LayoutVariables.PRIMARY_BACKGROUND);
+
     }
 
     private PaginatedGrid<Entry> createGridLayout() {

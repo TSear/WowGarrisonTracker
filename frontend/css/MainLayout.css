@@ -25,7 +25,3 @@
     box-shadow: 5px 0px 10px 10px var(--background-primary-color);
 }
 
-.primary-background{
-    background-color: var(--background-primary-color);
-    background: var(--background-primary-color);
-}

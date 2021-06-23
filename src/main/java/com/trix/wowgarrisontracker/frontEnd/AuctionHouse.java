@@ -20,12 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
 import java.util.Comparator;
 import java.util.List;
 
 //@CssImport(value="./auctionHouse.css", themeFor = "vaadin-grid")
 @Component
 @UIScope
+@PermitAll
 @Route(value = "auctionHouse", layout = MainLayout.class)
 public class AuctionHouse extends FlexLayout implements Refreshable {
 

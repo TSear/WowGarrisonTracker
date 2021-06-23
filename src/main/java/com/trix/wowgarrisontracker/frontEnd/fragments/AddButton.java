@@ -10,11 +10,9 @@ public class AddButton extends Button {
 
     public AddButton(String text, Dialog dialog) {
 
-        setWidthFull();
         setText(text);
         addClickListener(event -> dialog.open());
 
-        setClassName("addWS-button");
     }
 
 }
