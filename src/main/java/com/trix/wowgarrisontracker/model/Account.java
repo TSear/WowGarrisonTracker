@@ -5,6 +5,7 @@ import com.trix.wowgarrisontracker.pojos.Money;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -42,6 +43,8 @@ public class Account {
 
     private Long amountOfOpenedCards;
 
+    @Column(name = "totalGoldFromCards")
+    @Type(type = "com.trix.wowgarrisontracker.types.MoneyType")
     private Money totalGoldFromCards;
 
     @Column(length = 64)
@@ -52,9 +55,20 @@ public class Account {
 
 
     public Account() {
+        amountOfOpenedCards = 0L;
+        totalGoldFromCards = new Money();
         accountCharacters = new HashSet<>();
         this.amountOfEntries = 0L;
         options = new Options(this);
+    }
+
+    public void addCards(CardsOfOmen cards){
+        this.amountOfOpenedCards += cards.getAmountOfCards();
+        this.totalGoldFromCards.addMoney(cards.getMoneyFromCards());
+    }
+
+    public long getTotalGoldFromCards(){
+        return totalGoldFromCards.getCopperValue();
     }
 
     public int getAmountOfEntries() {

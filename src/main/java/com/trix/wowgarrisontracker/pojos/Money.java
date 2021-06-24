@@ -6,7 +6,7 @@ public class Money {
 
     private Long copper;
 
-    public Money(){
+    public Money() {
         copper = 0L;
     }
 
@@ -30,7 +30,7 @@ public class Money {
         return toAdd;
     }
 
-    public Long getCopperValue(){
+    public Long getCopperValue() {
         return this.copper;
     }
 
@@ -65,12 +65,16 @@ public class Money {
         this.copper += convertToCopper(gold, silver, copper);
     }
 
-    public int[] getFormattedValues(){
-        int [] result = new int[3];
+    public void addMoney(Money money) {
+        addCopper(money.getCopperValue());
+    }
+
+    public int[] getFormattedValues() {
+        int[] result = new int[3];
         Long tmp = this.copper;
-        result[2] = (int)(tmp%100);
+        result[2] = (int) (tmp % 100);
         tmp /= 100;
-        result[1] = (int)(tmp%100);
+        result[1] = (int) (tmp % 100);
         tmp /= 100;
         result[0] = tmp.intValue();
         return result;
@@ -89,4 +93,5 @@ public class Money {
     public int hashCode() {
         return Objects.hash(copper);
     }
+
 }

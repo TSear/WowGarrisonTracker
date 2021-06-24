@@ -1,5 +1,7 @@
 package com.trix.wowgarrisontracker.model;
 
+import com.trix.wowgarrisontracker.pojos.CardsOfOmen;
+import com.trix.wowgarrisontracker.pojos.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,6 +60,23 @@ public class AccountTest {
 
         //then
         assertEquals(300, (long) warPaint);
+
+    }
+
+    @Test
+    void addCards() {
+        //given
+        Account account = new Account();
+        Money money = new Money(10,10,10);
+        CardsOfOmen cards = new CardsOfOmen();
+        cards.setMoneyFromCards(money);
+        cards.setAmountOfCards(100L);
+
+        //when
+        account.addCards(cards);
+
+        //then
+        assertEquals(101010,account.getTotalGoldFromCards());
 
     }
 
