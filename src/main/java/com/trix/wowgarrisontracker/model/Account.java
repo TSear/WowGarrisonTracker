@@ -1,6 +1,5 @@
 package com.trix.wowgarrisontracker.model;
 
-import com.trix.wowgarrisontracker.pojos.CardsOfOmen;
 import com.trix.wowgarrisontracker.pojos.Money;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +8,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -49,6 +49,9 @@ public class Account {
 
     @Column(length = 64)
     private String verificationCode;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<CardsOfOmen> cardsOfOmenList;
 
     @Column(name = "enabled")
     private boolean enabled;

@@ -1,6 +1,5 @@
 package com.trix.wowgarrisontracker.model;
 
-import com.trix.wowgarrisontracker.pojos.CardsOfOmen;
 import com.trix.wowgarrisontracker.pojos.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
