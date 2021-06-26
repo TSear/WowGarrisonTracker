@@ -8,7 +8,6 @@ import com.trix.wowgarrisontracker.pojos.CardsOfOmenEntryPojo;
 import com.trix.wowgarrisontracker.services.interfaces.CardsOfOmenService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
@@ -43,8 +42,7 @@ public class CardsOfOmenView extends FlexLayout {
     private Grid<CardsOfOmen> cardsOfOmenGrid;
     private FormLayout formLayout;
     private Long accountId;
-    private GridContextMenu<CardsOfOmen> contextMenu;
-    private Refreshable statistics;
+    private final Refreshable statistics;
 
     public CardsOfOmenView(CardsOfOmenService cardsOfOmenService, Statistics statistics) {
         this.cardsOfOmenService = cardsOfOmenService;
@@ -79,7 +77,7 @@ public class CardsOfOmenView extends FlexLayout {
 
     private void configureContextMenuForGrid() {
 
-        contextMenu = cardsOfOmenGrid.addContextMenu();
+        GridContextMenu<CardsOfOmen> contextMenu = cardsOfOmenGrid.addContextMenu();
 
         contextMenu.addItem("Remove Entry", event -> {
             if(event.getGrid().getSelectedItems().size()>0){
@@ -111,7 +109,8 @@ public class CardsOfOmenView extends FlexLayout {
 
         pojoBinder.forField(amountOfCardsField)
                 .asRequired("Please fill this field")
-                .withValidator(new IntegerRangeValidator("Value must be between <0,100_000_000>", 0, 100_000_000))
+                .withValidator(new IntegerRangeValidator("Value must be between <0,100_000_000>"
+                        , 0, 100_000_000))
                 .bind(CardsOfOmenEntryPojo::getAmountOfCards, CardsOfOmenEntryPojo::setAmountOfCards);
 
         pojoBinder.forField(startingGold)
@@ -120,6 +119,8 @@ public class CardsOfOmenView extends FlexLayout {
 
         pojoBinder.forField(finishedGold)
                 .asRequired("Please fill empty fields")
+                .withValidator(money -> money.compareTo(startingGold.getValue())>0
+                        ,"Check if starting gold is smaller than ending money")
                 .bind(CardsOfOmenEntryPojo::getEndingMoney, CardsOfOmenEntryPojo::setEndingMoney);
 
         formLayout.add(amountOfCardsField, startingGold, finishedGold, buttonLayout);

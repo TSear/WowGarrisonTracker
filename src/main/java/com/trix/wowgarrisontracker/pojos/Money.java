@@ -2,7 +2,7 @@ package com.trix.wowgarrisontracker.pojos;
 
 import java.util.Objects;
 
-public class Money {
+public class Money implements Comparable<Money>{
 
     private Long copper;
 
@@ -100,5 +100,10 @@ public class Money {
 
     public void subtractMoney(Money moneyFromCards) {
        this.copper -= moneyFromCards.getCopperValue();
+    }
+
+    @Override
+    public int compareTo(Money money) {
+        return this.copper.compareTo(money.getCopperValue());
     }
 }
