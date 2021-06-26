@@ -29,19 +29,21 @@ public class MoneyCustomField extends CustomField<Money> {
     private IntegerField createIntegerField(String text, int max) {
         IntegerField field = new IntegerField();
         field.setPlaceholder(text);
-        field.setLabel(text);
         field.setMin(0);
         field.setMax(max);
         field.setStep(1);
         field.setHasControls(true);
         field.setValue(0);
         field.getStyle().set("flex","1");
+        field.setHelperText(text);
         return field;
     }
 
 
     @Override
     protected Money generateModelValue() {
+        if(goldField.getValue()== null || silverField.getValue() ==null || copperField.getValue() == null)
+            return null;
         return new Money(goldField.getValue(), silverField.getValue(), copperField.getValue());
     }
 
@@ -52,6 +54,10 @@ public class MoneyCustomField extends CustomField<Money> {
             goldField.setValue(values[0]);
             silverField.setValue(values[1]);
             copperField.setValue(values[2]);
+        }else {
+            goldField.setValue(0);
+            silverField.setValue(0);
+            copperField.setValue(0);
         }
     }
 }

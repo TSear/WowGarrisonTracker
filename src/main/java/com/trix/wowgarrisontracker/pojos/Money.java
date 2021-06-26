@@ -94,4 +94,7 @@ public class Money {
         return Objects.hash(copper);
     }
 
+    public Money subtract(Money money) {
+        return new Money(this.copper- money.getCopperValue());
+    }
 }

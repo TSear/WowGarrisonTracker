@@ -3,23 +3,27 @@ package com.trix.wowgarrisontracker.frontEnd;
 import com.trix.wowgarrisontracker.frontEnd.components.MoneyCustomField;
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.model.CardsOfOmen;
+import com.trix.wowgarrisontracker.pojos.CardsOfOmenEntryPojo;
 import com.trix.wowgarrisontracker.services.interfaces.CardsOfOmenService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.validator.IntegerRangeValidator;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.vaadin.klaudeta.PaginatedGrid;
+import org.checkerframework.checker.units.qual.C;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
+import java.time.LocalDate;
 
 
 @UIScope
@@ -31,6 +35,8 @@ public class CardsOfOmenView extends FlexLayout {
 
     private final CardsOfOmenService cardsOfOmenService;
     private DataProvider<CardsOfOmen, Void> dataProvider;
+    private Binder<CardsOfOmenEntryPojo> pojoBinder;
+    private CardsOfOmenEntryPojo pojo;
     private Grid<CardsOfOmen> cardsOfOmenGrid;
     private FormLayout formLayout;
     private Long accountId;
@@ -43,6 +49,9 @@ public class CardsOfOmenView extends FlexLayout {
     @PostConstruct
     public void init() {
 
+        pojo = new CardsOfOmenEntryPojo();
+        pojoBinder = new Binder<>();
+
         configureLayout();
 
         configureDataProvider();
@@ -54,33 +63,106 @@ public class CardsOfOmenView extends FlexLayout {
 
         configureEntryForm();
 
+        pojoBinder.readBean(pojo);
 
         add(verticalLayout);
         add(formLayout);
     }
 
+
     private void configureEntryForm() {
 
         formLayout = new FormLayout();
         formLayout.setClassName(LayoutVariables.FORM_LAYOUT);
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",1));
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
 
-        IntegerField amountOfCardsField = new IntegerField("Amount of cards");
-        MoneyCustomField startingGold = new MoneyCustomField("Starting money");
-        MoneyCustomField finishedGold = new MoneyCustomField("Ending money");
+        IntegerField amountOfCardsField = new IntegerField("Amount of cards opened");
+        MoneyCustomField startingGold = new MoneyCustomField("Money you started with");
+        MoneyCustomField finishedGold = new MoneyCustomField("Money you ended with");
+        Button addButton = createAddButton();
+        Button clearButton = createClearButton();
+        HorizontalLayout buttonLayout = new HorizontalLayout(addButton,clearButton);
+        buttonLayout.setFlexGrow(1,addButton);
+        amountOfCardsField.setStep(1);
+        amountOfCardsField.setHasControls(true);
 
+        pojoBinder.forField(amountOfCardsField)
+                .asRequired("Please fill this field")
+                .withValidator(new IntegerRangeValidator("Value must be between <0,100_000_000>",0,100_000_000))
+                .bind(CardsOfOmenEntryPojo::getAmountOfCards,CardsOfOmenEntryPojo::setAmountOfCards);
 
+        pojoBinder.forField(startingGold)
+                .asRequired("Please fill empty fields")
+                .bind(CardsOfOmenEntryPojo::getStartingMoney,CardsOfOmenEntryPojo::setStartingMoney);
 
-        formLayout.add(amountOfCardsField,startingGold, finishedGold);
+        pojoBinder.forField(finishedGold)
+                .asRequired("Please fill empty fields")
+                .bind(CardsOfOmenEntryPojo::getEndingMoney,CardsOfOmenEntryPojo::setEndingMoney);
+
+        formLayout.add(amountOfCardsField, startingGold, finishedGold, buttonLayout);
     }
+
+    private Button createAddButton() {
+        Button button = new Button("Create entry");
+        button.addClickListener(buttonClickEvent -> {
+            try {
+                pojoBinder.writeBean(pojo);
+                CardsOfOmen cards = new CardsOfOmen();
+
+                cards.setAmountOfCards(pojo.getAmountOfCards());
+                cards.setMoneyFromCards(pojo.getEndingMoney().subtract(pojo.getStartingMoney()));
+                cards.setAccount(GeneralUtils.getCustomUserPrincipal().getAccount());
+                cards.setLocalDate(LocalDate.now());
+
+                cardsOfOmenService.save(cards);
+                dataProvider.refreshAll();
+
+            } catch (ValidationException e) {
+                //TODO exception handling
+                System.out.println("Validation failed");
+            }
+        });
+        return button;
+    }
+
+    private Button createClearButton() {
+        Button button = new Button("Clear form");
+        button.addClickListener(buttonClickEvent -> pojoBinder.readBean(new CardsOfOmenEntryPojo()));
+        button.addClassName(LayoutVariables.SECONDARY_BUTTON);
+        return button;
+    }
+
 
     private void configureGrid() {
 
-        cardsOfOmenGrid = new Grid<>(CardsOfOmen.class);
+        cardsOfOmenGrid = new Grid<>();
         setFlexGrow(1, cardsOfOmenGrid);
         cardsOfOmenGrid.setClassName(LayoutVariables.CARDS_GRID);
         cardsOfOmenGrid.setHeightByRows(false);
         cardsOfOmenGrid.setItems(dataProvider);
+
+        cardsOfOmenGrid.addColumn(CardsOfOmen::getLocalDate)
+                .setHeader("Entry date")
+                .setKey("date").setFlexGrow(10);
+
+        cardsOfOmenGrid.addColumn(CardsOfOmen::getAmountOfCards)
+                .setHeader("Amount of cards")
+                .setKey("amountOfCards").setFlexGrow(10);
+
+
+        cardsOfOmenGrid.addColumn(CardsOfOmen -> CardsOfOmen.getMoneyFromCards().getFormattedValues()[0])
+                .setHeader("Gold")
+                .setKey("gold");
+
+        cardsOfOmenGrid.addColumn(CardsOfOmen -> CardsOfOmen.getMoneyFromCards().getFormattedValues()[1])
+                .setHeader("Silver")
+                .setKey("silver");
+
+        cardsOfOmenGrid.addColumn(CardsOfOmen -> CardsOfOmen.getMoneyFromCards().getFormattedValues()[2])
+                .setHeader("Copper")
+                .setKey("copper");
+
+        cardsOfOmenGrid.getColumns().forEach(cardsOfOmenColumn -> cardsOfOmenColumn.setAutoWidth(true));
 
     }
 
@@ -88,7 +170,7 @@ public class CardsOfOmenView extends FlexLayout {
     private void configureDataProvider() {
         dataProvider = DataProvider.fromCallbacks(query -> {
             int offset = query.getOffset();
-            return cardsOfOmenService.findAllByAccountIdPaged(accountId, offset,query.getLimit()).stream();
+            return cardsOfOmenService.findAllByAccountIdPaged(accountId, offset, query.getLimit()).stream();
         }, query -> cardsOfOmenService.getAmountOfEntries(accountId));
     }
 

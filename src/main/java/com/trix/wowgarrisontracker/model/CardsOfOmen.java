@@ -20,7 +20,7 @@ public class CardsOfOmen {
 
     private LocalDate localDate;
 
-    private Long amountOfCards;
+    private int amountOfCards;
 
     @Type(type = "com.trix.wowgarrisontracker.types.MoneyType")
     private Money moneyFromCards;
@@ -28,4 +28,13 @@ public class CardsOfOmen {
     @ManyToOne
     private Account account;
 
+    public CardsOfOmen() {
+        localDate = LocalDate.now();
+        amountOfCards = 0;
+        moneyFromCards = new Money();
+    }
+
+    public Money subtractMoney(Money money){
+       return moneyFromCards.subtract(money);
+    }
 }

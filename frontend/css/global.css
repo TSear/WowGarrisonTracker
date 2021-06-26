@@ -127,3 +127,7 @@ iron-overlay-backdrop {
 .cards-grid{
     margin: 1.5em;
 }
+
+.secondary-button{
+    background-color: var(--lumo-contrast-60pct);
+}

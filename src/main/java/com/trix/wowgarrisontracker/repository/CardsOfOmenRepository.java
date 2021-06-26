@@ -12,7 +12,8 @@ public interface CardsOfOmenRepository extends JpaRepository<CardsOfOmen, Long> 
 
     List<CardsOfOmen> findAllByAccountId(Long accountId);
 
-    List<CardsOfOmen> findAllByAccountId(Long accountId, Pageable pageable);
+    List<CardsOfOmen> findAllByAccountIdOrderByLocalDateDesc(Long accountId, Pageable pageable);
+
 
     int countByAccountId(Long accountId);
 }

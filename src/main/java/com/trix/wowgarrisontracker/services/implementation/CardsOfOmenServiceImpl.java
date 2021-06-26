@@ -47,7 +47,7 @@ public class CardsOfOmenServiceImpl implements CardsOfOmenService {
 
     @Override
     public List<CardsOfOmen> findAllByAccountIdPaged(Long accountId, int offset, int limit) {
-        return repository.findAllByAccountId(accountId, PageRequest.of(offset, limit));
+        return repository.findAllByAccountIdOrderByLocalDateDesc(accountId, PageRequest.of(offset, limit));
     }
 
     @Override

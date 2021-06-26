@@ -69,7 +69,7 @@ public class AccountTest {
         Money money = new Money(10,10,10);
         CardsOfOmen cards = new CardsOfOmen();
         cards.setMoneyFromCards(money);
-        cards.setAmountOfCards(100L);
+        cards.setAmountOfCards(100);
 
         //when
         account.addCards(cards);
