@@ -36,7 +36,7 @@ public class Account {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<AccountCharacter> accountCharacters;
 
     private Long amountOfEntries;

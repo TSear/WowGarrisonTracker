@@ -58,7 +58,7 @@ public class BootData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         this.innit();
-        auctionService.updateAuctionHouse();
+//        auctionService.updateAuctionHouse();
     }
 
     private void innit() {

@@ -33,7 +33,7 @@ public class Entry {
     private int warPaint;
 
     @ManyToOne
-    @JoinColumn(name = "accountCharacterId")
+    @JoinColumn(name = "accountCharacterId", referencedColumnName = "id")
     private AccountCharacter accountCharacter;
 
     public Entry() {
