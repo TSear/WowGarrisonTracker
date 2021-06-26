@@ -70,8 +70,13 @@ public class Account {
         this.totalGoldFromCards.addMoney(cards.getMoneyFromCards());
     }
 
-    public long getTotalGoldFromCards(){
-        return totalGoldFromCards.getCopperValue();
+    public void removeCards(CardsOfOmen cards){
+        this.amountOfOpenedCards -= cards.getAmountOfCards();
+        if(this.amountOfOpenedCards < 0)
+            this.amountOfOpenedCards = 0L;
+        this.totalGoldFromCards.subtractMoney(cards.getMoneyFromCards());
+        if(totalGoldFromCards.getCopperValue() <0)
+            this.totalGoldFromCards.setCopper(0L);
     }
 
     public int getAmountOfEntries() {

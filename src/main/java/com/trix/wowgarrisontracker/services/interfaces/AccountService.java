@@ -2,6 +2,7 @@ package com.trix.wowgarrisontracker.services.interfaces;
 
 import com.trix.wowgarrisontracker.exceptions.AccountNotFoundException;
 import com.trix.wowgarrisontracker.model.Account;
+import com.trix.wowgarrisontracker.model.CardsOfOmen;
 import com.trix.wowgarrisontracker.pojos.AccountPojo;
 import com.trix.wowgarrisontracker.pojos.RegisterPojo;
 import org.springframework.security.core.userdetails.User;
@@ -27,4 +28,7 @@ public interface AccountService {
     boolean verify(String verificationCode);
 
 
+    boolean addCards(CardsOfOmen cards);
+
+    boolean removeCards(CardsOfOmen cards);
 }

@@ -2,13 +2,17 @@ package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.frontEnd.components.MoneyCustomField;
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
+import com.trix.wowgarrisontracker.frontEnd.interfaces.Refreshable;
 import com.trix.wowgarrisontracker.model.CardsOfOmen;
 import com.trix.wowgarrisontracker.pojos.CardsOfOmenEntryPojo;
 import com.trix.wowgarrisontracker.services.interfaces.CardsOfOmenService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -19,7 +23,6 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.validator.IntegerRangeValidator;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.checkerframework.checker.units.qual.C;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
@@ -40,10 +43,13 @@ public class CardsOfOmenView extends FlexLayout {
     private Grid<CardsOfOmen> cardsOfOmenGrid;
     private FormLayout formLayout;
     private Long accountId;
+    private GridContextMenu<CardsOfOmen> contextMenu;
+    private Refreshable statistics;
 
-    public CardsOfOmenView(CardsOfOmenService cardsOfOmenService) {
+    public CardsOfOmenView(CardsOfOmenService cardsOfOmenService, Statistics statistics) {
         this.cardsOfOmenService = cardsOfOmenService;
         accountId = GeneralUtils.getCurrentlyLoggedUserId();
+        this.statistics = statistics;
     }
 
     @PostConstruct
@@ -61,6 +67,8 @@ public class CardsOfOmenView extends FlexLayout {
         verticalLayout.setClassName(LayoutVariables.CARDS_GRID);
         verticalLayout.setWidth(null);
 
+        configureContextMenuForGrid();
+
         configureEntryForm();
 
         pojoBinder.readBean(pojo);
@@ -69,6 +77,21 @@ public class CardsOfOmenView extends FlexLayout {
         add(formLayout);
     }
 
+    private void configureContextMenuForGrid() {
+
+        contextMenu = cardsOfOmenGrid.addContextMenu();
+
+        contextMenu.addItem("Remove Entry", event -> {
+            if(event.getGrid().getSelectedItems().size()>0){
+                event.getGrid().getSelectedItems().forEach(cardsOfOmenService::delete);
+                dataProvider.refreshAll();
+            }else{
+                Notification notification = new Notification("You need to select entry to delete", 5000);
+                notification.open();
+            }
+        });
+
+    }
 
     private void configureEntryForm() {
 
@@ -81,23 +104,23 @@ public class CardsOfOmenView extends FlexLayout {
         MoneyCustomField finishedGold = new MoneyCustomField("Money you ended with");
         Button addButton = createAddButton();
         Button clearButton = createClearButton();
-        HorizontalLayout buttonLayout = new HorizontalLayout(addButton,clearButton);
-        buttonLayout.setFlexGrow(1,addButton);
+        HorizontalLayout buttonLayout = new HorizontalLayout(addButton, clearButton);
+        buttonLayout.setFlexGrow(1, addButton);
         amountOfCardsField.setStep(1);
         amountOfCardsField.setHasControls(true);
 
         pojoBinder.forField(amountOfCardsField)
                 .asRequired("Please fill this field")
-                .withValidator(new IntegerRangeValidator("Value must be between <0,100_000_000>",0,100_000_000))
-                .bind(CardsOfOmenEntryPojo::getAmountOfCards,CardsOfOmenEntryPojo::setAmountOfCards);
+                .withValidator(new IntegerRangeValidator("Value must be between <0,100_000_000>", 0, 100_000_000))
+                .bind(CardsOfOmenEntryPojo::getAmountOfCards, CardsOfOmenEntryPojo::setAmountOfCards);
 
         pojoBinder.forField(startingGold)
                 .asRequired("Please fill empty fields")
-                .bind(CardsOfOmenEntryPojo::getStartingMoney,CardsOfOmenEntryPojo::setStartingMoney);
+                .bind(CardsOfOmenEntryPojo::getStartingMoney, CardsOfOmenEntryPojo::setStartingMoney);
 
         pojoBinder.forField(finishedGold)
                 .asRequired("Please fill empty fields")
-                .bind(CardsOfOmenEntryPojo::getEndingMoney,CardsOfOmenEntryPojo::setEndingMoney);
+                .bind(CardsOfOmenEntryPojo::getEndingMoney, CardsOfOmenEntryPojo::setEndingMoney);
 
         formLayout.add(amountOfCardsField, startingGold, finishedGold, buttonLayout);
     }
@@ -116,6 +139,7 @@ public class CardsOfOmenView extends FlexLayout {
 
                 cardsOfOmenService.save(cards);
                 dataProvider.refreshAll();
+                statistics.refresh();
 
             } catch (ValidationException e) {
                 //TODO exception handling
@@ -148,7 +172,6 @@ public class CardsOfOmenView extends FlexLayout {
         cardsOfOmenGrid.addColumn(CardsOfOmen::getAmountOfCards)
                 .setHeader("Amount of cards")
                 .setKey("amountOfCards").setFlexGrow(10);
-
 
         cardsOfOmenGrid.addColumn(CardsOfOmen -> CardsOfOmen.getMoneyFromCards().getFormattedValues()[0])
                 .setHeader("Gold")

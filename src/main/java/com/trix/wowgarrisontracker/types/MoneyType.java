@@ -60,6 +60,8 @@ public class MoneyType implements UserType {
 
     @Override
     public Object deepCopy(Object o) throws HibernateException {
+        if(o == null)
+            return new Money();
         return new Money(((Money)o).getCopperValue());
     }
 
@@ -70,16 +72,16 @@ public class MoneyType implements UserType {
 
     @Override
     public Serializable disassemble(Object o) throws HibernateException {
-        return null;
+        return (Serializable)o;
     }
 
     @Override
     public Object assemble(Serializable serializable, Object o) throws HibernateException {
-        return null;
+        return o;
     }
 
     @Override
     public Object replace(Object o, Object o1, Object o2) throws HibernateException {
-        return null;
+        return o;
     }
 }

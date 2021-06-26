@@ -1,6 +1,7 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.model.Account;
+import com.trix.wowgarrisontracker.model.CardsOfOmen;
 import com.trix.wowgarrisontracker.pojos.RegisterPojo;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountService;
@@ -86,13 +87,35 @@ public class AccountServicesImpl implements AccountService {
 
         if (optionalAccount.isEmpty() || optionalAccount.get().isEnabled()) {
             return false;
-        }else{
+        } else {
             Account account = optionalAccount.get();
             account.setVerificationCode(null);
             account.setEnabled(true);
             accountRepository.save(account);
             return true;
         }
+    }
+
+    @Override
+    public boolean addCards(CardsOfOmen cards) {
+        if (cards.getAccount() != null) {
+            Account account = cards.getAccount();
+            account.addOpenedCards(cards);
+            accountRepository.save(account);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean removeCards(CardsOfOmen cards) {
+        if (cards.getAccount() != null) {
+            Account account = findById(cards.getAccount().getId());
+            account.removeCards(cards);
+            accountRepository.save(account);
+            return true;
+        }
+        return false;
     }
 
     private Account createAccountFromRegisterPojo(RegisterPojo registerPojo) {

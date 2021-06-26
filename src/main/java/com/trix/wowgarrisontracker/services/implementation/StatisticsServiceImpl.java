@@ -61,6 +61,10 @@ public class StatisticsServiceImpl implements StatisticsService {
         statistics.setAverageDailyWarPaint((int) (account.getTotalWarPaint() / 1));
         statistics.setTotalGarrisonResources(account.getTotalGarrisonResources());
         statistics.setTotalWarPaint(account.getTotalWarPaint());
+        int[] formattedValues = account.getTotalGoldFromCards().getFormattedValues();
+        String totalGoldString = formattedValues[0]+"g " + formattedValues[1] + "s " + formattedValues[2] + "c";
+        statistics.setTotalGold(totalGoldString);
+        statistics.setTotalCardsOpened(account.getAmountOfOpenedCards());
 
         return statistics;
     }

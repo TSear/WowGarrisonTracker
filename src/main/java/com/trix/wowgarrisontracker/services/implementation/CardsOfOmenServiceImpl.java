@@ -2,6 +2,7 @@ package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.model.CardsOfOmen;
 import com.trix.wowgarrisontracker.repository.CardsOfOmenRepository;
+import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import com.trix.wowgarrisontracker.services.interfaces.CardsOfOmenService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,13 @@ import java.util.List;
 public class CardsOfOmenServiceImpl implements CardsOfOmenService {
 
     private final CardsOfOmenRepository repository;
+    private final AccountService accountService;
 
-    public CardsOfOmenServiceImpl(CardsOfOmenRepository repository) {
+    public CardsOfOmenServiceImpl(CardsOfOmenRepository repository, AccountService accountService) {
         this.repository = repository;
+        this.accountService = accountService;
     }
+
 
     @Override
     public List<CardsOfOmen> findAll() {
@@ -30,19 +34,22 @@ public class CardsOfOmenServiceImpl implements CardsOfOmenService {
     @Override
     public boolean save(CardsOfOmen cards) {
 
-        if (cards == null)
-            return false;
+        if (cards != null && accountService.addCards(cards)) {
+            repository.save(cards);
+            return true;
+        }
 
-        repository.save(cards);
-        return true;
+        return false;
     }
 
     @Override
     public boolean delete(CardsOfOmen cards) {
-        if (cards == null)
-            return false;
-        repository.delete(cards);
-        return true;
+        if (cards != null && accountService.removeCards(cards)) {
+            repository.delete(cards);
+            return true;
+        }
+
+        return false;
     }
 
     @Override

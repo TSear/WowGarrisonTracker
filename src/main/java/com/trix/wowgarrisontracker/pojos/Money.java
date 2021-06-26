@@ -97,4 +97,8 @@ public class Money {
     public Money subtract(Money money) {
         return new Money(this.copper- money.getCopperValue());
     }
+
+    public void subtractMoney(Money moneyFromCards) {
+       this.copper -= moneyFromCards.getCopperValue();
+    }
 }
