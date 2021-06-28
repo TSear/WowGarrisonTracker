@@ -1,10 +1,8 @@
 package com.trix.wowgarrisontracker.model;
 
-import com.trix.wowgarrisontracker.pojos.Money;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -39,14 +37,6 @@ public class Account {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<AccountCharacter> accountCharacters;
 
-    private Long amountOfEntries;
-
-    private Long amountOfOpenedCards;
-
-    @Column(name = "totalGoldFromCards")
-    @Type(type = "com.trix.wowgarrisontracker.types.MoneyType")
-    private Money totalGoldFromCards;
-
     @Column(length = 64)
     private String verificationCode;
 
@@ -56,50 +46,9 @@ public class Account {
     @Column(name = "enabled")
     private boolean enabled;
 
-
     public Account() {
-        amountOfOpenedCards = 0L;
-        totalGoldFromCards = new Money();
         accountCharacters = new HashSet<>();
-        this.amountOfEntries = 0L;
         options = new Options(this);
-    }
-
-    public void addCards(CardsOfOmen cards){
-        this.amountOfOpenedCards += cards.getAmountOfCards();
-        this.totalGoldFromCards.addMoney(cards.getMoneyFromCards());
-    }
-
-    public void removeCards(CardsOfOmen cards){
-        this.amountOfOpenedCards -= cards.getAmountOfCards();
-        if(this.amountOfOpenedCards < 0)
-            this.amountOfOpenedCards = 0L;
-        this.totalGoldFromCards.subtractMoney(cards.getMoneyFromCards());
-        if(totalGoldFromCards.getCopperValue() <0)
-            this.totalGoldFromCards.setCopper(0L);
-    }
-
-    public int getAmountOfEntries() {
-        return this.accountCharacters.stream()
-                .map(AccountCharacter::getAmountOfEntries)
-                .reduce(0, Integer::sum);
-    }
-
-    public Long getTotalGarrisonResources() {
-        return this.accountCharacters.stream()
-                .map(AccountCharacter::getTotalGarrisonResources)
-                .reduce(0L, Long::sum);
-    }
-
-    public Long getTotalWarPaint() {
-        return this.accountCharacters.stream()
-                .map(AccountCharacter::getTotalWarPaint)
-                .reduce(0L, Long::sum);
-    }
-
-    public void addOpenedCards(CardsOfOmen cards){
-        this.amountOfOpenedCards += cards.getAmountOfCards();
-        totalGoldFromCards.addCopper(cards.getMoneyFromCards().getCopperValue());
     }
 
     @Override

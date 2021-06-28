@@ -19,10 +19,7 @@ public class Entry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //
-//    private Long accountCharacterId;
-//
-    //@DateTimeFormat
+
     @Column(name = "entryDate")
     private LocalDate entryDate;
 
@@ -40,14 +37,6 @@ public class Entry {
         this.entryDate = LocalDate.now();
         this.garrisonResources = 0;
         this.warPaint = 0;
-    }
-
-    public void setWarPaintToNegative() {
-        this.setWarPaint(-this.getWarPaint());
-    }
-
-    public void setGarrisonResourcesToNegative() {
-        this.setGarrisonResources(-this.getGarrisonResources());
     }
 
     @Override

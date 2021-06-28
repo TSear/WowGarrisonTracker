@@ -17,4 +17,8 @@ public interface CardsOfOmenService {
    List<CardsOfOmen> findAllByAccountIdPaged(Long accountId, int offset, int limit);
 
    int getAmountOfEntries(Long accountId);
+
+   Long sumTotalOpenedCards(Long accountId);
+
+   Long sumTotalGold(Long accountId);
 }

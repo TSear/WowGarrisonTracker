@@ -100,7 +100,6 @@ public class AccountServicesImpl implements AccountService {
     public boolean addCards(CardsOfOmen cards) {
         if (cards.getAccount() != null) {
             Account account = cards.getAccount();
-            account.addOpenedCards(cards);
             accountRepository.save(account);
             return true;
         }
@@ -111,11 +110,30 @@ public class AccountServicesImpl implements AccountService {
     public boolean removeCards(CardsOfOmen cards) {
         if (cards.getAccount() != null) {
             Account account = findById(cards.getAccount().getId());
-            account.removeCards(cards);
             accountRepository.save(account);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Long sumEntriesGarrisonResources(Long accountId) {
+        return accountRepository.sumEntriesGarrisonResourcesByAccountId(accountId);
+    }
+
+    @Override
+    public Long sumEntriesWarPaint(Long accountId) {
+        return accountRepository.sumEntriesWarPaintByAccountId(accountId);
+    }
+
+    @Override
+    public Long countEntries(Long accountId) {
+        return accountRepository.countEntriesByAccountId(accountId);
+    }
+
+    @Override
+    public Long countDays(Long accountId) {
+       return accountRepository.countDaysByAccountId(accountId);
     }
 
     private Account createAccountFromRegisterPojo(RegisterPojo registerPojo) {
@@ -157,7 +175,6 @@ public class AccountServicesImpl implements AccountService {
 
         return null;
     }
-
 
     @Override
     public Account findById(Long id) {

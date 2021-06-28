@@ -1,8 +1,8 @@
 package com.trix.wowgarrisontracker.services.interfaces;
 
 import com.trix.wowgarrisontracker.model.AccountCharacter;
+import com.trix.wowgarrisontracker.pojos.AccountCharacterForm;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
-import com.trix.wowgarrisontracker.pojos.Entry;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -10,20 +10,12 @@ import java.util.List;
 
 public interface AccountCharacterService {
 
-    boolean addNewEntryToAccountCharacter(Entry entryPojo);
-
-    boolean addNewEntryToAccountCharacter(com.trix.wowgarrisontracker.model.Entry entry);
-
-    boolean removeEntryFromAccountCharacter(Entry entryPojo);
-
-    boolean removeEntryFromAccountCharacter(com.trix.wowgarrisontracker.model.Entry entry);
 
     List<AccountCharacter> listOfAccountCharacters(Long accountId);
 
-
     boolean isNameTaken(Long accountId, String name);
 
-    boolean save(AccountCharacterPojo characterPojo);
+    boolean save(AccountCharacterForm accountCharacterForm);
 
     boolean save(AccountCharacter accountCharacter);
 
@@ -32,9 +24,6 @@ public interface AccountCharacterService {
     List<AccountCharacterPojo> getListOfAccountCharactersConvertedToPojo(Long characterId);
 
     List<AccountCharacter> findAllByAccountId(Long accountId);
-
-    List<AccountCharacter> findAllByAccountId(Long accountId, Pageable pageable);
-
 
     void delete(Long id);
 

@@ -34,7 +34,7 @@ public class CardsOfOmenServiceImpl implements CardsOfOmenService {
     @Override
     public boolean save(CardsOfOmen cards) {
 
-        if (cards != null && accountService.addCards(cards)) {
+        if (cards!=null){
             repository.save(cards);
             return true;
         }
@@ -60,5 +60,15 @@ public class CardsOfOmenServiceImpl implements CardsOfOmenService {
     @Override
     public int getAmountOfEntries(Long accountId) {
         return repository.countByAccountId(accountId);
+    }
+
+    @Override
+    public Long sumTotalOpenedCards(Long accountId) {
+        return repository.sumAmountOfCardsByAccountId(accountId);
+    }
+
+    @Override
+    public Long sumTotalGold(Long accountId) {
+        return repository.sumMoneyFromCardsByAccountId(accountId);
     }
 }

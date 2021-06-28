@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -24,8 +26,8 @@ public class AccountTest {
         accountCharacter.setCharacterName("testingCharacter1");
         accountCharacter.setAccount(testingAccount);
 
-        accountCharacter.addNewEntry(entryCreator(100, 100, accountCharacter),
-                entryCreator(200, 200, accountCharacter));
+        accountCharacter.getEntries().addAll(Arrays.asList(entryCreator(100, 100, accountCharacter),
+                entryCreator(200, 200, accountCharacter)));
 
         testingAccount.getAccountCharacters().add(accountCharacter);
 
@@ -40,43 +42,7 @@ public class AccountTest {
         return entry;
     }
 
-    @Test
-    public void getTotalGarrisonResources_CorrectAmount() {
-        //given
 
-        //when
-        Long garrisonResources = testingAccount.getTotalGarrisonResources();
-        //then
-        assertEquals(300, (long) garrisonResources);
-    }
 
-    @Test
-    public void getTotalWarPaint_CorrectAmount() {
-        //given
-
-        //when
-        Long warPaint = testingAccount.getTotalWarPaint();
-
-        //then
-        assertEquals(300, (long) warPaint);
-
-    }
-
-    @Test
-    void addCards() {
-        //given
-        Account account = new Account();
-        Money money = new Money(10,10,10);
-        CardsOfOmen cards = new CardsOfOmen();
-        cards.setMoneyFromCards(money);
-        cards.setAmountOfCards(100);
-
-        //when
-        account.addCards(cards);
-
-        //then
-        assertEquals(101010,account.getTotalGoldFromCards());
-
-    }
 
 }

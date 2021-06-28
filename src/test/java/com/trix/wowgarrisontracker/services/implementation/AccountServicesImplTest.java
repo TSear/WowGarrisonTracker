@@ -1,7 +1,5 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
-import com.trix.wowgarrisontracker.converters.AccountPojoToAccount;
-import com.trix.wowgarrisontracker.converters.AccountToAccountPojo;
 import com.trix.wowgarrisontracker.model.Account;
 import com.trix.wowgarrisontracker.pojos.RegisterPojo;
 import com.trix.wowgarrisontracker.repository.AccountRepository;
@@ -29,12 +27,6 @@ class AccountServicesImplTest {
 
     @Mock
     OptionsService optionsService;
-
-    @Mock
-    AccountToAccountPojo accountToAccountPojo;
-
-    @Mock
-    AccountPojoToAccount accountPojoToAccount;
 
     BCryptPasswordEncoder passwordEncoder;
 

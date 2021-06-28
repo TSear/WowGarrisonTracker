@@ -1,20 +1,16 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
-import com.trix.wowgarrisontracker.converters.AccountCharacterPojoToAccountCharacter;
 import com.trix.wowgarrisontracker.converters.AccountCharacterToAccountCharacterPojo;
-import com.trix.wowgarrisontracker.converters.EntryPojoToEntry;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
+import com.trix.wowgarrisontracker.pojos.AccountCharacterForm;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
-import com.trix.wowgarrisontracker.pojos.Entry;
 import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
-import com.trix.wowgarrisontracker.services.interfaces.EntryService;
-import com.vaadin.flow.component.page.Page;
+import com.trix.wowgarrisontracker.services.interfaces.AccountService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,21 +19,15 @@ import java.util.stream.Collectors;
 public class AccountCharacterServiceImpl implements AccountCharacterService {
 
     private final AccountCharacterRepository accountCharacterRepository;
-    private final AccountCharacterPojoToAccountCharacter accountCharacterPojoToAccountCharacter;
     private final AccountCharacterToAccountCharacterPojo accountCharacterToAccountCharacterPojo;
-    private final EntryPojoToEntry entryPojoToEntry;
-    private final EntryService entryService;
+    private final AccountService accountService;
 
     public AccountCharacterServiceImpl(AccountCharacterRepository accountCharacterRepository,
-                                       AccountCharacterPojoToAccountCharacter accountCharacterPojoToAccountCharacter,
                                        AccountCharacterToAccountCharacterPojo accountCharacterToAccountCharacterPojo,
-                                       EntryService entryService,
-                                       EntryPojoToEntry entryPojoToEntry) {
+                                       AccountService accountService) {
         this.accountCharacterRepository = accountCharacterRepository;
-        this.accountCharacterPojoToAccountCharacter = accountCharacterPojoToAccountCharacter;
         this.accountCharacterToAccountCharacterPojo = accountCharacterToAccountCharacterPojo;
-        this.entryService = entryService;
-        this.entryPojoToEntry = entryPojoToEntry;
+        this.accountService = accountService;
     }
 
     @Override
@@ -45,43 +35,6 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
         Optional<AccountCharacter> optionalAccountCharacter = accountCharacterRepository.findById(id);
         return optionalAccountCharacter.orElse(null);
     }
-
-    @Override
-    public boolean addNewEntryToAccountCharacter(Entry entryPojo) {
-        com.trix.wowgarrisontracker.model.Entry entry = entryPojoToEntry.convert(entryPojo);
-        return this.addNewEntryToAccountCharacter(entry);
-    }
-
-    @Override
-    public boolean addNewEntryToAccountCharacter(com.trix.wowgarrisontracker.model.Entry entry) {
-        if (entry != null && entry.getAccountCharacter() != null) {
-            AccountCharacter accountCharacter = entry.getAccountCharacter();
-            accountCharacter.addResources(entry);
-            entryService.save(entry);
-            accountCharacterRepository.save(accountCharacter);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean removeEntryFromAccountCharacter(Entry entryPojo) {
-        com.trix.wowgarrisontracker.model.Entry entry = entryPojoToEntry.convert(entryPojo);
-        return removeEntryFromAccountCharacter(entry);
-    }
-
-    @Override
-    public boolean removeEntryFromAccountCharacter(com.trix.wowgarrisontracker.model.Entry entry) {
-        if (entry != null && entry.getAccountCharacter() != null) {
-            AccountCharacter accountCharacter = entry.getAccountCharacter();
-            accountCharacter.removeResources(entry);
-            accountCharacterRepository.save(accountCharacter);
-            entryService.delete(entry.getId());
-            return true;
-        }
-        return false;
-    }
-
 
     @Override
     public List<AccountCharacter> listOfAccountCharacters(Long accountId) {
@@ -101,10 +54,12 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     }
 
     @Override
-    public boolean save(AccountCharacterPojo characterPojo) {
+    public boolean save(AccountCharacterForm accountCharacterForm) {
 
-        if (characterPojo != null) {
-            AccountCharacter accountCharacter = accountCharacterPojoToAccountCharacter.convert(characterPojo);
+        if (accountCharacterForm != null) {
+            AccountCharacter accountCharacter = new AccountCharacter();
+            accountCharacter.setAccount(accountService.findById(accountCharacterForm.getAccountId()));
+            accountCharacter.setCharacterName(accountCharacterForm.getAccountCharacterName());
             return save(accountCharacter);
         }
         return false;
@@ -135,11 +90,6 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     }
 
     @Override
-    public List<AccountCharacter> findAllByAccountId(Long accountId, Pageable pageable) {
-        return null;
-    }
-
-    @Override
     public void delete(Long id) {
         accountCharacterRepository.deleteById(id);
     }
@@ -161,4 +111,5 @@ public class AccountCharacterServiceImpl implements AccountCharacterService {
     public int countAllAccountCharactersByAccountId(Long id) {
         return accountCharacterRepository.countAccountCharacterByAccountId(id);
     }
+
 }

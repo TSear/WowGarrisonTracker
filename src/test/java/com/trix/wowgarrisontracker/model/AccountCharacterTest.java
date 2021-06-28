@@ -4,6 +4,8 @@ import com.trix.wowgarrisontracker.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AccountCharacterTest {
@@ -23,7 +25,7 @@ class AccountCharacterTest {
         entry2.setId(1L);
         entry3.setId(2L);
 
-        accountCharacter.addNewEntry(entry1, entry2, entry3);
+        accountCharacter.getEntries().addAll(Arrays.asList(entry1,entry2,entry3));
         testEntry = entry1;
     }
 
@@ -47,27 +49,4 @@ class AccountCharacterTest {
         assertFalse(contains);
     }
 
-    @Test
-    void removeEntry_success() {
-        //given
-        int size = accountCharacter.getAmountOfEntries();
-
-        //when
-        boolean removed = accountCharacter.removeEntry(testEntry);
-        //then
-        assertEquals(size - 1, accountCharacter.getAmountOfEntries());
-        assertTrue(removed);
-    }
-
-    @Test
-    void removeEntry_fail() {
-        //given
-        int size = accountCharacter.getAmountOfEntries();
-        //when
-        boolean removed = accountCharacter.removeEntry(new Entry());
-
-        //then
-        assertEquals(size, accountCharacter.getAmountOfEntries());
-        assertFalse(removed);
-    }
 }

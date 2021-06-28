@@ -2,8 +2,9 @@ package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.frontEnd.interfaces.Refreshable;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
-import com.trix.wowgarrisontracker.pojos.Entry;
+import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
+import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -16,7 +17,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.IntegerRangeValidator;
 import com.vaadin.flow.spring.annotation.UIScope;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 
 import java.util.Objects;
 
@@ -32,22 +32,25 @@ public class EntryFormDialog extends Dialog {
     private final static int MIN_TEXT_FIELD_VALUE = 0;
 
     private final AccountCharacterService accountCharacterService;
+    private final EntryService entryService;
     private final Binder<Entry> entryPojoBinder = new Binder<>();
-    private final Entry entryPojo = new Entry();
+    private Entry entry = new Entry();
     private final Statistics statistics;
     private final Refreshable parent;
 
-    private Long id;
+    private final Long id;
 
 
     public EntryFormDialog(AccountCharacterService accountCharacterService,
                            Long id,
                            Refreshable parent,
-                           Statistics statistics) {
+                           Statistics statistics,
+                           EntryService entryService) {
         this.accountCharacterService = accountCharacterService;
         this.id = id;
         this.parent = parent;
         this.statistics = statistics;
+        this.entryService = entryService;
         generateDialogBox();
     }
 
@@ -82,7 +85,7 @@ public class EntryFormDialog extends Dialog {
             }
         });
 
-        entryPojoBinder.readBean(entryPojo);
+        entryPojoBinder.readBean(entry);
 
         entryFormLayout.add(accountCharactersComboBox);
         entryFormLayout.add(garrisonResourcesIntegerField);
@@ -151,7 +154,7 @@ public class EntryFormDialog extends Dialog {
 
     private void addEntryEventHandler() {
         try {
-            entryPojoBinder.writeBean(entryPojo);
+            entryPojoBinder.writeBean(entry);
             createEntryAndCleanDialog();
         } catch (ValidationException e) {
             //TODO this is temporary. Need to replace with something more appropriate
@@ -161,9 +164,9 @@ public class EntryFormDialog extends Dialog {
 
     private void createEntryAndCleanDialog() {
 
-        accountCharacterService.addNewEntryToAccountCharacter(entryPojo);
-        entryPojo.clean();
-        entryPojoBinder.readBean(entryPojo);
+        entryService.save(entry);
+        entry = new Entry();
+        entryPojoBinder.readBean(entry);
 
         refreshOtherPages();
         this.close();
@@ -196,7 +199,7 @@ public class EntryFormDialog extends Dialog {
         entryPojoBinder.forField(accountCharacters)
                 .withValidator(Objects::nonNull, REQUIRED)
                 .bind(Entry::getAccountCharacter,
-                        (entryPojo1, accountCharacter) -> entryPojo1.setAccountCharacterId(accountCharacter.getId()));
+                        Entry::setAccountCharacter);
 
         return accountCharacters;
     }

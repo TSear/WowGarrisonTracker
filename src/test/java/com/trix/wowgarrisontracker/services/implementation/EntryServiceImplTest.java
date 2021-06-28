@@ -1,8 +1,6 @@
 package com.trix.wowgarrisontracker.services.implementation;
 
 import com.trix.wowgarrisontracker.TestUtils;
-import com.trix.wowgarrisontracker.converters.EntryPojoToEntry;
-import com.trix.wowgarrisontracker.converters.EntryToEntryPojo;
 import com.trix.wowgarrisontracker.model.AccountCharacter;
 import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.repository.AccountCharacterRepository;
@@ -10,7 +8,6 @@ import com.trix.wowgarrisontracker.repository.EntryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -33,12 +30,6 @@ public class EntryServiceImplTest {
 
     @Mock
     AccountCharacterRepository accountCharacterRepository;
-
-    @Mock
-    EntryToEntryPojo entryToEntryPojo;
-
-    @Mock
-    EntryPojoToEntry entryPojoToEntry;
 
     List<Entry> entries;
     AccountCharacter accountCharacter;

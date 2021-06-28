@@ -1,6 +1,7 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
 import com.trix.wowgarrisontracker.frontEnd.interfaces.Refreshable;
+import com.trix.wowgarrisontracker.pojos.AccountCharacterForm;
 import com.trix.wowgarrisontracker.pojos.AccountCharacterPojo;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.vaadin.flow.component.button.Button;
@@ -20,16 +21,16 @@ import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 public class CharacterFormDialog extends Dialog {
 
     private final AccountCharacterService characterService;
-    private final Binder<AccountCharacterPojo> binder = new Binder<>();
+    private final Binder<AccountCharacterForm> binder = new Binder<>();
     private final Long id;
     private final Refreshable parentData;
-
-    private AccountCharacterPojo accountCharacterPojo = new AccountCharacterPojo();
+    private AccountCharacterForm accountCharacterForm;
 
     public CharacterFormDialog(AccountCharacterService characterService, Long id, Refreshable parentData) {
         this.characterService = characterService;
         this.id = id;
         this.parentData = parentData;
+        this.accountCharacterForm = new AccountCharacterForm();
 
         init();
     }
@@ -52,7 +53,7 @@ public class CharacterFormDialog extends Dialog {
 
         Button cancelButton = createCancelButton();
 
-        binder.readBean(accountCharacterPojo);
+        binder.readBean(accountCharacterForm);
 
         buttonLayout.add(createButton, cancelButton);
 
@@ -77,7 +78,7 @@ public class CharacterFormDialog extends Dialog {
 
         createButton.addClickListener(event -> {
             try {
-                binder.writeBean(accountCharacterPojo);
+                binder.writeBean(accountCharacterForm);
                 saveAndCleanDialog();
 
             } catch (ValidationException e) {
@@ -89,13 +90,13 @@ public class CharacterFormDialog extends Dialog {
     }
 
     private void saveAndCleanDialog() {
-        accountCharacterPojo.setAccountId(id);
+        accountCharacterForm.setAccountId(id);
 
         //TODO need to handle saving in another way
-        characterService.save(accountCharacterPojo);
+        characterService.save(accountCharacterForm);
 
-        accountCharacterPojo = new AccountCharacterPojo();
-        binder.readBean(accountCharacterPojo);
+        accountCharacterForm = new AccountCharacterForm();
+        binder.readBean(accountCharacterForm);
         parentData.refresh();
         this.close();
     }
@@ -122,7 +123,7 @@ public class CharacterFormDialog extends Dialog {
                 .withValidator(validate ->
                         !characterService.isNameTaken(id, characterNameField.getValue()), "Name is taken")
                 .withValidator(new StringLengthValidator("Character name must be between 0 and 100 characters", 0, 100))
-                .bind(AccountCharacterPojo::getCharacterName, AccountCharacterPojo::setCharacterName);
+                .bind(AccountCharacterForm::getAccountCharacterName, AccountCharacterForm::setAccountCharacterName);
         return characterNameField;
     }
 
