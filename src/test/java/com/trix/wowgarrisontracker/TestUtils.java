@@ -11,7 +11,6 @@ public class TestUtils {
     public static Entry generateEntryWithCharacter(int garrisonResources, int warPaint, AccountCharacter accountCharacter) {
         Entry entry = generateEntry(garrisonResources,warPaint);
         entry.setAccountCharacter(accountCharacter);
-        accountCharacter.addNewEntry(entry);
         return entry;
     }
 

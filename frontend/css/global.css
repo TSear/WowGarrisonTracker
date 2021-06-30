@@ -97,3 +97,37 @@ iron-overlay-backdrop {
     color: inherit;
     font-size: inherit;
 }
+
+.cards-grid{
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+}
+
+@media screen and (min-width: 1550px){
+    .wrapping{
+        flex-direction:row;
+    }
+}
+
+@media screen and (max-width: 1549px){
+    .wrapping{
+        flex-direction:column;
+    }
+}
+
+.form-layout{
+    margin: 1em 3em 3em 3em;
+    max-width: 550px;
+    align-self: center ;    
+    justify-self: center;
+}
+
+.cards-grid{
+    margin: 1.5em;
+}
+
+.secondary-button{
+    background-color: var(--lumo-contrast-60pct);
+}

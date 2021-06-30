@@ -11,7 +11,6 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -34,6 +33,8 @@ public class Statistics extends FlexLayout implements Refreshable {
     private final Label averageResourcesPDLabel;
     private final Label amountOfEntriesLabel;
     private final Label amountOfDaysLabel;
+    private final Label totalGoldLabel;
+    private final Label cardsOpenedLabel;
 
 
     public Statistics(StatisticsService statisticsService) {
@@ -43,6 +44,8 @@ public class Statistics extends FlexLayout implements Refreshable {
         averageWarPaintPDLabel = new Label();
         amountOfEntriesLabel = new Label();
         amountOfDaysLabel = new Label();
+        totalGoldLabel = new Label();
+        cardsOpenedLabel = new Label();
         this.statisticsService = statisticsService;
     }
 
@@ -61,8 +64,11 @@ public class Statistics extends FlexLayout implements Refreshable {
         Div averageGarrisonResourcesPD = createStatisticDiv("Average Garrison Resources", averageResourcesPDLabel);
         Div amountOfEntries = createStatisticDiv("Entries", amountOfEntriesLabel);
         Div amountOfDays = createStatisticDiv("Days", amountOfDaysLabel);
+        Div totalGoldFromCards = createStatisticDiv("Gold from cards", totalGoldLabel);
+        Div cardsOpened = createStatisticDiv("Cards opened", cardsOpenedLabel);
 
-        add(totalResources, totalWarPaint, averageGarrisonResourcesPD, averageWarPaintPD, amountOfEntries, amountOfDays);
+        add(totalResources, totalWarPaint, averageGarrisonResourcesPD, averageWarPaintPD, amountOfEntries, amountOfDays,
+                totalGoldFromCards,cardsOpened);
     }
 
     private void configureFrame() {
@@ -82,6 +88,8 @@ public class Statistics extends FlexLayout implements Refreshable {
         averageResourcesPDLabel.setText(statistics.getAverageDailyGarrisonResources() + "");
         amountOfEntriesLabel.setText(statistics.getAmountOfEntries() + "");
         amountOfDaysLabel.setText(statistics.getDays() + "");
+        totalGoldLabel.setText(statistics.getTotalGold() + "");
+        cardsOpenedLabel.setText(statistics.getTotalCardsOpened() + "");
 
     }
 

@@ -1,13 +1,12 @@
 package com.trix.wowgarrisontracker.model;
 
-import com.trix.wowgarrisontracker.pojos.CardsOfOmen;
-import com.trix.wowgarrisontracker.pojos.Money;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -35,49 +34,21 @@ public class Account {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<AccountCharacter> accountCharacters;
-
-    private Long amountOfEntries;
-
-    private Long amountOfOpenedCards;
-
-    private Money totalGoldFromCards;
 
     @Column(length = 64)
     private String verificationCode;
 
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<CardsOfOmen> cardsOfOmenList;
+
     @Column(name = "enabled")
     private boolean enabled;
 
-
     public Account() {
         accountCharacters = new HashSet<>();
-        this.amountOfEntries = 0L;
         options = new Options(this);
-    }
-
-    public int getAmountOfEntries() {
-        return this.accountCharacters.stream()
-                .map(AccountCharacter::getAmountOfEntries)
-                .reduce(0, Integer::sum);
-    }
-
-    public Long getTotalGarrisonResources() {
-        return this.accountCharacters.stream()
-                .map(AccountCharacter::getTotalGarrisonResources)
-                .reduce(0L, Long::sum);
-    }
-
-    public Long getTotalWarPaint() {
-        return this.accountCharacters.stream()
-                .map(AccountCharacter::getTotalWarPaint)
-                .reduce(0L, Long::sum);
-    }
-
-    public void addOpenedCards(CardsOfOmen cards){
-        this.amountOfOpenedCards += cards.getAmountOfCards();
-        totalGoldFromCards.addCopper(cards.getMoneyFromCards().getCopperValue());
     }
 
     @Override

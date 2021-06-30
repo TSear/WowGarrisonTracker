@@ -41,7 +41,9 @@ class StatisticsServiceImplTest {
         entry2.setGarrisonResources(200);
         entry2.setWarPaint(200);
 
-        accountCharacter.addNewEntry(entry1, entry2);
+        accountCharacter.getEntries().add(entry1);
+        accountCharacter.getEntries().add(entry2);
+
 
         AccountCharacter accountCharacter1 = new AccountCharacter();
         accountCharacter1.setAccount(account);
@@ -57,35 +59,15 @@ class StatisticsServiceImplTest {
         entry4.setGarrisonResources(400);
         entry4.setWarPaint(400);
 
-        accountCharacter1.addNewEntry(entry4, entry3);
+        accountCharacter.getEntries().add(entry3);
+        accountCharacter.getEntries().add(entry4);
 
         account.setAccountCharacters(new HashSet<AccountCharacter>(Arrays.asList(accountCharacter, accountCharacter1)));
 
     }
 
-    @Test
-    void getTotalGarrisonResources() {
-        //given
-        Long correctValue = 1000L;
 
-        //when
-        Long totalSum = account.getTotalGarrisonResources();
 
-        //then
-        assertEquals(correctValue, totalSum);
-    }
-
-    @Test
-    void getTotalWarPaint() {
-        //given
-        Long correctValue = 1000L;
-
-        //when
-        Long totalSum = account.getTotalWarPaint();
-
-        //then
-        assertEquals(correctValue, totalSum);
-    }
 
     @Test
     void getAverageWarPaintPerDay() {

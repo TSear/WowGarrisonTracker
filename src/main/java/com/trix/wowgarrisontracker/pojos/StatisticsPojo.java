@@ -14,5 +14,7 @@ public class StatisticsPojo {
     private int averageDailyWarPaint;
     private Long totalWarPaint;
     private Long totalGarrisonResources;
+    private String totalGold;
+    private Long totalCardsOpened;
 
 }

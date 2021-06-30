@@ -58,7 +58,7 @@ public class BootData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         this.innit();
-        auctionService.updateAuctionHouse();
+//        auctionService.updateAuctionHouse();
     }
 
     private void innit() {
@@ -107,7 +107,7 @@ public class BootData implements CommandLineRunner {
             List<Entry> entries = new ArrayList<>();
             accountCharacterService.findAllByAccountId(1L).forEach(accCharacter -> IntStream.range(1, 5)
                     .mapToObj(i -> generateEntryWithCharacter((int) (Math.random() * 100), (int) (Math.random() * 100), accCharacter))
-                    .forEach(accountCharacterService::addNewEntryToAccountCharacter));
+                    .forEach(entryRepository::save));
         }
 
 
@@ -117,7 +117,6 @@ public class BootData implements CommandLineRunner {
             accountCharacter) {
         Entry entry = generateEntry(garrisonResources, warPaint);
         entry.setAccountCharacter(accountCharacter);
-        accountCharacter.addNewEntry(entry);
         return entry;
     }
 

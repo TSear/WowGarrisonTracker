@@ -22,4 +22,10 @@ public interface AccountCharacterRepository extends JpaRepository<AccountCharact
 
     @Query("SELECT count(accountCharacters.id) FROM AccountCharacter accountCharacters  WHERE accountCharacters.account.id = :id")
     int countAccountCharacterByAccountId(Long id);
+
+    @Query("Select sum(entry.garrisonResources) FROM AccountCharacter acc INNER JOIN acc.entries entry WHERE acc.id = :accountCharacterId")
+    Long sumGarrisonResourcesByAccountCharacterId(AccountCharacter accountCharacterId);
+
+    @Query("Select sum(entry.warPaint) FROM AccountCharacter acc INNER JOIN acc.entries entry WHERE acc.id = :accountCharacterId")
+    Long sumWarPaintByAccountCharacterId(AccountCharacter accountCharacterId);
 }

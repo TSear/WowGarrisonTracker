@@ -72,7 +72,7 @@ public class AuctionServiceImpl implements AuctionService {
 
 
     //TODO this is so awful. Need to read about multi threading and then redo this
-    @Async
+//    @Async
     @Override
     public void updateAuctionHouse() {
 

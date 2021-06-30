@@ -1,14 +1,11 @@
 package com.trix.wowgarrisontracker.frontEnd;
 
-import com.trix.wowgarrisontracker.converters.OptionsDTOToOptions;
-import com.trix.wowgarrisontracker.converters.OptionsToOptionsDTO;
 import com.trix.wowgarrisontracker.enums.Regions;
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.frontEnd.interfaces.Refreshable;
 import com.trix.wowgarrisontracker.model.CustomUserDetails;
 import com.trix.wowgarrisontracker.model.Options;
 import com.trix.wowgarrisontracker.model.Server;
-import com.trix.wowgarrisontracker.pojos.OptionsDTO;
 import com.trix.wowgarrisontracker.services.interfaces.OptionsService;
 import com.trix.wowgarrisontracker.services.interfaces.ServerService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
@@ -25,7 +22,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -44,24 +40,21 @@ import java.util.stream.Collectors;
 public class Settings extends VerticalLayout {
 
     private final FormLayout formLayout;
-    private final Binder<OptionsDTO> optionsDTOBinder;
-    private final OptionsDTO optionsDTO;
+    private final Binder<Options> optionsDTOBinder;
+    private final Options options;
     private final Notification savedNotification;
     private final OptionsService optionsService;
     private final List<Server> serverList;
-    private final OptionsDTOToOptions optionsDTOToOptions;
     private final Refreshable auctionHouse;
     private Map<String, List<Server>> groupedServers;
 
-public Settings(OptionsService optionsService, ServerService serverService, OptionsDTOToOptions optionsDTOToOptions,
-                AuctionHouse auctionHouse) {
+    public Settings(OptionsService optionsService, ServerService serverService,
+                    AuctionHouse auctionHouse) {
         this.optionsService = optionsService;
-        this.optionsDTOToOptions = optionsDTOToOptions;
         serverList = serverService.getServers();
-        OptionsToOptionsDTO optionsToOptionsDTO = new OptionsToOptionsDTO();
         this.formLayout = new FormLayout();
         this.optionsDTOBinder = new Binder<>();
-        this.optionsDTO = optionsToOptionsDTO.convert(GeneralUtils.getUserSettings());
+        this.options = GeneralUtils.getUserSettings();
         this.savedNotification = new Notification("Options were saved", 2000);
         this.auctionHouse = auctionHouse;
     }
@@ -86,7 +79,7 @@ public Settings(OptionsService optionsService, ServerService serverService, Opti
 
         Button submitFormButton = configureSubmitFormButton();
 
-        optionsDTOBinder.readBean(optionsDTO);
+        optionsDTOBinder.readBean(options);
 
         formLayout.addFormItem(regionComboBox, "Region");
         formLayout.addFormItem(serverNameComboBox, "Server Name");
@@ -103,16 +96,16 @@ public Settings(OptionsService optionsService, ServerService serverService, Opti
         submitFormButton.setClassName("margin-top-big");
         submitFormButton.addClickListener(event -> {
             try {
-                optionsDTOBinder.writeBean(optionsDTO);
-                Options optionsTmp = optionsDTOToOptions.convert(optionsDTO);
-                optionsService.save(optionsTmp);
+                optionsDTOBinder.writeBean(options);
+                optionsService.save(options);
                 //TODO for now this is refreshing logged user options without logging out. Will need to find better way
                 CustomUserDetails tmp = GeneralUtils.getCustomUserPrincipal();
-                tmp.getAccount().setOptions(optionsDTOToOptions.convert(optionsDTO));
+                tmp.getAccount().setOptions(options);
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(tmp, null, new ArrayList<>()));
                 savedNotification.open();
                 auctionHouse.refresh();
             } catch (ValidationException e) {
+                //TODO exception handling
                 System.out.println(e.getMessage());
             }
         });
@@ -121,7 +114,7 @@ public Settings(OptionsService optionsService, ServerService serverService, Opti
 
     private Checkbox configureEmailNotificationsCheckBox() {
         Checkbox sendEmailNotificationsCheckBox = new Checkbox();
-        optionsDTOBinder.forField(sendEmailNotificationsCheckBox).bind(OptionsDTO::isReceiveEmailNotifications, OptionsDTO::setReceiveEmailNotifications);
+        optionsDTOBinder.forField(sendEmailNotificationsCheckBox).bind(Options::isReceiveEmailNotifications, Options::setReceiveEmailNotifications);
         return sendEmailNotificationsCheckBox;
     }
 
@@ -131,7 +124,7 @@ public Settings(OptionsService optionsService, ServerService serverService, Opti
         serverNameComboBox.setItems(serverList);
         serverNameComboBox.setItemLabelGenerator(Server::toString);
         serverNameComboBox.setAllowCustomValue(false);
-        optionsDTOBinder.forField(serverNameComboBox).bind(OptionsDTO::getServer, OptionsDTO::setServer);
+        optionsDTOBinder.forField(serverNameComboBox).bind(Options::getServer, Options::setServer);
         return serverNameComboBox;
     }
 
@@ -139,14 +132,13 @@ public Settings(OptionsService optionsService, ServerService serverService, Opti
         ComboBox<Regions> regionComboBox = new ComboBox<>();
         regionComboBox.setItems(Regions.values());
         regionComboBox.setValue(Arrays.stream(Regions.values())
-                .filter(regions1 -> regions1.getValue().equalsIgnoreCase(optionsDTO.getServer().getRegion()))
+                .filter(regions1 -> regions1.getValue().equalsIgnoreCase(options.getServer().getRegion()))
                 .findFirst().orElse(Regions.values()[0]));
         regionComboBox.setAllowCustomValue(false);
         regionComboBox.addValueChangeListener(event -> {
             if (regionComboBox.getValue().getValue().equalsIgnoreCase("all")) {
                 serverNameComboBox.setItems(serverList);
-            }
-            else {
+            } else {
                 serverNameComboBox.setItems(groupedServers.get(regionComboBox.getValue().getValue()));
             }
         });

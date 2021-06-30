@@ -2,11 +2,11 @@ package com.trix.wowgarrisontracker.pojos;
 
 import java.util.Objects;
 
-public class Money {
+public class Money implements Comparable<Money> {
 
     private Long copper;
 
-    public Money(){
+    public Money() {
         copper = 0L;
     }
 
@@ -30,7 +30,7 @@ public class Money {
         return toAdd;
     }
 
-    public Long getCopperValue(){
+    public Long getCopperValue() {
         return this.copper;
     }
 
@@ -65,12 +65,16 @@ public class Money {
         this.copper += convertToCopper(gold, silver, copper);
     }
 
-    public int[] getFormattedValues(){
-        int [] result = new int[3];
+    public void addMoney(Money money) {
+        addCopper(money.getCopperValue());
+    }
+
+    public int[] getFormattedValues() {
+        int[] result = new int[3];
         Long tmp = this.copper;
-        result[2] = (int)(tmp%100);
+        result[2] = (int) (tmp % 100);
         tmp /= 100;
-        result[1] = (int)(tmp%100);
+        result[1] = (int) (tmp % 100);
         tmp /= 100;
         result[0] = tmp.intValue();
         return result;
@@ -88,5 +92,24 @@ public class Money {
     @Override
     public int hashCode() {
         return Objects.hash(copper);
+    }
+
+    public Money subtract(Money money) {
+        return new Money(this.copper - money.getCopperValue());
+    }
+
+    public void subtractMoney(Money moneyFromCards) {
+        this.copper -= moneyFromCards.getCopperValue();
+    }
+
+    @Override
+    public int compareTo(Money money) {
+        return this.copper.compareTo(money.getCopperValue());
+    }
+
+    @Override
+    public String toString() {
+        int[] formattedValues = getFormattedValues();
+        return formattedValues[0] + "g " + formattedValues[1] + "s " + formattedValues[2] + "c";
     }
 }

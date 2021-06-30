@@ -48,9 +48,10 @@ public class MainLayout extends AppLayout {
 
         List<Tab> listOfTabs = new ArrayList<>(Arrays.asList(
                 new Tab(VaadinIcon.LINES_LIST.create(), new RouterLink("Track", TrackLayout.class)),
+                new Tab(VaadinIcon.MONEY.create(), new RouterLink("Cards of Omen", CardsOfOmenView.class)),
                 new Tab(VaadinIcon.GROUP.create(), new RouterLink("Characters", CharactersLayout.class)),
                 new Tab(VaadinIcon.CHART.create(), new RouterLink("Statistics", Statistics.class)),
-                new Tab(VaadinIcon.MONEY.create(), new RouterLink("Auction House", AuctionHouse.class)),
+                new Tab(VaadinIcon.MONEY_EXCHANGE.create(), new RouterLink("Auction House", AuctionHouse.class)),
                 new Tab(VaadinIcon.PHONE.create(), new RouterLink("Contact", Contact.class)),
                 new Tab(VaadinIcon.COGS.create(), new RouterLink("Settings", Settings.class)),
                 new Tab(VaadinIcon.EXIT.create(), logout))

@@ -8,6 +8,7 @@ import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -15,7 +16,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.context.annotation.Profile;
 import org.vaadin.klaudeta.PaginatedGrid;
 
@@ -57,6 +57,7 @@ public class CharactersLayout extends VerticalLayout implements Refreshable {
 
         dataGridLayout = createGridLayout();
 
+
         HorizontalLayout gridButtonLayout = new HorizontalLayout();
         gridButtonLayout.setWidthFull();
 
@@ -67,6 +68,8 @@ public class CharactersLayout extends VerticalLayout implements Refreshable {
 
         createDeleteConfirmDialog();
 
+        configureContextMenuForGrid();
+
 
         gridButtonLayout.add(addNewCharacterButton);
         gridButtonLayout.add(deleteCharacterButton);
@@ -74,6 +77,25 @@ public class CharactersLayout extends VerticalLayout implements Refreshable {
         add(dataGridLayout);
         add(gridButtonLayout);
         add(confirmDelete);
+    }
+
+    private void configureContextMenuForGrid() {
+        ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setTarget(dataGridLayout);
+
+        Button deleteEntryButton = new Button("Delete selected entry");
+
+        deleteEntryButton.addClickListener(event -> {
+            dataGridLayout.getSelectedItems().forEach(accountCharacterPojo -> {
+                accountCharacterService.delete(accountCharacterPojo.getId());
+                dataProvider.refreshAll();
+                statistics.refresh();
+                contextMenu.close();
+            });
+        });
+
+        contextMenu.add(deleteEntryButton);
+
     }
 
     private void createDeleteConfirmDialog() {

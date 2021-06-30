@@ -3,7 +3,7 @@ package com.trix.wowgarrisontracker.frontEnd;
 import com.trix.wowgarrisontracker.frontEnd.fragments.AddButton;
 import com.trix.wowgarrisontracker.frontEnd.fragments.MainLayout;
 import com.trix.wowgarrisontracker.frontEnd.interfaces.Refreshable;
-import com.trix.wowgarrisontracker.pojos.Entry;
+import com.trix.wowgarrisontracker.model.Entry;
 import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
@@ -18,9 +18,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.PageRequest;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import javax.annotation.PostConstruct;
@@ -71,7 +71,7 @@ public class TrackLayout extends VerticalLayout implements Refreshable {
 
         configureDataProvider();
         configureMainLayout();
-        entryFormDialog = new EntryFormDialog(accountCharacterService, id, this, statistics);
+        entryFormDialog = new EntryFormDialog(accountCharacterService, id, this, statistics, entryService);
 
 
         gridLayout = createGridLayout();
@@ -79,7 +79,7 @@ public class TrackLayout extends VerticalLayout implements Refreshable {
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setWidthFull();
 
-        Button addButton = createAddEntryButton("Add New Entry", entryFormDialog);
+        Button addButton = createAddEntryButton(entryFormDialog);
         buttonLayout.setFlexGrow(1, addButton);
 
         Button deleteEntryButton = createDeleteButton(gridLayout);
@@ -95,8 +95,8 @@ public class TrackLayout extends VerticalLayout implements Refreshable {
         add(contextMenu);
     }
 
-    private Button createAddEntryButton(String text, EntryFormDialog entryFormDialog) {
-        Button button = new AddButton(text, entryFormDialog);
+    private Button createAddEntryButton(EntryFormDialog entryFormDialog) {
+        Button button = new AddButton("Add New Entry", entryFormDialog);
         button.setClassName("contrast-button");
         setWidthFull();
         return button;
@@ -130,7 +130,7 @@ public class TrackLayout extends VerticalLayout implements Refreshable {
     }
 
     private void removeEntries(Collection<Entry> entries) {
-        entries.forEach(accountCharacterService::removeEntryFromAccountCharacter);
+        entries.forEach(entry -> entryService.delete(entry.getId()));
         statistics.refresh();
         dataProvider.refreshAll();
     }
@@ -139,8 +139,8 @@ public class TrackLayout extends VerticalLayout implements Refreshable {
 
         dataProvider = DataProvider.fromCallbacks(
                 query -> {
-                    long offset = gridLayout == null || gridLayout.getPage() < 1 ? 0L : gridLayout.getPage() - 1;
-                    List<Entry> data = entryService.getAllAccountEntriesPagedPojo(id, offset, (long) PAGE_SIZE);
+                    int offset = gridLayout == null || gridLayout.getPage() < 1 ? 0 : gridLayout.getPage() - 1;
+                    List<Entry> data = entryService.getAllAccountEntriesPaged(id, PageRequest.of(offset, PAGE_SIZE));
                     return data.stream();
                 }, query -> entryService.getAmountOfEntries(id));
     }
@@ -178,7 +178,7 @@ public class TrackLayout extends VerticalLayout implements Refreshable {
 
 
         gridLayout.addColumn(Entry::getEntryDate).setHeader("Entry Date");
-        gridLayout.addColumn(Entry::getCharacterName).setHeader("Character Name");
+        gridLayout.addColumn(entry -> entry.getAccountCharacter().getCharacterName()).setHeader("Character Name");
         gridLayout.addColumn(Entry::getGarrisonResources).setHeader("Garrison Resources");
         gridLayout.addColumn(Entry::getWarPaint).setHeader("War Paint");
 
