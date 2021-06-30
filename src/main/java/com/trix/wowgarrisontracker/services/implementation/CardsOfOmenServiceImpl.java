@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CardsOfOmenServiceImpl implements CardsOfOmenService {
@@ -64,11 +65,11 @@ public class CardsOfOmenServiceImpl implements CardsOfOmenService {
 
     @Override
     public Long sumTotalOpenedCards(Long accountId) {
-        return repository.sumAmountOfCardsByAccountId(accountId);
+        return Objects.requireNonNullElse(repository.sumAmountOfCardsByAccountId(accountId),0L);
     }
 
     @Override
     public Long sumTotalGold(Long accountId) {
-        return repository.sumMoneyFromCardsByAccountId(accountId);
+        return Objects.requireNonNullElse(repository.sumMoneyFromCardsByAccountId(accountId),0L);
     }
 }

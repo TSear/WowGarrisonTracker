@@ -1,6 +1,6 @@
 package com.trix.wowgarrisontracker.config;
 
-import com.trix.wowgarrisontracker.frontEnd.LoginPage;
+import com.trix.wowgarrisontracker.frontEnd.views.login.LoginView;
 import com.trix.wowgarrisontracker.services.implementation.AccountDetailsService;
 import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.requestCache().requestCache(new CustomRequestCache());
-        setLoginView(http, LoginPage.class);
+        setLoginView(http, LoginView.class);
     }
 
     @Override
@@ -55,7 +55,6 @@ public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
                 "/webjars/**",
                 "/frontend-es5/**",
                 "/frontend-es6/**",
-                "/h2**",
                 "/resources/**",
                 "/img/**");
         super.configure(web);

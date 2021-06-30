@@ -26,16 +26,16 @@ public class StatisticsServiceImpl implements StatisticsService {
         Account account = accountService.findById(accountId);
         StatisticsPojo statistics = new StatisticsPojo();
         Long days = accountService.countDays(account.getId());
-        Long garrisonResources =Objects.requireNonNullElse(accountService.sumEntriesGarrisonResources(account.getId()),0L);
-        Long totalWarPaint = Objects.requireNonNullElse(accountService.sumEntriesWarPaint(account.getId()),0L);
+        Long garrisonResources = accountService.sumEntriesGarrisonResources(account.getId());
+        Long warPaint = accountService.sumEntriesWarPaint(account.getId());
 
 
         statistics.setAmountOfEntries(accountService.countEntries(account.getId()).intValue());
         statistics.setDays(days.intValue());
         statistics.setAverageDailyGarrisonResources((int) (garrisonResources / Math.max(days,1)));
-        statistics.setAverageDailyWarPaint((int) (totalWarPaint / Math.max(days,1)));
+        statistics.setAverageDailyWarPaint((int) (garrisonResources / Math.max(days,1)));
         statistics.setTotalGarrisonResources(garrisonResources);
-        statistics.setTotalWarPaint(totalWarPaint);
+        statistics.setTotalWarPaint(warPaint);
         statistics.setTotalGold(new Money(cardsOfOmenService.sumTotalGold(account.getId())).toString());
         statistics.setTotalCardsOpened(cardsOfOmenService.sumTotalOpenedCards(account.getId()));
 

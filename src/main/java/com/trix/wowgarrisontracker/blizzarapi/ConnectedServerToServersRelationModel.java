@@ -14,7 +14,6 @@ public class ConnectedServerToServersRelationModel {
 
     private List<String> serverNames;
 
-    @SuppressWarnings("unchecked")
     @JsonProperty("realms")
     private void setServerNames(Map<String, Object> array){
         serverNames.add((String)array.get("slug"));

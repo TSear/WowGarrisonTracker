@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 
 public interface AccountService {
 
+    boolean save(Account account);
 
     boolean isLoginTaken(String login);
 

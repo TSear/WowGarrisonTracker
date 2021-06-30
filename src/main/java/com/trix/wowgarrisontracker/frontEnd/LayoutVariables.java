@@ -9,4 +9,6 @@ public class LayoutVariables {
     public static final String CARDS_GRID = "cards-grid";
     public static final String WRAPPING = "wrapping";
     public static final String SECONDARY_BUTTON = "secondary-button";
+    public static final String CONTRAST = "contrast";
+    public static final String MARGIN_BIG = "margin-big";
 }

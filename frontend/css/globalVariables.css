@@ -9,6 +9,7 @@ html {
   --small-shadow-range: 0.2em;
   --big-shadow-range: 1em;
   --mega-shadow-range: 1.5em;
+  --margin-big: 1.5em;
   /* Lumo */
   --lumo-body-text-color: var(--font-primary-color);
   --lumo-primary-text-color: #fffcf2;

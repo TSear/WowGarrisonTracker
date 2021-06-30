@@ -131,3 +131,12 @@ iron-overlay-backdrop {
 .secondary-button{
     background-color: var(--lumo-contrast-60pct);
 }
+
+.contrast{
+    background-color: var(--primary-contrast-color);
+    color: var(--primary-contrast-color);
+}
+
+.margin-big{
+    margin: var(--margin-big);
+}

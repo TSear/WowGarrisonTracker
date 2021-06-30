@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -118,12 +119,12 @@ public class AccountServicesImpl implements AccountService {
 
     @Override
     public Long sumEntriesGarrisonResources(Long accountId) {
-        return accountRepository.sumEntriesGarrisonResourcesByAccountId(accountId);
+        return Objects.requireNonNullElse(accountRepository.sumEntriesGarrisonResourcesByAccountId(accountId), 0L);
     }
 
     @Override
     public Long sumEntriesWarPaint(Long accountId) {
-        return accountRepository.sumEntriesWarPaintByAccountId(accountId);
+        return Objects.requireNonNullElse(accountRepository.sumEntriesWarPaintByAccountId(accountId), 0L);
     }
 
     @Override
@@ -133,7 +134,7 @@ public class AccountServicesImpl implements AccountService {
 
     @Override
     public Long countDays(Long accountId) {
-       return accountRepository.countDaysByAccountId(accountId);
+        return accountRepository.countDaysByAccountId(accountId);
     }
 
     private Account createAccountFromRegisterPojo(RegisterPojo registerPojo) {
@@ -147,6 +148,15 @@ public class AccountServicesImpl implements AccountService {
         account.setVerificationCode(RandomString.make(64));
 
         return account;
+    }
+
+    @Override
+    public boolean save(Account account) {
+        if (account != null) {
+            accountRepository.save(account);
+            return true;
+        }
+        return false;
     }
 
     @Override
