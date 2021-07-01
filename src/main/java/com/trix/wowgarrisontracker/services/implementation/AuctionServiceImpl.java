@@ -10,6 +10,7 @@ import com.trix.wowgarrisontracker.repository.AuctionEntityRepository;
 import com.trix.wowgarrisontracker.repository.ItemEntityRepository;
 import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
 import com.trix.wowgarrisontracker.services.interfaces.ItemsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class AuctionServiceImpl implements AuctionService {
 
@@ -80,12 +82,11 @@ public class AuctionServiceImpl implements AuctionService {
             List<AuctionEntity> auctionEntities = blizzardApiRequests.getFilteredAuctions();
             this.removeAll();
             repository.saveAll(auctionEntities);
-            System.out.println("Updated auctionHouse");
+            log.info("Updated auction house");
             try {
                 //TODO busy waiting!!! Need to find a way to change it
                 Thread.sleep(30 * 60 * 1000);
-//                Thread.sleep(1000*60);
-                System.out.println("Updating auction House");
+                log.info("Updating auction house");
             } catch (InterruptedException e) {
                 break;
             }

@@ -138,5 +138,18 @@ iron-overlay-backdrop {
 }
 
 .margin-big{
-    margin: var(--margin-big);
+    margin: var(--margin-big);}
+
+:host(.logout-button) .vaadin-button-container{
+    justify-content: start;
+}
+
+.image-fit{
+    object-fit: contain;
+    max-width: 50%;
+    min-width: 450px;
+}
+
+.paragraph-about{
+    max-width: 50%;
 }

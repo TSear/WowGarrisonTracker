@@ -25,12 +25,14 @@ import com.vaadin.flow.data.validator.IntegerRangeValidator;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
 import java.time.LocalDate;
 
 
+@Slf4j
 @UIScope
 @PermitAll
 @PageTitle("Cards Of Omen")
@@ -147,8 +149,7 @@ public class CardsOfOmenView extends FlexLayout {
                 statistics.refresh();
 
             } catch (ValidationException e) {
-                //TODO exception handling
-                System.out.println("Validation failed");
+                log.info("Validation failed: " + CardsOfOmenView.class);
             }
         });
         return button;

@@ -84,32 +84,30 @@ public class BootData implements CommandLineRunner {
 //        auctionService.updateAuctionHouse();
 
         Account account1 = new Account();
-        account1.setId(1L);
         account1.setLogin("login1");
         account1.setPassword(passwordEncoder.encode("password1"));
         account1.setEnabled(true);
 
         if (accountRepository.count() == 0) {
             accountRepository.save(account1);
-        }
-        List<AccountCharacter> characters = IntStream.range(0, 30).mapToObj(i -> {
-            AccountCharacter accountCharacter = new AccountCharacter();
-            accountCharacter.setAccount(account1);
-            accountCharacter.setId((long) i);
-            accountCharacter.setCharacterName("Character: " + i);
-            return accountCharacter;
-        }).collect(Collectors.toList());
-        if (accountCharacterRepository.count() == 0) {
-            accountCharacterRepository.saveAll(characters);
-        }
+            List<AccountCharacter> characters = IntStream.range(0, 30).mapToObj(i -> {
+                AccountCharacter accountCharacter = new AccountCharacter();
+                accountCharacter.setAccount(account1);
+                accountCharacter.setId((long) i);
+                accountCharacter.setCharacterName("Character: " + i);
+                return accountCharacter;
+            }).collect(Collectors.toList());
+            if (accountCharacterRepository.count() == 0) {
+                accountCharacterRepository.saveAll(characters);
+            }
 
-        if (entryRepository.count() == 0) {
-            List<Entry> entries = new ArrayList<>();
-            accountCharacterService.findAllByAccountId(1L).forEach(accCharacter -> IntStream.range(1, 5)
-                    .mapToObj(i -> generateEntryWithCharacter((int) (Math.random() * 100), (int) (Math.random() * 100), accCharacter))
-                    .forEach(entryRepository::save));
+            if (entryRepository.count() == 0) {
+                List<Entry> entries = new ArrayList<>();
+                accountCharacterService.findAllByAccountId(1L).forEach(accCharacter -> IntStream.range(1, 5)
+                        .mapToObj(i -> generateEntryWithCharacter((int) (Math.random() * 100), (int) (Math.random() * 100), accCharacter))
+                        .forEach(entryRepository::save));
+            }
         }
-
 
     }
 

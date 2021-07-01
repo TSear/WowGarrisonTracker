@@ -1,6 +1,7 @@
 package com.trix.wowgarrisontracker.frontEnd.fragments;
 
-import com.trix.wowgarrisontracker.frontEnd.*;
+import com.trix.wowgarrisontracker.frontEnd.LayoutVariables;
+import com.trix.wowgarrisontracker.frontEnd.views.about.AboutView;
 import com.trix.wowgarrisontracker.frontEnd.views.auctionHouse.AuctionHouseView;
 import com.trix.wowgarrisontracker.frontEnd.views.cardsOfOmen.CardsOfOmenView;
 import com.trix.wowgarrisontracker.frontEnd.views.characters.CharactersView;
@@ -29,7 +30,6 @@ import java.util.List;
 @CssImport(value = "/css/MainLayout.css", themeFor = "vaadin-app-layout")
 @CssImport(value = "/css/MainLayout.css")
 @UIScope
-//TODO Add annotations configs for security
 public class MainLayout extends AppLayout {
 
 
@@ -52,6 +52,8 @@ public class MainLayout extends AppLayout {
         Button logout = new Button("Log Out");
         logout.addClickListener(buttonClickEvent -> SecurityService.logout());
         logout.setClassName("logout-button");
+        logout.setWidthFull();
+
 
         List<Tab> listOfTabs = new ArrayList<>(Arrays.asList(
                 new Tab(VaadinIcon.LINES_LIST.create(), new RouterLink("Track", ResourcesView.class)),
@@ -61,6 +63,7 @@ public class MainLayout extends AppLayout {
                 new Tab(VaadinIcon.MONEY_EXCHANGE.create(), new RouterLink("Auction House", AuctionHouseView.class)),
                 new Tab(VaadinIcon.PHONE.create(), new RouterLink("Contact", ContactView.class)),
                 new Tab(VaadinIcon.COGS.create(), new RouterLink("Settings", SettingsView.class)),
+                new Tab(VaadinIcon.INFO.create(), new RouterLink("About", AboutView.class)),
                 new Tab(VaadinIcon.EXIT.create(), logout))
         );
 

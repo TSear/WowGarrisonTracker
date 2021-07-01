@@ -140,8 +140,8 @@ public class CharactersView extends VerticalLayout implements Refreshable {
         PaginatedGrid<AccountCharacterPojo> tmp = new PaginatedGrid<>();
         setFlexGrow(1, tmp);
         tmp.addColumn(AccountCharacterPojo::getCharacterName).setHeader("Character Name");
-        tmp.addColumn(AccountCharacterPojo::getGarrisonResources).setHeader("Garrison Resources");
-        tmp.addColumn(AccountCharacterPojo::getWarPaint).setHeader("War paint");
+        tmp.addColumn(AccountCharacterPojo::getGarrisonResources).setHeader("Total Garrison Resources");
+        tmp.addColumn(AccountCharacterPojo::getWarPaint).setHeader("Total War paint");
         tmp.setWidth("100%");
         tmp.setDataProvider(dataProvider);
         tmp.setPageSize(PAGE_SIZE);

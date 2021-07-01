@@ -26,6 +26,7 @@ import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.UIScope;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @UIScope
 @Component
 @AnonymousAllowed
@@ -100,8 +102,7 @@ public class RegisterView extends VerticalLayout {
                 accountService.register(pojo, url);
                 UI.getCurrent().navigate(LoginView.class);
             } catch (ValidationException e) {
-                //TODO addWS exception handling
-                System.out.println(e.getMessage());
+                log.info("Validation failed: " + RegisterView.class);
             }
 
         });

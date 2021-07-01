@@ -16,7 +16,9 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @UIScope
 public class NewCharacterDialog extends Dialog {
 
@@ -82,8 +84,7 @@ public class NewCharacterDialog extends Dialog {
                 saveAndCleanDialog();
 
             } catch (ValidationException e) {
-                //TODO addWS exception handling
-                System.out.println(e.getMessage());
+                log.info("Validation failed: " + NewCharacterDialog.class);
             }
         });
         return createButton;
@@ -122,7 +123,7 @@ public class NewCharacterDialog extends Dialog {
         binder.forField(characterNameField)
                 .withValidator(validate ->
                         !characterService.isNameTaken(id, characterNameField.getValue()), "Name is taken")
-                .withValidator(new StringLengthValidator("Character name must be between 0 and 100 characters", 0, 100))
+                .withValidator(new StringLengthValidator("Character name must be between 1 and 100 characters", 1, 100))
                 .bind(AccountCharacterForm::getAccountCharacterName, AccountCharacterForm::setAccountCharacterName);
         return characterNameField;
     }
