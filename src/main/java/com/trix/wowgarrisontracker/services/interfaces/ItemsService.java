@@ -12,4 +12,7 @@ public interface ItemsService {
 
     List<ItemEntity> findAll();
 
+    int count();
+
+    void saveAll(List<ItemEntity> itemEntities);
 }

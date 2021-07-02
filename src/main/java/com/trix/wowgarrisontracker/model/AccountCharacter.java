@@ -27,6 +27,9 @@ public class AccountCharacter {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "accountCharacter", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private final Set<Entry> entries;
 
+
+
+
     public AccountCharacter() {
         this.entries = new HashSet<>();
     }

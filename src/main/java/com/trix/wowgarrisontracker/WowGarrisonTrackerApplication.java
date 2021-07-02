@@ -17,16 +17,6 @@ public class WowGarrisonTrackerApplication {
         SpringApplication.run(WowGarrisonTrackerApplication.class, args);
     }
 
-    @Bean
-    public Executor taskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setMaxPoolSize(2);
-        executor.setCorePoolSize(2);
-        executor.setQueueCapacity(100);
-        executor.setThreadNamePrefix("AuctionHouseUpdate-");
-        executor.initialize();
-        return executor;
-    }
 
 
 }

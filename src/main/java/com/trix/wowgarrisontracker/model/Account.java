@@ -1,5 +1,6 @@
 package com.trix.wowgarrisontracker.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -46,9 +47,18 @@ public class Account {
     @Column(name = "enabled")
     private boolean enabled;
 
+
+
     public Account() {
         accountCharacters = new HashSet<>();
         options = new Options(this);
+    }
+
+    public Account(String login, String password, String email) {
+        this();
+        this.login = login;
+        this.password = password;
+        this.email = email;
     }
 
     @Override

@@ -10,13 +10,13 @@ public interface AuctionService {
 
     boolean save(AuctionEntity auctionEntity);
 
+    boolean saveAll(List<AuctionEntity> auctionEntities);
+
     List<AuctionEntity> getAuctionsByItemId(Long itemId);
 
     String getItemNameByAuction(Long auctionItemId);
 
     void removeAll();
-
-    void updateAuctionHouse();
 
     List<AuctionPojoWrapper> findAllAuctions();
 

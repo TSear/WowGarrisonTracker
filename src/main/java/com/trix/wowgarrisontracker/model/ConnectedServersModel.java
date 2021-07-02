@@ -24,7 +24,7 @@ public class ConnectedServersModel {
     @JsonProperty("href")
     private String href;
 
-    @OneToMany(mappedBy = "connectedServersModel", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "connectedServersModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Server> servers;
 
     @Enumerated(EnumType.ORDINAL)

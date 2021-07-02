@@ -48,6 +48,15 @@ public class AuctionServiceImpl implements AuctionService {
         return true;
     }
 
+    @Override
+    public boolean saveAll(List<AuctionEntity> auctionEntities) {
+        if (auctionEntities != null) {
+            repository.saveAll(auctionEntities);
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public List<AuctionEntity> getAuctionsByItemId(Long itemId) {
@@ -70,28 +79,6 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public void removeAll() {
         repository.deleteAll();
-    }
-
-
-    //TODO this is so awful. Need to read about multi threading and then redo this
-//    @Async
-    @Override
-    public void updateAuctionHouse() {
-
-        while (true) {
-            List<AuctionEntity> auctionEntities = blizzardApiRequests.getFilteredAuctions();
-            this.removeAll();
-            repository.saveAll(auctionEntities);
-            log.info("Updated auction house");
-            try {
-                //TODO busy waiting!!! Need to find a way to change it
-                Thread.sleep(30 * 60 * 1000);
-                log.info("Updating auction house");
-            } catch (InterruptedException e) {
-                break;
-            }
-
-        }
     }
 
     @Override

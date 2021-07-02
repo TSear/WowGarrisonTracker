@@ -1,64 +1,53 @@
 package com.trix.wowgarrisontracker;
 
+import com.trix.wowgarrisontracker.blizzarapi.AuctionHouseUpdaterThread;
 import com.trix.wowgarrisontracker.blizzarapi.BlizzardApiRequests;
-import com.trix.wowgarrisontracker.model.*;
-import com.trix.wowgarrisontracker.repository.*;
-import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
-import com.trix.wowgarrisontracker.services.interfaces.AuctionService;
+import com.trix.wowgarrisontracker.model.ConnectedServersModel;
+import com.trix.wowgarrisontracker.model.ItemEntity;
 import com.trix.wowgarrisontracker.services.interfaces.ConnectedServersService;
+import com.trix.wowgarrisontracker.services.interfaces.ItemsService;
 import com.trix.wowgarrisontracker.services.interfaces.ServerService;
-import com.trix.wowgarrisontracker.utils.BlizzardRequestUtils;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
+@Profile("dev")
 @Component
 public class BootData implements CommandLineRunner {
 
-    private final AccountRepository accountRepository;
-    private final AccountCharacterRepository accountCharacterRepository;
-    private final EntryRepository entryRepository;
-    private final ItemEntityRepository itemEntityRepository;
-    private final AuctionEntityRepository auctionEntityRepository;
-    private final AuctionService auctionService;
-    private final BlizzardRequestUtils blizzardRequestUtils;
+    private final ItemsService itemsService;
     private final BlizzardApiRequests blizzardApiRequests;
     private final ServerService serverService;
-    private final PasswordEncoder passwordEncoder;
-    private final AccountCharacterService accountCharacterService;
     private final ConnectedServersService connectedServersService;
+    private final AuctionHouseUpdaterThread auctionHouseUpdaterThread;
 
-    public BootData(AccountRepository accountRepository, AccountCharacterRepository accountCharacterRepository,
-                    EntryRepository entryRepository, ItemEntityRepository itemEntityRepository,
-                    AuctionEntityRepository auctionEntityRepository, AuctionService auctionService,
-                    ServerService serverService, PasswordEncoder passwordEncoder,
-                    BlizzardRequestUtils blizzardRequestUtils,
-                    AccountCharacterService accountCharacterService,
-                    BlizzardApiRequests blizzardApiRequests,
-                    ConnectedServersService connectedServersService) {
-        this.accountRepository = accountRepository;
-        this.accountCharacterRepository = accountCharacterRepository;
-        this.entryRepository = entryRepository;
-        this.itemEntityRepository = itemEntityRepository;
-        this.auctionEntityRepository = auctionEntityRepository;
-        this.auctionService = auctionService;
-        this.blizzardRequestUtils = blizzardRequestUtils;
+    public BootData(
+            ItemsService itemsService,
+            ServerService serverService,
+            BlizzardApiRequests blizzardApiRequests,
+            ConnectedServersService connectedServersService,
+            AuctionHouseUpdaterThread auctionHouseUpdaterThread) {
+        this.itemsService = itemsService;
         this.serverService = serverService;
-        this.passwordEncoder = passwordEncoder;
-        this.accountCharacterService = accountCharacterService;
         this.blizzardApiRequests = blizzardApiRequests;
         this.connectedServersService = connectedServersService;
+        this.auctionHouseUpdaterThread = auctionHouseUpdaterThread;
     }
+
 
     @Override
     public void run(String... args) throws Exception {
+
         this.innit();
-//        auctionService.updateAuctionHouse();
+
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(auctionHouseUpdaterThread, 0, 1, TimeUnit.HOURS);
     }
 
     private void innit() {
@@ -67,61 +56,16 @@ public class BootData implements CommandLineRunner {
             List<ConnectedServersModel> connectedServersModels = blizzardApiRequests.getListOfConnectedServers();
             connectedServersService.saveAll(connectedServersModels);
         }
-//        Server server = new Server();
-//        server.setId(1);
-//        server.setRegion("EU");
-//        server.setSlug("test");
-//        server.setName("Test");
 
-//        serverService.save(server);
+        if (itemsService.count() == 0) {
+            ItemEntity trueIronOre = new ItemEntity(109119L, "True Iron Ore");
+            ItemEntity sumptuousFur = new ItemEntity(111557L, "Sumptuous Fur");
+            ItemEntity goblinGliderKit = new ItemEntity(109076L, "Goblin Glider Kit");
 
-        if (itemEntityRepository.count() == 0) {
-            ItemEntity itemEntity = new ItemEntity();
-            itemEntity.setId(109119L);
-            itemEntity.setName("True Iron Ore");
-            itemEntityRepository.save(itemEntity);
-        }
-//        auctionService.updateAuctionHouse();
-
-        Account account1 = new Account();
-        account1.setLogin("login1");
-        account1.setPassword(passwordEncoder.encode("password1"));
-        account1.setEnabled(true);
-
-        if (accountRepository.count() == 0) {
-            accountRepository.save(account1);
-            List<AccountCharacter> characters = IntStream.range(0, 30).mapToObj(i -> {
-                AccountCharacter accountCharacter = new AccountCharacter();
-                accountCharacter.setAccount(account1);
-                accountCharacter.setId((long) i);
-                accountCharacter.setCharacterName("Character: " + i);
-                return accountCharacter;
-            }).collect(Collectors.toList());
-            if (accountCharacterRepository.count() == 0) {
-                accountCharacterRepository.saveAll(characters);
-            }
-
-            if (entryRepository.count() == 0) {
-                List<Entry> entries = new ArrayList<>();
-                accountCharacterService.findAllByAccountId(1L).forEach(accCharacter -> IntStream.range(1, 5)
-                        .mapToObj(i -> generateEntryWithCharacter((int) (Math.random() * 100), (int) (Math.random() * 100), accCharacter))
-                        .forEach(entryRepository::save));
-            }
+            itemsService.saveAll(Arrays.asList(trueIronOre, sumptuousFur, goblinGliderKit));
         }
 
+
     }
 
-    public static Entry generateEntryWithCharacter(int garrisonResources, int warPaint, AccountCharacter
-            accountCharacter) {
-        Entry entry = generateEntry(garrisonResources, warPaint);
-        entry.setAccountCharacter(accountCharacter);
-        return entry;
-    }
-
-    private static Entry generateEntry(int garrisonResources, int warPaint) {
-        Entry entry = new Entry();
-        entry.setWarPaint(warPaint);
-        entry.setGarrisonResources(garrisonResources);
-        return entry;
-    }
 }
