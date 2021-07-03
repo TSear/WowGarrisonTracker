@@ -1,5 +1,6 @@
 package com.trix.wowgarrisontracker.frontEnd.views.settings;
 
+import com.trix.wowgarrisontracker.frontEnd.LayoutVariables;
 import com.trix.wowgarrisontracker.frontEnd.components.CenteredHeader;
 import com.trix.wowgarrisontracker.frontEnd.components.SaveButton;
 import com.trix.wowgarrisontracker.frontEnd.components.ServerField;
@@ -17,6 +18,8 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.PropertyId;
 
 import java.util.List;
+
+import static com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep.LabelsPosition.*;
 
 public class ServerSettings extends VerticalLayout {
 
@@ -72,8 +75,11 @@ public class ServerSettings extends VerticalLayout {
     }
 
     private void configureFormLayout() {
+        formLayout.setWidthFull();
+        formLayout.setMaxWidth(LayoutVariables.FORM_MAX_WIDTH);
         formLayout.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("0", 1));
+                new FormLayout.ResponsiveStep("0px", 1, TOP),
+                new FormLayout.ResponsiveStep("300px", 1, ASIDE));
     }
 
     private BinderSave saveLambda() {

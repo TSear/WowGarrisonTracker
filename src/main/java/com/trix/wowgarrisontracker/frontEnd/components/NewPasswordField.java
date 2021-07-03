@@ -6,6 +6,8 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep.LabelsPosition.*;
+
 public class NewPasswordField extends CustomField<String> {
 
     private final Credentials credentials;
@@ -21,7 +23,8 @@ public class NewPasswordField extends CustomField<String> {
 
         FormLayout formLayout = new FormLayout();
         formLayout.setWidthFull();
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0px", 1, TOP),
+                new FormLayout.ResponsiveStep("300px",1, ASIDE));
 
         oldPasswordField = new PasswordField();
         oldPasswordField.setWidthFull();

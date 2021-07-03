@@ -12,6 +12,8 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -86,12 +88,11 @@ public class CharactersView extends VerticalLayout implements Refreshable {
     }
 
     private void configureContextMenuForGrid() {
-        ContextMenu contextMenu = new ContextMenu();
+        GridContextMenu<AccountCharacterPojo> contextMenu = new GridContextMenu<>();
         contextMenu.setTarget(dataGridLayout);
+        contextMenu.addClassName(LayoutVariables.CONTEXT_MENU);
 
-        Button deleteEntryButton = new Button("Delete selected entry");
-
-        deleteEntryButton.addClickListener(event -> {
+        contextMenu.addItem("Delete entry", event -> {
             dataGridLayout.getSelectedItems().forEach(accountCharacterPojo -> {
                 accountCharacterService.delete(accountCharacterPojo.getId());
                 dataProvider.refreshAll();
@@ -100,7 +101,6 @@ public class CharactersView extends VerticalLayout implements Refreshable {
             });
         });
 
-        contextMenu.add(deleteEntryButton);
 
     }
 
@@ -122,7 +122,6 @@ public class CharactersView extends VerticalLayout implements Refreshable {
     }
 
     private void configureFrame() {
-        setHeightFull();
         setClassName(LayoutVariables.PRIMARY_BACKGROUND);
     }
 

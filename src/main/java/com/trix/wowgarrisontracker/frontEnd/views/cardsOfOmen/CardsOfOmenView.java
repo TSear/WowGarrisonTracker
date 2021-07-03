@@ -84,6 +84,7 @@ public class CardsOfOmenView extends FlexLayout {
     private void configureContextMenuForGrid() {
 
         GridContextMenu<CardsOfOmen> contextMenu = cardsOfOmenGrid.addContextMenu();
+        contextMenu.addClassName(LayoutVariables.CONTEXT_MENU);
 
         contextMenu.addItem("Remove Entry", event -> {
             if(event.getGrid().getSelectedItems().size()>0){
@@ -205,7 +206,6 @@ public class CardsOfOmenView extends FlexLayout {
 
 
     private void configureLayout() {
-        setSizeFull();
         setClassName(LayoutVariables.PRIMARY_BACKGROUND);
         addClassName(LayoutVariables.WRAPPING);
     }

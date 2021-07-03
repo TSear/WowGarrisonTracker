@@ -75,7 +75,6 @@ public class StatisticsView extends FlexLayout implements Refreshable {
     }
 
     private void configureFrame() {
-        setSizeFull();
         setFlexWrap(FlexWrap.WRAP);
         setClassName("statistics-container");
         getStyle().set("padding", "15px");

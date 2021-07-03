@@ -16,7 +16,6 @@ public class AboutView extends VerticalLayout {
 
     public AboutView() {
         setWidthFull();
-        setMinHeight("100%");
         setClassName(LayoutVariables.PRIMARY_BACKGROUND);
         add(new About());
     }

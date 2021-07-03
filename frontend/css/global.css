@@ -5,6 +5,7 @@
 .primary-background{
     background: var(--background-primary-color);
     background-image: url('/img/bg3.png');
+    min-height: 100%;
 }
 
 .register-form *{
@@ -76,7 +77,8 @@ iron-overlay-backdrop {
 }
 
 .context-menu{
-    background: var(--background-primary-color);
+    background: var(--background-secondary-color);
+
 }
 
 .logout-button{
@@ -103,6 +105,7 @@ iron-overlay-backdrop {
     flex-direction: column;
     flex-basis: 100%;
     flex: 1;
+    min-height: 400px;
 }
 
 @media screen and (min-width: 1550px){
@@ -147,9 +150,9 @@ iron-overlay-backdrop {
 .image-fit{
     object-fit: contain;
     max-width: 50%;
-    min-width: 450px;
+    min-width: 250px;
 }
 
 .paragraph-about{
-    max-width: 50%;
+    max-width: 450px;
 }

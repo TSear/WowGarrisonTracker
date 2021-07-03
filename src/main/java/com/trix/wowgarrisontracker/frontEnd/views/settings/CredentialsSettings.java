@@ -1,5 +1,6 @@
 package com.trix.wowgarrisontracker.frontEnd.views.settings;
 
+import com.trix.wowgarrisontracker.frontEnd.LayoutVariables;
 import com.trix.wowgarrisontracker.frontEnd.components.CenteredHeader;
 import com.trix.wowgarrisontracker.frontEnd.components.NewPasswordField;
 import com.trix.wowgarrisontracker.frontEnd.components.SaveButton;
@@ -15,6 +16,8 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.PropertyId;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import static com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep.LabelsPosition.*;
 
 public class CredentialsSettings extends VerticalLayout {
 
@@ -98,7 +101,10 @@ public class CredentialsSettings extends VerticalLayout {
     }
 
     private void configureFormLayout() {
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
+        formLayout.setWidthFull();
+        formLayout.setMaxWidth(LayoutVariables.FORM_MAX_WIDTH);
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0px", 1, TOP),
+                new FormLayout.ResponsiveStep("300px",1, ASIDE));
     }
 
 

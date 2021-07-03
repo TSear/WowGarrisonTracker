@@ -74,7 +74,6 @@ public class SettingsView extends VerticalLayout {
 
     private void configureFrame() {
         this.setWidthFull();
-        this.setMinHeight("100%");
         this.setClassName("background");
         addClassName(LayoutVariables.PRIMARY_BACKGROUND);
     }

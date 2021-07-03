@@ -65,7 +65,6 @@ public class AuctionHouseView extends FlexLayout implements Refreshable {
     }
 
     private void configureMainView() {
-        setSizeFull();
         setFlexWrap(FlexWrap.WRAP);
         setAlignItems(Alignment.BASELINE);
         setJustifyContentMode(JustifyContentMode.CENTER);

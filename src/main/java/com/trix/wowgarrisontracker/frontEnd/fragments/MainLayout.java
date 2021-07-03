@@ -29,6 +29,7 @@ import java.util.List;
 @CssImport(value = "/css/global.css", themeFor = "vaadin-button")
 @CssImport(value = "/css/MainLayout.css", themeFor = "vaadin-app-layout")
 @CssImport(value = "/css/MainLayout.css")
+@CssImport(value = "./css/contextMenu.css", themeFor = "vaadin-context-menu-overlay")
 @UIScope
 public class MainLayout extends AppLayout {
 

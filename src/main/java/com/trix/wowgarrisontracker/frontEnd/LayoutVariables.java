@@ -13,4 +13,7 @@ public class LayoutVariables {
     public static final String MARGIN_BIG = "margin-big";
     public static final String IMAGE = "image-fit";
     public static final String PARAGRAPH_ABOUT = "paragraph-about";
+    public static final String FORM_MAX_WIDTH = "450px" ;
+    public static final String CONTEXT_BUTTON = "context-button";
+    public static final String CONTEXT_MENU = "context-menu";
 }

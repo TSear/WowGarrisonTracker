@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep.LabelsPosition.ASIDE;
+import static com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep.LabelsPosition.TOP;
+
 public class ServerField extends CustomField<Server> {
 
     private final List<Server> serverList;
@@ -26,14 +29,15 @@ public class ServerField extends CustomField<Server> {
 
         FormLayout formLayout = new FormLayout();
         formLayout.setWidthFull();
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",1));
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0px", 1, TOP),
+                new FormLayout.ResponsiveStep("300px",1, ASIDE ));
 
         serverNameComboBox = configureServerNameComboBox();
 
         regionComboBox = configureRegionComboBox(serverNameComboBox);
 
         formLayout.addFormItem(regionComboBox, "Region");
-        formLayout.addFormItem(serverNameComboBox,"Server");
+        formLayout.addFormItem(serverNameComboBox, "Server");
 
         add(formLayout);
     }

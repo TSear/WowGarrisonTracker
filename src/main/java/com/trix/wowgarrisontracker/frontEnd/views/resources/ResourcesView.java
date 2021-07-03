@@ -10,9 +10,9 @@ import com.trix.wowgarrisontracker.services.interfaces.AccountCharacterService;
 import com.trix.wowgarrisontracker.services.interfaces.EntryService;
 import com.trix.wowgarrisontracker.utils.GeneralUtils;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -91,12 +91,11 @@ public class ResourcesView extends VerticalLayout implements Refreshable {
         buttonLayout.add(addButton);
         buttonLayout.add(deleteEntryButton);
 
-        ContextMenu contextMenu = createContextMenu(gridLayout);
+        createContextMenu(gridLayout);
 
         add(gridLayout);
         add(buttonLayout);
         add(entryFormDialog);
-        add(contextMenu);
     }
 
     private Button createAddEntryButton(NewEntryDialogForm entryFormDialog) {
@@ -106,15 +105,14 @@ public class ResourcesView extends VerticalLayout implements Refreshable {
         return button;
     }
 
-    private ContextMenu createContextMenu(PaginatedGrid<Entry> gridLayout) {
-        ContextMenu contextMenu = new ContextMenu();
+    private void createContextMenu(PaginatedGrid<Entry> gridLayout) {
+        GridContextMenu<Entry> contextMenu = new GridContextMenu<>();
         contextMenu.setTarget(gridLayout);
-        contextMenu.setClassName("context-menu");
+        contextMenu.setClassName(LayoutVariables.CONTEXT_MENU);
 
-        Button addEntryContextMenuButton = new AddButton("Create new entry", entryFormDialog);
+        contextMenu.addItem("Create new entry",entryGridContextMenuItemClickEvent -> entryFormDialog.open());
 
-        Button deleteContextMenuButton = new Button("Delete selected entries");
-        deleteContextMenuButton.addClickListener(buttonClickEvent -> {
+        contextMenu.addItem("Delete entry", buttonClickEvent -> {
             int selectedSize = gridLayout.getSelectedItems().size();
             if (selectedSize == 0) {
                 Notification notification = new Notification("You need to select entry", 5000);
@@ -126,11 +124,7 @@ public class ResourcesView extends VerticalLayout implements Refreshable {
             }
         });
 
-        VerticalLayout verticalLayout = new VerticalLayout(addEntryContextMenuButton, deleteContextMenuButton);
-        verticalLayout.setAlignItems(Alignment.STRETCH);
-        contextMenu.add(verticalLayout);
 
-        return contextMenu;
     }
 
     private void removeEntries(Collection<Entry> entries) {
@@ -164,7 +158,6 @@ public class ResourcesView extends VerticalLayout implements Refreshable {
     }
 
     private void configureMainLayout() {
-        this.setHeightFull();
         this.getStyle().set("padding-bottom","0");
         this.setClassName(LayoutVariables.PRIMARY_BACKGROUND);
 

@@ -35,7 +35,6 @@ public class ContactView extends FlexLayout {
 
     public ContactView() {
 
-        setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setAlignItems(Alignment.CENTER);
         setClassName(LayoutVariables.PRIMARY_BACKGROUND);
@@ -62,9 +61,12 @@ public class ContactView extends FlexLayout {
     }
 
     private void createInfoBox(String s, String labelValue) {
-        HorizontalLayout infoBox = new HorizontalLayout();
+        FlexLayout infoBox = new FlexLayout();
         infoBox.setClassName("info-box");
         infoBox.setWidthFull();
+        infoBox.setFlexWrap(FlexWrap.WRAP);
+        infoBox.setAlignContent(ContentAlignment.CENTER);
+        infoBox.setJustifyContentMode(JustifyContentMode.CENTER);
         Label text = new Label(s);
         Label value = new Label(labelValue);
         text.setClassName("text");
