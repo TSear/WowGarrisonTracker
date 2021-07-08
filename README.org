@@ -13,20 +13,26 @@
     | Statistics            | Here you can see your statistics. Things like total 'Garrison Resources', 'War Paint', total gold from 'Cards of Omen, etc.                                                                    |
     | Auction House         | Here you can quickly check prices of things like 'True Iron Ore' etc. Prices are updated each hour based on what server you picked.                                                            |
 
-*   Enviromental Variables
+*   How to run this?
 
-** client.id
+** Currently you need to download release jar and simply run it with *java -jar [path to .jar file]. But before this app will run you need to do few things
+
+*** Set mysql database(for now you need to set it locally)
+
+***   And set enviromental variables
+
+**** client_id
 
 Sets your Blizzard client id. You need to set it!
 
-** client.secret
+**** client_secret
 
 Sets your Blizzard client secret. Same as id you need to set it
 
-** email.login
+**** email_login
 
 Currently im not offering any build in email so you need to set one yourself. Most likely will be changed in future
 
-** email.password
+**** email_password
 
 Sets email password.
