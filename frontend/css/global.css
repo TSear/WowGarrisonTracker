@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;800&display=swap');
+
+*{
+    font-family: "Open Sans";
+}
+
 .content-background {
     background: #252422;
 }
@@ -106,6 +112,7 @@ iron-overlay-backdrop {
     flex-basis: 100%;
     flex: 1;
     min-height: 400px;
+    margin-top: 0.5em;
 }
 
 @media screen and (min-width: 1550px){
@@ -125,10 +132,6 @@ iron-overlay-backdrop {
     max-width: 550px;
     align-self: center ;    
     justify-self: center;
-}
-
-.cards-grid{
-    margin: 1.5em;
 }
 
 .secondary-button{

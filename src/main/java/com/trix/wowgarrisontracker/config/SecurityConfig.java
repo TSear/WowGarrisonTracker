@@ -56,7 +56,8 @@ public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
                 "/frontend-es5/**",
                 "/frontend-es6/**",
                 "/resources/**",
-                "/img/**");
+                "/img/**",
+                "/verify**");
         super.configure(web);
     }
 
