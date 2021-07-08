@@ -54,3 +54,23 @@ Database password
 [[https://github.com/TSear/WowGarrisonTracker/blob/master/images/env.png]]
 
 * Screenshots
+
+** Resources
+
+[[https://github.com/TSear/WowGarrisonTracker/tree/master/images/resources.png]]
+
+** Cards Of Omen
+
+[[https://github.com/TSear/WowGarrisonTracker/tree/master/images/cardsOfOmen.png]]
+
+** Characters
+
+[[https://github.com/TSear/WowGarrisonTracker/tree/master/images/characters.png]]
+
+** Statistics
+
+[[https://github.com/TSear/WowGarrisonTracker/tree/master/images/statistics.png]]
+
+** Auction House
+
+[[https://github.com/TSear/WowGarrisonTracker/tree/master/images/auctionhouse.png]]
