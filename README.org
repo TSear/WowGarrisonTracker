@@ -51,7 +51,6 @@ Database password
 
 **** Correctly set variables
 
-[[./images/env.png
-]]
+[[https://github.com/TSear/WowGarrisonTracker/blob/master/images/env.png]]
 
 * Screenshots
