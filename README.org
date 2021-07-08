@@ -4,16 +4,16 @@
 
 ** client.id
 
-*** !IMPORTANT. sets your Blizzard client id. You need to set it!
+ !IMPORTANT. sets your Blizzard client id. You need to set it!
 
 ** client.secret
 
-*** !IMPORTANT. Sets your Blizzard client secret. Same as id you need to set it
+ !IMPORTANT. Sets your Blizzard client secret. Same as id you need to set it
 
 ** email.login
 
-*** !IMPORTANT. Currently im not offering any build in email so you need to set one yourself. Most likely will be changed in future
+ !IMPORTANT. Currently im not offering any build in email so you need to set one yourself. Most likely will be changed in future
 
 ** email.password
 
-*** !IMPORTANT. same as login
+ !IMPORTANT. same as login
