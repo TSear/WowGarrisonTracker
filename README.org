@@ -17,9 +17,9 @@
 
  Currently you need to download release jar and simply run it with *java -jar [path to .jar file]*. But before this app will run you need to do few things
 
-*** Set mysql database(for now you need to set it locally)
+*** MYSQL database
 
-*** And set enviromental variables
+*** Evironmental variables
 
 **** CLIENT_ID
 
@@ -31,7 +31,7 @@ Sets your Blizzard client secret. Same as id you need to set it
 
 **** EMAIL_LOGIN
 
-Currently im not offering any build in email so you need to set one yourself. Most likely will be changed in future
+Currently im not offering any build in email so you need to set one yourself. Most likely will be changed in future. This email is used to send account activation emails.
 
 **** EMAIL_PASSWORD
 
@@ -48,3 +48,10 @@ Database login
 **** JDBC_DATABASE_PASSWORD
 
 Database password
+
+**** Correctly set variables
+
+[[images/env.png
+]]
+
+* Screenshots
