@@ -57,12 +57,12 @@ Database password
 
 ** Resources
 
-#+attr_html: :width 200px
+#+attr_html: :width 100px
 [[https://github.com/TSear/WowGarrisonTracker/tree/master/images/resources.png]]
 
 ** Cards Of Omen
 
-#+attr_html: :width 200px
+#+attr_html: :width 50px
 [[https://github.com/TSear/WowGarrisonTracker/tree/master/images/cardsOfOmen.png]]
 
 ** Characters
