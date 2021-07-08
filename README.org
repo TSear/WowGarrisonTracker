@@ -1,10 +1,10 @@
 # WowGarrisonTracker
 
-*  Whats is this all about?
+*  Idea?
 
     This project is supposed to help people who make money from garrison. It have few convinient features that can substitute Excel and the undermine journal (of course if you like to track how much money and resources you get).
 
-* What I can offer?
+* What can I offer?
 
     |-----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
     | Resources tracking    | You can track how much 'Garrison Resources' and 'War Paint' you earn each day on each character                                                                                                |
