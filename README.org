@@ -15,11 +15,11 @@
 
 *   How to run this?
 
-** Currently you need to download release jar and simply run it with *java -jar [path to .jar file]. But before this app will run you need to do few things
+** Currently you need to download release jar and simply run it with *java -jar [path to .jar file]*. But before this app will run you need to do few things
 
 *** Set mysql database(for now you need to set it locally)
 
-***   And set enviromental variables
+*** And set enviromental variables
 
 **** client_id
 
