@@ -21,18 +21,30 @@
 
 *** And set enviromental variables
 
-**** client_id
+**** CLIENT_ID
 
 Sets your Blizzard client id. You need to set it!
 
-**** client_secret
+**** CLIENT_SECRET
 
 Sets your Blizzard client secret. Same as id you need to set it
 
-**** email_login
+**** EMAIL_LOGIN
 
 Currently im not offering any build in email so you need to set one yourself. Most likely will be changed in future
 
-**** email_password
+**** EMAIL_PASSWORD
 
 Sets email password.
+
+**** JDBC_DATABASE_URL
+
+Sets your database URL for example *jdbc:mysql://localhost:3306/garrisontracker*
+
+**** JDBC_DATABASE_LOGIN
+
+Database login
+
+**** JDBC_DATABASE_PASSWORD
+
+Database password
