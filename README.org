@@ -12,7 +12,6 @@
     | Your characters       | Tracking resources wouldn't be possible without this page. Here you can add new characters and, you can see how much total resources you earned on each character.                             |
     | Statistics            | Here you can see your statistics. Things like total 'Garrison Resources', 'War Paint', total gold from 'Cards of Omen, etc.                                                                    |
     | Auction House         | Here you can quickly check prices of things like 'True Iron Ore' etc. Prices are updated each hour based on what server you picked.                                                            |
-    |-----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 *   Enviromental Variables
 
