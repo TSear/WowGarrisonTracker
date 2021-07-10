@@ -42,4 +42,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "WHERE acc.id = :accountId")
     Long countDaysByAccountId(Long accountId);
 
+    boolean existsByEmail(String s);
 }

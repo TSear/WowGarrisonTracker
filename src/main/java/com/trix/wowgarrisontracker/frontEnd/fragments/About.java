@@ -16,7 +16,7 @@ public class About extends VerticalLayout {
     private String paragraphText = "Garrison tracker as the name suggests is web application for people who spend their" +
             " time in the garrison making money. Of course if you don't want to track the income from your cards or" +
             " how much resource you are getting each day then this app won't help you much." +
-            " But if you like to see how much money, resources and resources you get then this app if for you." +
+            " But if you like to see how much money, resources you get then this app is for you." +
             " I also offer handy auction house, so you don't have to look for items on Undermine Journal or go to" +
             " auction house in game.";
 
@@ -51,7 +51,7 @@ public class About extends VerticalLayout {
             " you chose while creating account. Currently, there is not a lot of functionality" +
             ", but I have some plans to improve this page. Currently, there are only few items shown and there is simple" +
             " reason for this I have limited storage space. So currently users cannot add new items." +
-            " But if you really want some item you can just email me and I will add it (my email Jakub.Olszowski@wp.pl)";
+            " But if you really want some item you can just send me a email and I will add it (my email pietrzyk.jakub001@gmail.com)";
 
     private String settingsParagraphText = "And last one is settings page." +
             " What can I say about it is just simple settings page." +

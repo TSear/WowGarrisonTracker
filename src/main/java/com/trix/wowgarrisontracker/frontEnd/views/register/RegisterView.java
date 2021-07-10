@@ -159,6 +159,7 @@ public class RegisterView extends VerticalLayout {
         emailField.setLabel("Email");
         pojoBinder.forField(emailField)
                 .withValidator(new EmailValidator("This is not valid email"))
+                .withValidator(s -> !accountService.isEmailTaken(s), "Email is taken")
                 .bind(RegisterPojo::getEmail, RegisterPojo::setEmail);
         return emailField;
     }

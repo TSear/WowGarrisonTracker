@@ -137,6 +137,11 @@ public class AccountServicesImpl implements AccountService {
         return accountRepository.countDaysByAccountId(accountId);
     }
 
+    @Override
+    public boolean isEmailTaken(String s) {
+       return accountRepository.existsByEmail(s);
+    }
+
     private Account createAccountFromRegisterPojo(RegisterPojo registerPojo) {
 
         Account account = new Account();
