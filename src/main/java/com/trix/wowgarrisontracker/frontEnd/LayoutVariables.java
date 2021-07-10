@@ -16,4 +16,6 @@ public class LayoutVariables {
     public static final String FORM_MAX_WIDTH = "450px" ;
     public static final String CONTEXT_BUTTON = "context-button";
     public static final String CONTEXT_MENU = "context-menu";
+    public static final String DEMO = "demo";
+    public static final String LABEL = "label";
 }

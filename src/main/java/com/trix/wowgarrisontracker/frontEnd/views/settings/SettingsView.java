@@ -37,13 +37,16 @@ public class SettingsView extends VerticalLayout {
     private final PasswordEncoder passwordEncoder;
     private final AccountService accountService;
 
+    private final CredentialsSettings credentialsSettings;
+
     private final List<Refreshable> refreshableList;
 
     public SettingsView(ServerService serverService,
                         AuctionHouseView auctionHouse,
                         OptionsService optionsService,
                         PasswordEncoder passwordEncoder,
-                        AccountService accountService) {
+                        AccountService accountService,
+                        CredentialsSettings credentialsSettings) {
 
         this.optionsService = optionsService;
         this.serverService = serverService;
@@ -51,6 +54,7 @@ public class SettingsView extends VerticalLayout {
         this.refreshableList.add(auctionHouse);
         this.passwordEncoder = passwordEncoder;
         this.accountService = accountService;
+        this.credentialsSettings = credentialsSettings;
 
         this.optionsBinder = new Binder<>();
         this.options = GeneralUtils.getUserSettings();
@@ -62,7 +66,6 @@ public class SettingsView extends VerticalLayout {
         configureFrame();
 
         ServerSettings serverSettings = new ServerSettings(serverService, this,optionsService);
-        CredentialsSettings credentialsSettings = new CredentialsSettings(this, passwordEncoder, accountService);
 
         add(serverSettings);
         add(new CustomHr());

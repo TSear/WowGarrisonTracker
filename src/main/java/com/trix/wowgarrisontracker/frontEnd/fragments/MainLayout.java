@@ -25,10 +25,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@CssImport(value = "/css/globalVariables.css")
-@CssImport(value = "/css/global.css", themeFor = "vaadin-button")
-@CssImport(value = "/css/MainLayout.css", themeFor = "vaadin-app-layout")
-@CssImport(value = "/css/MainLayout.css")
+@CssImport(value = "./css/global.css")
+@CssImport(value = "./css/textField.css", themeFor = "vaadin-text-field")
+@CssImport(value = "./css/textField.css", themeFor = "vaadin-password-field")
+@CssImport(value = "./css/grid.css", themeFor = "vaadin-grid")
+@CssImport(value = "./css/login.css", themeFor = "vaadin-login-form-wrapper")
+@CssImport(value = "./css/dialogBox.css", themeFor = "vaadin-dialog-overlay")
+@CssImport(value = "./css/statistics.css")
+@CssImport(value = "./css/contact.css")
+@CssImport(value = "./css/globalVariables.css")
+@CssImport(value = "./css/global.css", themeFor = "vaadin-button")
+@CssImport(value = "./css/MainLayout.css", themeFor = "vaadin-app-layout")
+@CssImport(value = "./css/MainLayout.css")
 @CssImport(value = "./css/contextMenu.css", themeFor = "vaadin-context-menu-overlay")
 @UIScope
 public class MainLayout extends AppLayout {

@@ -159,3 +159,8 @@ iron-overlay-backdrop {
 .paragraph-about{
     max-width: 450px;
 }
+
+.label{
+    text-align: center;
+    width: 100%;
+}

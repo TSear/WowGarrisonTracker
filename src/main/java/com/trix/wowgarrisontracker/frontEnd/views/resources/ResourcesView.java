@@ -33,15 +33,7 @@ import java.util.List;
 
 @Profile("vaadin")
 @UIScope
-@CssImport(value = "/css/globalVariables.css")
-@CssImport(value = "/css/global.css")
-@CssImport(value = "/css/textField.css", themeFor = "vaadin-text-field")
-@CssImport(value = "/css/textField.css", themeFor = "vaadin-password-field")
-@CssImport(value = "/css/grid.css", themeFor = "vaadin-grid")
-@CssImport(value = "/css/login.css", themeFor = "vaadin-login-form-wrapper")
-@CssImport(value = "/css/dialogBox.css", themeFor = "vaadin-dialog-overlay")
-@CssImport(value = "/css/statistics.css")
-@CssImport(value = "/css/contact.css")
+
 @RouteAlias(value = "", layout = MainLayout.class)
 @PermitAll
 @PageTitle("Resources")
