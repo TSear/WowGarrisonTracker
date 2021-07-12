@@ -50,8 +50,8 @@ public class About extends VerticalLayout {
     private String auctionHouseParagraphText = "The auction house page simply shows you the prices of items on the server" +
             " you chose while creating account. Currently, there is not a lot of functionality" +
             ", but I have some plans to improve this page. Currently, there are only few items shown and there is simple" +
-            " reason for this I have limited storage space. So currently users cannot add new items." +
-            " But if you really want some item you can just send me a email and I will add it (my email pietrzyk.jakub001@gmail.com)";
+            " reason for this. I have limited storage space. So currently users cannot add new items." +
+            " But if you really want specific item you can just send me a email and I will add it (my email pietrzyk.jakub001@gmail.com)";
 
     private String settingsParagraphText = "And last one is settings page." +
             " What can I say about it is just simple settings page." +
