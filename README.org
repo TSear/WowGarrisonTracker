@@ -2,7 +2,7 @@
 
 *  Idea?
 
-    This project is supposed to help people who make money from garrison. It have few convinient features that can substitute Excel and the undermine journal (of course if you like to track how much money and resources you get).
+    This project is supposed to help people who make money from garrison. It have few convinient features that can substitute Excel and the undermine journal (of course if you like to track how much money and resources you get). Link to demo on heroku https://wowgarrisontracker.herokuapp.com.
 
 * What can I offer?
 
